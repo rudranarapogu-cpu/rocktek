@@ -70,10 +70,10 @@ function Marketplace() {
               defaultValue={search.q ?? ""}
               placeholder="Search title…"
               className="pl-9"
-              onChange={(e) => navigate({ search: (s) => ({ ...s, q: e.target.value || undefined }), replace: true })}
+              onChange={(e) => navigate({ search: (s: any) => ({ ...s, q: e.target.value || undefined }), replace: true })}
             />
           </div>
-          <Select value={search.category ?? "all"} onValueChange={(v) => navigate({ search: (s) => ({ ...s, category: v === "all" ? undefined : v }) })}>
+          <Select value={search.category ?? "all"} onValueChange={(v) => navigate({ search: (s: any) => ({ ...s, category: v === "all" ? undefined : v }) })}>
             <SelectTrigger><SelectValue placeholder="Category" /></SelectTrigger>
             <SelectContent>
               <SelectItem value="all">All categories</SelectItem>
@@ -83,7 +83,7 @@ function Marketplace() {
           <Input
             defaultValue={search.state ?? ""}
             placeholder="Filter by state (e.g. Karnataka)"
-            onChange={(e) => navigate({ search: (s) => ({ ...s, state: e.target.value || undefined }), replace: true })}
+            onChange={(e) => navigate({ search: (s: any) => ({ ...s, state: e.target.value || undefined }), replace: true })}
           />
         </div>
 
