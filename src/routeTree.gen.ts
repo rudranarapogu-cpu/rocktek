@@ -9,38 +9,233 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SellerRouteImport } from './routes/seller'
+import { Route as SellRouteImport } from './routes/sell'
+import { Route as MarketplaceRouteImport } from './routes/marketplace'
+import { Route as AccountRouteImport } from './routes/account'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as SellerIndexRouteImport } from './routes/seller/index'
+import { Route as CategoriesIndexRouteImport } from './routes/categories/index'
+import { Route as SellerUploadRouteImport } from './routes/seller/upload'
+import { Route as SellerOnboardingRouteImport } from './routes/seller/onboarding'
+import { Route as SellerListingsRouteImport } from './routes/seller/listings'
+import { Route as ListingIdRouteImport } from './routes/listing/$id'
+import { Route as CategoriesSlugRouteImport } from './routes/categories/$slug'
+import { Route as AuthSignupRouteImport } from './routes/auth/signup'
+import { Route as AuthLoginRouteImport } from './routes/auth/login'
 
+const SellerRoute = SellerRouteImport.update({
+  id: '/seller',
+  path: '/seller',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SellRoute = SellRouteImport.update({
+  id: '/sell',
+  path: '/sell',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MarketplaceRoute = MarketplaceRouteImport.update({
+  id: '/marketplace',
+  path: '/marketplace',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AccountRoute = AccountRouteImport.update({
+  id: '/account',
+  path: '/account',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SellerIndexRoute = SellerIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => SellerRoute,
+} as any)
+const CategoriesIndexRoute = CategoriesIndexRouteImport.update({
+  id: '/categories/',
+  path: '/categories/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SellerUploadRoute = SellerUploadRouteImport.update({
+  id: '/upload',
+  path: '/upload',
+  getParentRoute: () => SellerRoute,
+} as any)
+const SellerOnboardingRoute = SellerOnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => SellerRoute,
+} as any)
+const SellerListingsRoute = SellerListingsRouteImport.update({
+  id: '/listings',
+  path: '/listings',
+  getParentRoute: () => SellerRoute,
+} as any)
+const ListingIdRoute = ListingIdRouteImport.update({
+  id: '/listing/$id',
+  path: '/listing/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CategoriesSlugRoute = CategoriesSlugRouteImport.update({
+  id: '/categories/$slug',
+  path: '/categories/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthSignupRoute = AuthSignupRouteImport.update({
+  id: '/auth/signup',
+  path: '/auth/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthLoginRoute = AuthLoginRouteImport.update({
+  id: '/auth/login',
+  path: '/auth/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/account': typeof AccountRoute
+  '/marketplace': typeof MarketplaceRoute
+  '/sell': typeof SellRoute
+  '/seller': typeof SellerRouteWithChildren
+  '/auth/login': typeof AuthLoginRoute
+  '/auth/signup': typeof AuthSignupRoute
+  '/categories/$slug': typeof CategoriesSlugRoute
+  '/listing/$id': typeof ListingIdRoute
+  '/seller/listings': typeof SellerListingsRoute
+  '/seller/onboarding': typeof SellerOnboardingRoute
+  '/seller/upload': typeof SellerUploadRoute
+  '/categories/': typeof CategoriesIndexRoute
+  '/seller/': typeof SellerIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/account': typeof AccountRoute
+  '/marketplace': typeof MarketplaceRoute
+  '/sell': typeof SellRoute
+  '/auth/login': typeof AuthLoginRoute
+  '/auth/signup': typeof AuthSignupRoute
+  '/categories/$slug': typeof CategoriesSlugRoute
+  '/listing/$id': typeof ListingIdRoute
+  '/seller/listings': typeof SellerListingsRoute
+  '/seller/onboarding': typeof SellerOnboardingRoute
+  '/seller/upload': typeof SellerUploadRoute
+  '/categories': typeof CategoriesIndexRoute
+  '/seller': typeof SellerIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/account': typeof AccountRoute
+  '/marketplace': typeof MarketplaceRoute
+  '/sell': typeof SellRoute
+  '/seller': typeof SellerRouteWithChildren
+  '/auth/login': typeof AuthLoginRoute
+  '/auth/signup': typeof AuthSignupRoute
+  '/categories/$slug': typeof CategoriesSlugRoute
+  '/listing/$id': typeof ListingIdRoute
+  '/seller/listings': typeof SellerListingsRoute
+  '/seller/onboarding': typeof SellerOnboardingRoute
+  '/seller/upload': typeof SellerUploadRoute
+  '/categories/': typeof CategoriesIndexRoute
+  '/seller/': typeof SellerIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/account'
+    | '/marketplace'
+    | '/sell'
+    | '/seller'
+    | '/auth/login'
+    | '/auth/signup'
+    | '/categories/$slug'
+    | '/listing/$id'
+    | '/seller/listings'
+    | '/seller/onboarding'
+    | '/seller/upload'
+    | '/categories/'
+    | '/seller/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/account'
+    | '/marketplace'
+    | '/sell'
+    | '/auth/login'
+    | '/auth/signup'
+    | '/categories/$slug'
+    | '/listing/$id'
+    | '/seller/listings'
+    | '/seller/onboarding'
+    | '/seller/upload'
+    | '/categories'
+    | '/seller'
+  id:
+    | '__root__'
+    | '/'
+    | '/account'
+    | '/marketplace'
+    | '/sell'
+    | '/seller'
+    | '/auth/login'
+    | '/auth/signup'
+    | '/categories/$slug'
+    | '/listing/$id'
+    | '/seller/listings'
+    | '/seller/onboarding'
+    | '/seller/upload'
+    | '/categories/'
+    | '/seller/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AccountRoute: typeof AccountRoute
+  MarketplaceRoute: typeof MarketplaceRoute
+  SellRoute: typeof SellRoute
+  SellerRoute: typeof SellerRouteWithChildren
+  AuthLoginRoute: typeof AuthLoginRoute
+  AuthSignupRoute: typeof AuthSignupRoute
+  CategoriesSlugRoute: typeof CategoriesSlugRoute
+  ListingIdRoute: typeof ListingIdRoute
+  CategoriesIndexRoute: typeof CategoriesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/seller': {
+      id: '/seller'
+      path: '/seller'
+      fullPath: '/seller'
+      preLoaderRoute: typeof SellerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sell': {
+      id: '/sell'
+      path: '/sell'
+      fullPath: '/sell'
+      preLoaderRoute: typeof SellRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/marketplace': {
+      id: '/marketplace'
+      path: '/marketplace'
+      fullPath: '/marketplace'
+      preLoaderRoute: typeof MarketplaceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/account': {
+      id: '/account'
+      path: '/account'
+      fullPath: '/account'
+      preLoaderRoute: typeof AccountRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +243,101 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/seller/': {
+      id: '/seller/'
+      path: '/'
+      fullPath: '/seller/'
+      preLoaderRoute: typeof SellerIndexRouteImport
+      parentRoute: typeof SellerRoute
+    }
+    '/categories/': {
+      id: '/categories/'
+      path: '/categories'
+      fullPath: '/categories/'
+      preLoaderRoute: typeof CategoriesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/seller/upload': {
+      id: '/seller/upload'
+      path: '/upload'
+      fullPath: '/seller/upload'
+      preLoaderRoute: typeof SellerUploadRouteImport
+      parentRoute: typeof SellerRoute
+    }
+    '/seller/onboarding': {
+      id: '/seller/onboarding'
+      path: '/onboarding'
+      fullPath: '/seller/onboarding'
+      preLoaderRoute: typeof SellerOnboardingRouteImport
+      parentRoute: typeof SellerRoute
+    }
+    '/seller/listings': {
+      id: '/seller/listings'
+      path: '/listings'
+      fullPath: '/seller/listings'
+      preLoaderRoute: typeof SellerListingsRouteImport
+      parentRoute: typeof SellerRoute
+    }
+    '/listing/$id': {
+      id: '/listing/$id'
+      path: '/listing/$id'
+      fullPath: '/listing/$id'
+      preLoaderRoute: typeof ListingIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/categories/$slug': {
+      id: '/categories/$slug'
+      path: '/categories/$slug'
+      fullPath: '/categories/$slug'
+      preLoaderRoute: typeof CategoriesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/signup': {
+      id: '/auth/signup'
+      path: '/auth/signup'
+      fullPath: '/auth/signup'
+      preLoaderRoute: typeof AuthSignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/login': {
+      id: '/auth/login'
+      path: '/auth/login'
+      fullPath: '/auth/login'
+      preLoaderRoute: typeof AuthLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
+interface SellerRouteChildren {
+  SellerListingsRoute: typeof SellerListingsRoute
+  SellerOnboardingRoute: typeof SellerOnboardingRoute
+  SellerUploadRoute: typeof SellerUploadRoute
+  SellerIndexRoute: typeof SellerIndexRoute
+}
+
+const SellerRouteChildren: SellerRouteChildren = {
+  SellerListingsRoute: SellerListingsRoute,
+  SellerOnboardingRoute: SellerOnboardingRoute,
+  SellerUploadRoute: SellerUploadRoute,
+  SellerIndexRoute: SellerIndexRoute,
+}
+
+const SellerRouteWithChildren =
+  SellerRoute._addFileChildren(SellerRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AccountRoute: AccountRoute,
+  MarketplaceRoute: MarketplaceRoute,
+  SellRoute: SellRoute,
+  SellerRoute: SellerRouteWithChildren,
+  AuthLoginRoute: AuthLoginRoute,
+  AuthSignupRoute: AuthSignupRoute,
+  CategoriesSlugRoute: CategoriesSlugRoute,
+  ListingIdRoute: ListingIdRoute,
+  CategoriesIndexRoute: CategoriesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
