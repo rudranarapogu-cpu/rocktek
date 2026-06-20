@@ -28,6 +28,7 @@ import { Route as SellerDriversRouteImport } from './routes/seller/drivers'
 import { Route as SellerDispatchesRouteImport } from './routes/seller/dispatches'
 import { Route as ListingIdRouteImport } from './routes/listing/$id'
 import { Route as DriverOnboardingRouteImport } from './routes/driver/onboarding'
+import { Route as DriverActiveRouteImport } from './routes/driver/active'
 import { Route as CategoriesSlugRouteImport } from './routes/categories/$slug'
 import { Route as BuyerTrackingRouteImport } from './routes/buyer/tracking'
 import { Route as BuyerProfileRouteImport } from './routes/buyer/profile'
@@ -129,6 +130,11 @@ const DriverOnboardingRoute = DriverOnboardingRouteImport.update({
   path: '/onboarding',
   getParentRoute: () => DriverRoute,
 } as any)
+const DriverActiveRoute = DriverActiveRouteImport.update({
+  id: '/active',
+  path: '/active',
+  getParentRoute: () => DriverRoute,
+} as any)
 const CategoriesSlugRoute = CategoriesSlugRouteImport.update({
   id: '/categories/$slug',
   path: '/categories/$slug',
@@ -168,6 +174,7 @@ export interface FileRoutesByFullPath {
   '/buyer/profile': typeof BuyerProfileRoute
   '/buyer/tracking': typeof BuyerTrackingRoute
   '/categories/$slug': typeof CategoriesSlugRoute
+  '/driver/active': typeof DriverActiveRoute
   '/driver/onboarding': typeof DriverOnboardingRoute
   '/listing/$id': typeof ListingIdRoute
   '/seller/dispatches': typeof SellerDispatchesRoute
@@ -191,6 +198,7 @@ export interface FileRoutesByTo {
   '/buyer/profile': typeof BuyerProfileRoute
   '/buyer/tracking': typeof BuyerTrackingRoute
   '/categories/$slug': typeof CategoriesSlugRoute
+  '/driver/active': typeof DriverActiveRoute
   '/driver/onboarding': typeof DriverOnboardingRoute
   '/listing/$id': typeof ListingIdRoute
   '/seller/dispatches': typeof SellerDispatchesRoute
@@ -218,6 +226,7 @@ export interface FileRoutesById {
   '/buyer/profile': typeof BuyerProfileRoute
   '/buyer/tracking': typeof BuyerTrackingRoute
   '/categories/$slug': typeof CategoriesSlugRoute
+  '/driver/active': typeof DriverActiveRoute
   '/driver/onboarding': typeof DriverOnboardingRoute
   '/listing/$id': typeof ListingIdRoute
   '/seller/dispatches': typeof SellerDispatchesRoute
@@ -246,6 +255,7 @@ export interface FileRouteTypes {
     | '/buyer/profile'
     | '/buyer/tracking'
     | '/categories/$slug'
+    | '/driver/active'
     | '/driver/onboarding'
     | '/listing/$id'
     | '/seller/dispatches'
@@ -269,6 +279,7 @@ export interface FileRouteTypes {
     | '/buyer/profile'
     | '/buyer/tracking'
     | '/categories/$slug'
+    | '/driver/active'
     | '/driver/onboarding'
     | '/listing/$id'
     | '/seller/dispatches'
@@ -295,6 +306,7 @@ export interface FileRouteTypes {
     | '/buyer/profile'
     | '/buyer/tracking'
     | '/categories/$slug'
+    | '/driver/active'
     | '/driver/onboarding'
     | '/listing/$id'
     | '/seller/dispatches'
@@ -459,6 +471,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DriverOnboardingRouteImport
       parentRoute: typeof DriverRoute
     }
+    '/driver/active': {
+      id: '/driver/active'
+      path: '/active'
+      fullPath: '/driver/active'
+      preLoaderRoute: typeof DriverActiveRouteImport
+      parentRoute: typeof DriverRoute
+    }
     '/categories/$slug': {
       id: '/categories/$slug'
       path: '/categories/$slug'
@@ -512,11 +531,13 @@ const BuyerRouteChildren: BuyerRouteChildren = {
 const BuyerRouteWithChildren = BuyerRoute._addFileChildren(BuyerRouteChildren)
 
 interface DriverRouteChildren {
+  DriverActiveRoute: typeof DriverActiveRoute
   DriverOnboardingRoute: typeof DriverOnboardingRoute
   DriverIndexRoute: typeof DriverIndexRoute
 }
 
 const DriverRouteChildren: DriverRouteChildren = {
+  DriverActiveRoute: DriverActiveRoute,
   DriverOnboardingRoute: DriverOnboardingRoute,
   DriverIndexRoute: DriverIndexRoute,
 }
