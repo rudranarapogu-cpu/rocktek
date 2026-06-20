@@ -19,6 +19,7 @@ import { Route as SellerIndexRouteImport } from './routes/seller/index'
 import { Route as CategoriesIndexRouteImport } from './routes/categories/index'
 import { Route as BuyerIndexRouteImport } from './routes/buyer/index'
 import { Route as SellerUploadRouteImport } from './routes/seller/upload'
+import { Route as SellerOrdersRouteImport } from './routes/seller/orders'
 import { Route as SellerOnboardingRouteImport } from './routes/seller/onboarding'
 import { Route as SellerListingsRouteImport } from './routes/seller/listings'
 import { Route as ListingIdRouteImport } from './routes/listing/$id'
@@ -78,6 +79,11 @@ const SellerUploadRoute = SellerUploadRouteImport.update({
   path: '/upload',
   getParentRoute: () => SellerRoute,
 } as any)
+const SellerOrdersRoute = SellerOrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
+  getParentRoute: () => SellerRoute,
+} as any)
 const SellerOnboardingRoute = SellerOnboardingRouteImport.update({
   id: '/onboarding',
   path: '/onboarding',
@@ -134,6 +140,7 @@ export interface FileRoutesByFullPath {
   '/listing/$id': typeof ListingIdRoute
   '/seller/listings': typeof SellerListingsRoute
   '/seller/onboarding': typeof SellerOnboardingRoute
+  '/seller/orders': typeof SellerOrdersRoute
   '/seller/upload': typeof SellerUploadRoute
   '/buyer/': typeof BuyerIndexRoute
   '/categories/': typeof CategoriesIndexRoute
@@ -152,6 +159,7 @@ export interface FileRoutesByTo {
   '/listing/$id': typeof ListingIdRoute
   '/seller/listings': typeof SellerListingsRoute
   '/seller/onboarding': typeof SellerOnboardingRoute
+  '/seller/orders': typeof SellerOrdersRoute
   '/seller/upload': typeof SellerUploadRoute
   '/buyer': typeof BuyerIndexRoute
   '/categories': typeof CategoriesIndexRoute
@@ -173,6 +181,7 @@ export interface FileRoutesById {
   '/listing/$id': typeof ListingIdRoute
   '/seller/listings': typeof SellerListingsRoute
   '/seller/onboarding': typeof SellerOnboardingRoute
+  '/seller/orders': typeof SellerOrdersRoute
   '/seller/upload': typeof SellerUploadRoute
   '/buyer/': typeof BuyerIndexRoute
   '/categories/': typeof CategoriesIndexRoute
@@ -195,6 +204,7 @@ export interface FileRouteTypes {
     | '/listing/$id'
     | '/seller/listings'
     | '/seller/onboarding'
+    | '/seller/orders'
     | '/seller/upload'
     | '/buyer/'
     | '/categories/'
@@ -213,6 +223,7 @@ export interface FileRouteTypes {
     | '/listing/$id'
     | '/seller/listings'
     | '/seller/onboarding'
+    | '/seller/orders'
     | '/seller/upload'
     | '/buyer'
     | '/categories'
@@ -233,6 +244,7 @@ export interface FileRouteTypes {
     | '/listing/$id'
     | '/seller/listings'
     | '/seller/onboarding'
+    | '/seller/orders'
     | '/seller/upload'
     | '/buyer/'
     | '/categories/'
@@ -325,6 +337,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SellerUploadRouteImport
       parentRoute: typeof SellerRoute
     }
+    '/seller/orders': {
+      id: '/seller/orders'
+      path: '/orders'
+      fullPath: '/seller/orders'
+      preLoaderRoute: typeof SellerOrdersRouteImport
+      parentRoute: typeof SellerRoute
+    }
     '/seller/onboarding': {
       id: '/seller/onboarding'
       path: '/onboarding'
@@ -401,6 +420,7 @@ const BuyerRouteWithChildren = BuyerRoute._addFileChildren(BuyerRouteChildren)
 interface SellerRouteChildren {
   SellerListingsRoute: typeof SellerListingsRoute
   SellerOnboardingRoute: typeof SellerOnboardingRoute
+  SellerOrdersRoute: typeof SellerOrdersRoute
   SellerUploadRoute: typeof SellerUploadRoute
   SellerIndexRoute: typeof SellerIndexRoute
 }
@@ -408,6 +428,7 @@ interface SellerRouteChildren {
 const SellerRouteChildren: SellerRouteChildren = {
   SellerListingsRoute: SellerListingsRoute,
   SellerOnboardingRoute: SellerOnboardingRoute,
+  SellerOrdersRoute: SellerOrdersRoute,
   SellerUploadRoute: SellerUploadRoute,
   SellerIndexRoute: SellerIndexRoute,
 }
