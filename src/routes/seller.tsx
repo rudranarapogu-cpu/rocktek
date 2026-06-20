@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate, Outlet } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { Package, PlusCircle, ShieldCheck, ShieldAlert, LayoutDashboard } from "lucide-react";
+import { Package, PlusCircle, ShieldCheck, ShieldAlert, LayoutDashboard, ShoppingBag, Truck, Users } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { useAuth } from "@/lib/auth-context";
