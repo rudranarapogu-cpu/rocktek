@@ -1,11 +1,15 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowLeft, MapPin, Package, ShieldCheck, Clock, Hammer, Building2 } from "lucide-react";
+import { ArrowLeft, MapPin, Package, ShieldCheck, Clock, Hammer, Building2, X } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
+import { ADVANCE_RATE, inr } from "@/lib/logistics";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/listing/$id")({
@@ -18,6 +22,7 @@ function ListingDetail() {
   const [listing, setListing] = useState<any>(null);
   const [activeImg, setActiveImg] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [booking, setBooking] = useState(false);
 
   useEffect(() => {
     supabase
@@ -33,14 +38,7 @@ function ListingDetail() {
 
   const images: { url: string }[] = listing.listing_images ?? [];
   const expiresIn = Math.max(0, Math.ceil((new Date(listing.expires_at).getTime() - Date.now()) / 86400000));
-
-  const handleBookNow = () => {
-    if (!user) {
-      toast.info("Please log in to book.");
-      return;
-    }
-    toast.success("Booking flow coming in Phase 2");
-  };
+  const soldOut = listing.status === "sold" || Number(listing.stock_available) <= 0;
 
   return (
     <PageShell>
@@ -88,14 +86,18 @@ function ListingDetail() {
             <div className="flex items-end justify-between">
               <div>
                 <p className="text-xs uppercase text-muted-foreground">Price</p>
-                <p className="font-display text-4xl">₹{Number(listing.price).toLocaleString("en-IN")}<span className="text-base text-muted-foreground">/{listing.unit_type}</span></p>
+                <p className="font-display text-4xl">{inr(Number(listing.price))}<span className="text-base text-muted-foreground">/{listing.unit_type}</span></p>
               </div>
               <div className="text-right">
                 <p className="text-xs uppercase text-muted-foreground">1% advance only</p>
-                <p className="font-display text-xl text-primary">₹{Math.round(Number(listing.price) * 0.01).toLocaleString("en-IN")}</p>
+                <p className="font-display text-xl text-primary">{inr(Number(listing.price) * ADVANCE_RATE)}</p>
               </div>
             </div>
-            <Button onClick={handleBookNow} size="lg" className="mt-4 w-full bg-primary">Book Now</Button>
+            {soldOut ? (
+              <Button disabled size="lg" className="mt-4 w-full">Sold out</Button>
+            ) : (
+              <Button onClick={() => setBooking(true)} size="lg" className="mt-4 w-full bg-primary">Book Now</Button>
+            )}
             <p className="mt-2 text-center text-xs text-muted-foreground">RockTek mediates the full transaction. Pay 1% to lock the order.</p>
           </div>
 
@@ -106,8 +108,99 @@ function ListingDetail() {
           </div>
         </div>
       </div>
+
+      {booking && <BookingDialog listing={listing} user={user} onClose={() => setBooking(false)} />}
     </PageShell>
   );
+}
+
+function BookingDialog({ listing, user, onClose }: { listing: any; user: any; onClose: () => void }) {
+  const nav = useNavigate();
+  const [qty, setQty] = useState("1");
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+
+  const stock = Number(listing.stock_available);
+  const quantity = Math.max(0, Number(qty) || 0);
+  const total = quantity * Number(listing.price);
+  const advance = total * ADVANCE_RATE;
+
+  const confirm = async () => {
+    if (!user) { toast.info("Please sign in to book."); nav({ to: "/auth/login" }); return; }
+    if (quantity <= 0) return toast.error("Enter a valid quantity");
+    if (quantity > stock) return toast.error(`Only ${stock} ${listing.unit_type} available`);
+    if (!name || !phone || !address) return toast.error("Fill in your contact & delivery details");
+
+    setSubmitting(true);
+    // Mock payment: assume 1% advance succeeds, mark order confirmed (stock auto-reduces via DB trigger).
+    const { error } = await supabase.from("orders").insert({
+      listing_id: listing.id,
+      buyer_id: user.id,
+      seller_id: listing.seller_id,
+      quantity,
+      unit_price: Number(listing.price),
+      total_amount: total,
+      advance_amount: advance,
+      status: "confirmed",
+      payment_status: "advance_paid",
+      buyer_name: name,
+      buyer_phone: phone,
+      delivery_address: address,
+    });
+    setSubmitting(false);
+    if (error) return toast.error(error.message);
+    toast.success("Booking confirmed! Advance paid.");
+    nav({ to: "/buyer" });
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4" onClick={onClose}>
+      <div className="w-full max-w-md rounded-2xl border border-border bg-background p-6 shadow-xl" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-start justify-between">
+          <div>
+            <p className="font-display text-xs uppercase tracking-[0.3em] text-primary">Booking</p>
+            <h2 className="mt-1 font-display text-2xl">{listing.title}</h2>
+          </div>
+          <button onClick={onClose} className="rounded-md p-1 hover:bg-muted"><X className="h-5 w-5" /></button>
+        </div>
+
+        <div className="mt-5 space-y-3">
+          <F label={`Quantity (${listing.unit_type}) — max ${stock}`}>
+            <Input type="number" min="1" max={stock} value={qty} onChange={(e) => setQty(e.target.value)} />
+          </F>
+          <F label="Your name"><Input value={name} onChange={(e) => setName(e.target.value)} /></F>
+          <F label="Phone"><Input value={phone} onChange={(e) => setPhone(e.target.value)} /></F>
+          <F label="Delivery address"><Textarea rows={2} value={address} onChange={(e) => setAddress(e.target.value)} /></F>
+        </div>
+
+        <div className="mt-4 space-y-1 rounded-xl bg-muted p-4 text-sm">
+          <Row label="Order total" value={inr(total)} />
+          <Row label="Advance now (1%)" value={inr(advance)} highlight />
+          <Row label="Balance on delivery" value={inr(total - advance)} muted />
+        </div>
+
+        <Button onClick={confirm} disabled={submitting} size="lg" className="mt-4 w-full bg-primary">
+          {submitting ? "Processing payment…" : `Pay ${inr(advance)} & confirm`}
+        </Button>
+        <p className="mt-2 text-center text-xs text-muted-foreground">Mock payment for demo. Stock reduces automatically.</p>
+      </div>
+    </div>
+  );
+}
+
+function Row({ label, value, highlight, muted }: { label: string; value: string; highlight?: boolean; muted?: boolean }) {
+  return (
+    <div className="flex items-center justify-between">
+      <span className={muted ? "text-muted-foreground" : ""}>{label}</span>
+      <span className={`font-semibold ${highlight ? "text-primary" : ""}`}>{value}</span>
+    </div>
+  );
+}
+
+function F({ label, children }: { label: string; children: React.ReactNode }) {
+  return <div className="space-y-1.5"><Label>{label}</Label>{children}</div>;
 }
 
 function Spec({ icon: Icon, label, value }: { icon: any; label: string; value: string }) {
