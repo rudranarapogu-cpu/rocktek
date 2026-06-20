@@ -41,6 +41,86 @@ export type Database = {
         }
         Relationships: []
       }
+      delivery_proofs: {
+        Row: {
+          created_at: string
+          doc_url: string | null
+          id: string
+          image_url: string | null
+          notes: string | null
+          trip_id: string
+        }
+        Insert: {
+          created_at?: string
+          doc_url?: string | null
+          id?: string
+          image_url?: string | null
+          notes?: string | null
+          trip_id: string
+        }
+        Update: {
+          created_at?: string
+          doc_url?: string | null
+          id?: string
+          image_url?: string | null
+          notes?: string | null
+          trip_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "delivery_proofs_trip_id_fkey"
+            columns: ["trip_id"]
+            isOneToOne: false
+            referencedRelation: "trips"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      drivers: {
+        Row: {
+          created_at: string
+          full_name: string
+          id: string
+          license_number: string
+          phone: string
+          state: string | null
+          status: Database["public"]["Enums"]["driver_status"]
+          updated_at: string
+          user_id: string
+          vehicle_number: string
+          vehicle_type: string | null
+          verified_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          full_name: string
+          id?: string
+          license_number: string
+          phone: string
+          state?: string | null
+          status?: Database["public"]["Enums"]["driver_status"]
+          updated_at?: string
+          user_id: string
+          vehicle_number: string
+          vehicle_type?: string | null
+          verified_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          full_name?: string
+          id?: string
+          license_number?: string
+          phone?: string
+          state?: string | null
+          status?: Database["public"]["Enums"]["driver_status"]
+          updated_at?: string
+          user_id?: string
+          vehicle_number?: string
+          vehicle_type?: string | null
+          verified_at?: string | null
+        }
+        Relationships: []
+      }
       listing_images: {
         Row: {
           created_at: string
@@ -180,6 +260,75 @@ export type Database = {
           },
         ]
       }
+      orders: {
+        Row: {
+          advance_amount: number
+          buyer_id: string
+          buyer_name: string | null
+          buyer_phone: string | null
+          created_at: string
+          delivery_address: string | null
+          id: string
+          listing_id: string
+          payment_status: Database["public"]["Enums"]["payment_status"]
+          quantity: number
+          seller_id: string
+          status: Database["public"]["Enums"]["order_status"]
+          total_amount: number
+          unit_price: number
+          updated_at: string
+        }
+        Insert: {
+          advance_amount: number
+          buyer_id: string
+          buyer_name?: string | null
+          buyer_phone?: string | null
+          created_at?: string
+          delivery_address?: string | null
+          id?: string
+          listing_id: string
+          payment_status?: Database["public"]["Enums"]["payment_status"]
+          quantity: number
+          seller_id: string
+          status?: Database["public"]["Enums"]["order_status"]
+          total_amount: number
+          unit_price: number
+          updated_at?: string
+        }
+        Update: {
+          advance_amount?: number
+          buyer_id?: string
+          buyer_name?: string | null
+          buyer_phone?: string | null
+          created_at?: string
+          delivery_address?: string | null
+          id?: string
+          listing_id?: string
+          payment_status?: Database["public"]["Enums"]["payment_status"]
+          quantity?: number
+          seller_id?: string
+          status?: Database["public"]["Enums"]["order_status"]
+          total_amount?: number
+          unit_price?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "orders_listing_id_fkey"
+            columns: ["listing_id"]
+            isOneToOne: false
+            referencedRelation: "listings"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "orders_seller_id_fkey"
+            columns: ["seller_id"]
+            isOneToOne: false
+            referencedRelation: "sellers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -287,6 +436,102 @@ export type Database = {
         }
         Relationships: []
       }
+      trip_locations: {
+        Row: {
+          id: string
+          lat: number
+          lng: number
+          recorded_at: string
+          trip_id: string
+        }
+        Insert: {
+          id?: string
+          lat: number
+          lng: number
+          recorded_at?: string
+          trip_id: string
+        }
+        Update: {
+          id?: string
+          lat?: number
+          lng?: number
+          recorded_at?: string
+          trip_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "trip_locations_trip_id_fkey"
+            columns: ["trip_id"]
+            isOneToOne: false
+            referencedRelation: "trips"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      trips: {
+        Row: {
+          created_at: string
+          current_lat: number | null
+          current_lng: number | null
+          delivered_at: string | null
+          driver_id: string
+          id: string
+          order_id: string
+          seller_id: string
+          started_at: string | null
+          status: Database["public"]["Enums"]["trip_status"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          current_lat?: number | null
+          current_lng?: number | null
+          delivered_at?: string | null
+          driver_id: string
+          id?: string
+          order_id: string
+          seller_id: string
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["trip_status"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          current_lat?: number | null
+          current_lng?: number | null
+          delivered_at?: string | null
+          driver_id?: string
+          id?: string
+          order_id?: string
+          seller_id?: string
+          started_at?: string | null
+          status?: Database["public"]["Enums"]["trip_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "trips_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
+            referencedRelation: "drivers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "trips_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "trips_seller_id_fkey"
+            columns: ["seller_id"]
+            isOneToOne: false
+            referencedRelation: "sellers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -313,6 +558,9 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      can_view_trip: { Args: { _trip_id: string }; Returns: boolean }
+      get_my_driver_id: { Args: never; Returns: string }
+      get_my_seller_id: { Args: never; Returns: string }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -322,9 +570,25 @@ export type Database = {
       }
     }
     Enums: {
-      app_role: "buyer" | "seller" | "admin"
+      app_role: "buyer" | "seller" | "admin" | "driver"
+      driver_status: "pending" | "approved" | "rejected"
       listing_status: "active" | "sold" | "expired"
+      order_status:
+        | "pending"
+        | "confirmed"
+        | "dispatched"
+        | "in_transit"
+        | "delivered"
+        | "cancelled"
+      payment_status: "unpaid" | "advance_paid" | "paid"
       seller_status: "pending" | "approved" | "rejected"
+      trip_status:
+        | "assigned"
+        | "loading"
+        | "picked_up"
+        | "in_transit"
+        | "near_destination"
+        | "delivered"
       unit_type: "sqft" | "tons"
     }
     CompositeTypes: {
@@ -453,9 +717,27 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["buyer", "seller", "admin"],
+      app_role: ["buyer", "seller", "admin", "driver"],
+      driver_status: ["pending", "approved", "rejected"],
       listing_status: ["active", "sold", "expired"],
+      order_status: [
+        "pending",
+        "confirmed",
+        "dispatched",
+        "in_transit",
+        "delivered",
+        "cancelled",
+      ],
+      payment_status: ["unpaid", "advance_paid", "paid"],
       seller_status: ["pending", "approved", "rejected"],
+      trip_status: [
+        "assigned",
+        "loading",
+        "picked_up",
+        "in_transit",
+        "near_destination",
+        "delivered",
+      ],
       unit_type: ["sqft", "tons"],
     },
   },
