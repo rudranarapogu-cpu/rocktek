@@ -38,6 +38,8 @@ import { Route as BuyerProfileRouteImport } from './routes/buyer/profile'
 import { Route as AuthSignupRouteImport } from './routes/auth/signup'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
 import { Route as AdminSellersRouteImport } from './routes/admin/sellers'
+import { Route as AdminLogisticsRouteImport } from './routes/admin/logistics'
+import { Route as AdminInventoryRouteImport } from './routes/admin/inventory'
 import { Route as AdminDriversRouteImport } from './routes/admin/drivers'
 
 const SellerRoute = SellerRouteImport.update({
@@ -185,6 +187,16 @@ const AdminSellersRoute = AdminSellersRouteImport.update({
   path: '/sellers',
   getParentRoute: () => AdminRoute,
 } as any)
+const AdminLogisticsRoute = AdminLogisticsRouteImport.update({
+  id: '/logistics',
+  path: '/logistics',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminInventoryRoute = AdminInventoryRouteImport.update({
+  id: '/inventory',
+  path: '/inventory',
+  getParentRoute: () => AdminRoute,
+} as any)
 const AdminDriversRoute = AdminDriversRouteImport.update({
   id: '/drivers',
   path: '/drivers',
@@ -201,6 +213,8 @@ export interface FileRoutesByFullPath {
   '/sell': typeof SellRoute
   '/seller': typeof SellerRouteWithChildren
   '/admin/drivers': typeof AdminDriversRoute
+  '/admin/inventory': typeof AdminInventoryRoute
+  '/admin/logistics': typeof AdminLogisticsRoute
   '/admin/sellers': typeof AdminSellersRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
@@ -229,6 +243,8 @@ export interface FileRoutesByTo {
   '/marketplace': typeof MarketplaceRoute
   '/sell': typeof SellRoute
   '/admin/drivers': typeof AdminDriversRoute
+  '/admin/inventory': typeof AdminInventoryRoute
+  '/admin/logistics': typeof AdminLogisticsRoute
   '/admin/sellers': typeof AdminSellersRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
@@ -262,6 +278,8 @@ export interface FileRoutesById {
   '/sell': typeof SellRoute
   '/seller': typeof SellerRouteWithChildren
   '/admin/drivers': typeof AdminDriversRoute
+  '/admin/inventory': typeof AdminInventoryRoute
+  '/admin/logistics': typeof AdminLogisticsRoute
   '/admin/sellers': typeof AdminSellersRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
@@ -296,6 +314,8 @@ export interface FileRouteTypes {
     | '/sell'
     | '/seller'
     | '/admin/drivers'
+    | '/admin/inventory'
+    | '/admin/logistics'
     | '/admin/sellers'
     | '/auth/login'
     | '/auth/signup'
@@ -324,6 +344,8 @@ export interface FileRouteTypes {
     | '/marketplace'
     | '/sell'
     | '/admin/drivers'
+    | '/admin/inventory'
+    | '/admin/logistics'
     | '/admin/sellers'
     | '/auth/login'
     | '/auth/signup'
@@ -356,6 +378,8 @@ export interface FileRouteTypes {
     | '/sell'
     | '/seller'
     | '/admin/drivers'
+    | '/admin/inventory'
+    | '/admin/logistics'
     | '/admin/sellers'
     | '/auth/login'
     | '/auth/signup'
@@ -600,6 +624,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminSellersRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/admin/logistics': {
+      id: '/admin/logistics'
+      path: '/logistics'
+      fullPath: '/admin/logistics'
+      preLoaderRoute: typeof AdminLogisticsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/inventory': {
+      id: '/admin/inventory'
+      path: '/inventory'
+      fullPath: '/admin/inventory'
+      preLoaderRoute: typeof AdminInventoryRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/admin/drivers': {
       id: '/admin/drivers'
       path: '/drivers'
@@ -612,12 +650,16 @@ declare module '@tanstack/react-router' {
 
 interface AdminRouteChildren {
   AdminDriversRoute: typeof AdminDriversRoute
+  AdminInventoryRoute: typeof AdminInventoryRoute
+  AdminLogisticsRoute: typeof AdminLogisticsRoute
   AdminSellersRoute: typeof AdminSellersRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
   AdminDriversRoute: AdminDriversRoute,
+  AdminInventoryRoute: AdminInventoryRoute,
+  AdminLogisticsRoute: AdminLogisticsRoute,
   AdminSellersRoute: AdminSellersRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
