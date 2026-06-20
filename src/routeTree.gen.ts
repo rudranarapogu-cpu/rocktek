@@ -17,11 +17,14 @@ import { Route as AccountRouteImport } from './routes/account'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SellerIndexRouteImport } from './routes/seller/index'
 import { Route as CategoriesIndexRouteImport } from './routes/categories/index'
+import { Route as BuyerIndexRouteImport } from './routes/buyer/index'
 import { Route as SellerUploadRouteImport } from './routes/seller/upload'
 import { Route as SellerOnboardingRouteImport } from './routes/seller/onboarding'
 import { Route as SellerListingsRouteImport } from './routes/seller/listings'
 import { Route as ListingIdRouteImport } from './routes/listing/$id'
 import { Route as CategoriesSlugRouteImport } from './routes/categories/$slug'
+import { Route as BuyerTrackingRouteImport } from './routes/buyer/tracking'
+import { Route as BuyerProfileRouteImport } from './routes/buyer/profile'
 import { Route as AuthSignupRouteImport } from './routes/auth/signup'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
 
@@ -65,6 +68,11 @@ const CategoriesIndexRoute = CategoriesIndexRouteImport.update({
   path: '/categories/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BuyerIndexRoute = BuyerIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => BuyerRoute,
+} as any)
 const SellerUploadRoute = SellerUploadRouteImport.update({
   id: '/upload',
   path: '/upload',
@@ -90,6 +98,16 @@ const CategoriesSlugRoute = CategoriesSlugRouteImport.update({
   path: '/categories/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BuyerTrackingRoute = BuyerTrackingRouteImport.update({
+  id: '/tracking',
+  path: '/tracking',
+  getParentRoute: () => BuyerRoute,
+} as any)
+const BuyerProfileRoute = BuyerProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => BuyerRoute,
+} as any)
 const AuthSignupRoute = AuthSignupRouteImport.update({
   id: '/auth/signup',
   path: '/auth/signup',
@@ -104,33 +122,38 @@ const AuthLoginRoute = AuthLoginRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/account': typeof AccountRoute
-  '/buyer': typeof BuyerRoute
+  '/buyer': typeof BuyerRouteWithChildren
   '/marketplace': typeof MarketplaceRoute
   '/sell': typeof SellRoute
   '/seller': typeof SellerRouteWithChildren
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
+  '/buyer/profile': typeof BuyerProfileRoute
+  '/buyer/tracking': typeof BuyerTrackingRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/listing/$id': typeof ListingIdRoute
   '/seller/listings': typeof SellerListingsRoute
   '/seller/onboarding': typeof SellerOnboardingRoute
   '/seller/upload': typeof SellerUploadRoute
+  '/buyer/': typeof BuyerIndexRoute
   '/categories/': typeof CategoriesIndexRoute
   '/seller/': typeof SellerIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/account': typeof AccountRoute
-  '/buyer': typeof BuyerRoute
   '/marketplace': typeof MarketplaceRoute
   '/sell': typeof SellRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
+  '/buyer/profile': typeof BuyerProfileRoute
+  '/buyer/tracking': typeof BuyerTrackingRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/listing/$id': typeof ListingIdRoute
   '/seller/listings': typeof SellerListingsRoute
   '/seller/onboarding': typeof SellerOnboardingRoute
   '/seller/upload': typeof SellerUploadRoute
+  '/buyer': typeof BuyerIndexRoute
   '/categories': typeof CategoriesIndexRoute
   '/seller': typeof SellerIndexRoute
 }
@@ -138,17 +161,20 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/account': typeof AccountRoute
-  '/buyer': typeof BuyerRoute
+  '/buyer': typeof BuyerRouteWithChildren
   '/marketplace': typeof MarketplaceRoute
   '/sell': typeof SellRoute
   '/seller': typeof SellerRouteWithChildren
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
+  '/buyer/profile': typeof BuyerProfileRoute
+  '/buyer/tracking': typeof BuyerTrackingRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/listing/$id': typeof ListingIdRoute
   '/seller/listings': typeof SellerListingsRoute
   '/seller/onboarding': typeof SellerOnboardingRoute
   '/seller/upload': typeof SellerUploadRoute
+  '/buyer/': typeof BuyerIndexRoute
   '/categories/': typeof CategoriesIndexRoute
   '/seller/': typeof SellerIndexRoute
 }
@@ -163,27 +189,32 @@ export interface FileRouteTypes {
     | '/seller'
     | '/auth/login'
     | '/auth/signup'
+    | '/buyer/profile'
+    | '/buyer/tracking'
     | '/categories/$slug'
     | '/listing/$id'
     | '/seller/listings'
     | '/seller/onboarding'
     | '/seller/upload'
+    | '/buyer/'
     | '/categories/'
     | '/seller/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/account'
-    | '/buyer'
     | '/marketplace'
     | '/sell'
     | '/auth/login'
     | '/auth/signup'
+    | '/buyer/profile'
+    | '/buyer/tracking'
     | '/categories/$slug'
     | '/listing/$id'
     | '/seller/listings'
     | '/seller/onboarding'
     | '/seller/upload'
+    | '/buyer'
     | '/categories'
     | '/seller'
   id:
@@ -196,11 +227,14 @@ export interface FileRouteTypes {
     | '/seller'
     | '/auth/login'
     | '/auth/signup'
+    | '/buyer/profile'
+    | '/buyer/tracking'
     | '/categories/$slug'
     | '/listing/$id'
     | '/seller/listings'
     | '/seller/onboarding'
     | '/seller/upload'
+    | '/buyer/'
     | '/categories/'
     | '/seller/'
   fileRoutesById: FileRoutesById
@@ -208,7 +242,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AccountRoute: typeof AccountRoute
-  BuyerRoute: typeof BuyerRoute
+  BuyerRoute: typeof BuyerRouteWithChildren
   MarketplaceRoute: typeof MarketplaceRoute
   SellRoute: typeof SellRoute
   SellerRoute: typeof SellerRouteWithChildren
@@ -277,6 +311,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CategoriesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/buyer/': {
+      id: '/buyer/'
+      path: '/'
+      fullPath: '/buyer/'
+      preLoaderRoute: typeof BuyerIndexRouteImport
+      parentRoute: typeof BuyerRoute
+    }
     '/seller/upload': {
       id: '/seller/upload'
       path: '/upload'
@@ -312,6 +353,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CategoriesSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/buyer/tracking': {
+      id: '/buyer/tracking'
+      path: '/tracking'
+      fullPath: '/buyer/tracking'
+      preLoaderRoute: typeof BuyerTrackingRouteImport
+      parentRoute: typeof BuyerRoute
+    }
+    '/buyer/profile': {
+      id: '/buyer/profile'
+      path: '/profile'
+      fullPath: '/buyer/profile'
+      preLoaderRoute: typeof BuyerProfileRouteImport
+      parentRoute: typeof BuyerRoute
+    }
     '/auth/signup': {
       id: '/auth/signup'
       path: '/auth/signup'
@@ -328,6 +383,20 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface BuyerRouteChildren {
+  BuyerProfileRoute: typeof BuyerProfileRoute
+  BuyerTrackingRoute: typeof BuyerTrackingRoute
+  BuyerIndexRoute: typeof BuyerIndexRoute
+}
+
+const BuyerRouteChildren: BuyerRouteChildren = {
+  BuyerProfileRoute: BuyerProfileRoute,
+  BuyerTrackingRoute: BuyerTrackingRoute,
+  BuyerIndexRoute: BuyerIndexRoute,
+}
+
+const BuyerRouteWithChildren = BuyerRoute._addFileChildren(BuyerRouteChildren)
 
 interface SellerRouteChildren {
   SellerListingsRoute: typeof SellerListingsRoute
@@ -349,7 +418,7 @@ const SellerRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AccountRoute: AccountRoute,
-  BuyerRoute: BuyerRoute,
+  BuyerRoute: BuyerRouteWithChildren,
   MarketplaceRoute: MarketplaceRoute,
   SellRoute: SellRoute,
   SellerRoute: SellerRouteWithChildren,

@@ -57,7 +57,7 @@ function BuyerTracking() {
 
 function TrackingCard({ trip }: { trip: any }) {
   const live = useTripLive(trip.id, trip);
-  const status = live?.status ?? trip.status;
+  const status = (live?.status ?? trip.status) as TripStatus;
   return (
     <div className="rounded-xl border border-border bg-card p-5">
       <div className="flex items-center justify-between">
