@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SellerRouteImport } from './routes/seller'
 import { Route as SellRouteImport } from './routes/sell'
 import { Route as MarketplaceRouteImport } from './routes/marketplace'
+import { Route as BuyerRouteImport } from './routes/buyer'
 import { Route as AccountRouteImport } from './routes/account'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SellerIndexRouteImport } from './routes/seller/index'
@@ -37,6 +38,11 @@ const SellRoute = SellRouteImport.update({
 const MarketplaceRoute = MarketplaceRouteImport.update({
   id: '/marketplace',
   path: '/marketplace',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BuyerRoute = BuyerRouteImport.update({
+  id: '/buyer',
+  path: '/buyer',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AccountRoute = AccountRouteImport.update({
@@ -98,6 +104,7 @@ const AuthLoginRoute = AuthLoginRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/account': typeof AccountRoute
+  '/buyer': typeof BuyerRoute
   '/marketplace': typeof MarketplaceRoute
   '/sell': typeof SellRoute
   '/seller': typeof SellerRouteWithChildren
@@ -114,6 +121,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/account': typeof AccountRoute
+  '/buyer': typeof BuyerRoute
   '/marketplace': typeof MarketplaceRoute
   '/sell': typeof SellRoute
   '/auth/login': typeof AuthLoginRoute
@@ -130,6 +138,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/account': typeof AccountRoute
+  '/buyer': typeof BuyerRoute
   '/marketplace': typeof MarketplaceRoute
   '/sell': typeof SellRoute
   '/seller': typeof SellerRouteWithChildren
@@ -148,6 +157,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/account'
+    | '/buyer'
     | '/marketplace'
     | '/sell'
     | '/seller'
@@ -164,6 +174,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/account'
+    | '/buyer'
     | '/marketplace'
     | '/sell'
     | '/auth/login'
@@ -179,6 +190,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/account'
+    | '/buyer'
     | '/marketplace'
     | '/sell'
     | '/seller'
@@ -196,6 +208,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AccountRoute: typeof AccountRoute
+  BuyerRoute: typeof BuyerRoute
   MarketplaceRoute: typeof MarketplaceRoute
   SellRoute: typeof SellRoute
   SellerRoute: typeof SellerRouteWithChildren
@@ -227,6 +240,13 @@ declare module '@tanstack/react-router' {
       path: '/marketplace'
       fullPath: '/marketplace'
       preLoaderRoute: typeof MarketplaceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/buyer': {
+      id: '/buyer'
+      path: '/buyer'
+      fullPath: '/buyer'
+      preLoaderRoute: typeof BuyerRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/account': {
@@ -329,6 +349,7 @@ const SellerRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AccountRoute: AccountRoute,
+  BuyerRoute: BuyerRoute,
   MarketplaceRoute: MarketplaceRoute,
   SellRoute: SellRoute,
   SellerRoute: SellerRouteWithChildren,
