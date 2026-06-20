@@ -26,8 +26,11 @@ function SellerLayout() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 py-8 grid gap-6 lg:grid-cols-[220px_1fr]">
         <aside className="flex flex-row gap-2 overflow-x-auto rounded-xl border border-border bg-card p-2 lg:flex-col">
           <NavItem to="/seller" icon={LayoutDashboard} label="Overview" />
-          <NavItem to="/seller/listings" icon={Package} label="My Listings" />
+          <NavItem to="/seller/listings" icon={Package} label="Inventory" />
           <NavItem to="/seller/upload" icon={PlusCircle} label="Upload" />
+          <NavItem to="/seller/orders" icon={ShoppingBag} label="Orders" />
+          <NavItem to="/seller/dispatches" icon={Truck} label="Dispatches" />
+          <NavItem to="/seller/drivers" icon={Users} label="Drivers" />
           <NavItem to="/seller/onboarding" icon={ShieldCheck} label="Profile" />
         </aside>
         <main><Outlet /></main>
