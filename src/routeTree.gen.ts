@@ -12,17 +12,35 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as SellerRouteImport } from './routes/seller'
 import { Route as SellRouteImport } from './routes/sell'
 import { Route as MarketplaceRouteImport } from './routes/marketplace'
+import { Route as DriverRouteImport } from './routes/driver'
+import { Route as BuyerRouteImport } from './routes/buyer'
+import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AccountRouteImport } from './routes/account'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SellerIndexRouteImport } from './routes/seller/index'
+import { Route as DriverIndexRouteImport } from './routes/driver/index'
 import { Route as CategoriesIndexRouteImport } from './routes/categories/index'
+import { Route as BuyerIndexRouteImport } from './routes/buyer/index'
+import { Route as AdminIndexRouteImport } from './routes/admin/index'
 import { Route as SellerUploadRouteImport } from './routes/seller/upload'
+import { Route as SellerOrdersRouteImport } from './routes/seller/orders'
 import { Route as SellerOnboardingRouteImport } from './routes/seller/onboarding'
 import { Route as SellerListingsRouteImport } from './routes/seller/listings'
+import { Route as SellerDriversRouteImport } from './routes/seller/drivers'
+import { Route as SellerDispatchesRouteImport } from './routes/seller/dispatches'
 import { Route as ListingIdRouteImport } from './routes/listing/$id'
+import { Route as DriverProofRouteImport } from './routes/driver/proof'
+import { Route as DriverOnboardingRouteImport } from './routes/driver/onboarding'
+import { Route as DriverActiveRouteImport } from './routes/driver/active'
 import { Route as CategoriesSlugRouteImport } from './routes/categories/$slug'
+import { Route as BuyerTrackingRouteImport } from './routes/buyer/tracking'
+import { Route as BuyerProfileRouteImport } from './routes/buyer/profile'
 import { Route as AuthSignupRouteImport } from './routes/auth/signup'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
+import { Route as AdminSellersRouteImport } from './routes/admin/sellers'
+import { Route as AdminLogisticsRouteImport } from './routes/admin/logistics'
+import { Route as AdminInventoryRouteImport } from './routes/admin/inventory'
+import { Route as AdminDriversRouteImport } from './routes/admin/drivers'
 
 const SellerRoute = SellerRouteImport.update({
   id: '/seller',
@@ -37,6 +55,21 @@ const SellRoute = SellRouteImport.update({
 const MarketplaceRoute = MarketplaceRouteImport.update({
   id: '/marketplace',
   path: '/marketplace',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DriverRoute = DriverRouteImport.update({
+  id: '/driver',
+  path: '/driver',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BuyerRoute = BuyerRouteImport.update({
+  id: '/buyer',
+  path: '/buyer',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AccountRoute = AccountRouteImport.update({
@@ -54,14 +87,34 @@ const SellerIndexRoute = SellerIndexRouteImport.update({
   path: '/',
   getParentRoute: () => SellerRoute,
 } as any)
+const DriverIndexRoute = DriverIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DriverRoute,
+} as any)
 const CategoriesIndexRoute = CategoriesIndexRouteImport.update({
   id: '/categories/',
   path: '/categories/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BuyerIndexRoute = BuyerIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => BuyerRoute,
+} as any)
+const AdminIndexRoute = AdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AdminRoute,
+} as any)
 const SellerUploadRoute = SellerUploadRouteImport.update({
   id: '/upload',
   path: '/upload',
+  getParentRoute: () => SellerRoute,
+} as any)
+const SellerOrdersRoute = SellerOrdersRouteImport.update({
+  id: '/orders',
+  path: '/orders',
   getParentRoute: () => SellerRoute,
 } as any)
 const SellerOnboardingRoute = SellerOnboardingRouteImport.update({
@@ -74,15 +127,50 @@ const SellerListingsRoute = SellerListingsRouteImport.update({
   path: '/listings',
   getParentRoute: () => SellerRoute,
 } as any)
+const SellerDriversRoute = SellerDriversRouteImport.update({
+  id: '/drivers',
+  path: '/drivers',
+  getParentRoute: () => SellerRoute,
+} as any)
+const SellerDispatchesRoute = SellerDispatchesRouteImport.update({
+  id: '/dispatches',
+  path: '/dispatches',
+  getParentRoute: () => SellerRoute,
+} as any)
 const ListingIdRoute = ListingIdRouteImport.update({
   id: '/listing/$id',
   path: '/listing/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DriverProofRoute = DriverProofRouteImport.update({
+  id: '/proof',
+  path: '/proof',
+  getParentRoute: () => DriverRoute,
+} as any)
+const DriverOnboardingRoute = DriverOnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => DriverRoute,
+} as any)
+const DriverActiveRoute = DriverActiveRouteImport.update({
+  id: '/active',
+  path: '/active',
+  getParentRoute: () => DriverRoute,
+} as any)
 const CategoriesSlugRoute = CategoriesSlugRouteImport.update({
   id: '/categories/$slug',
   path: '/categories/$slug',
   getParentRoute: () => rootRouteImport,
+} as any)
+const BuyerTrackingRoute = BuyerTrackingRouteImport.update({
+  id: '/tracking',
+  path: '/tracking',
+  getParentRoute: () => BuyerRoute,
+} as any)
+const BuyerProfileRoute = BuyerProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => BuyerRoute,
 } as any)
 const AuthSignupRoute = AuthSignupRouteImport.update({
   id: '/auth/signup',
@@ -94,21 +182,59 @@ const AuthLoginRoute = AuthLoginRouteImport.update({
   path: '/auth/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminSellersRoute = AdminSellersRouteImport.update({
+  id: '/sellers',
+  path: '/sellers',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminLogisticsRoute = AdminLogisticsRouteImport.update({
+  id: '/logistics',
+  path: '/logistics',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminInventoryRoute = AdminInventoryRouteImport.update({
+  id: '/inventory',
+  path: '/inventory',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminDriversRoute = AdminDriversRouteImport.update({
+  id: '/drivers',
+  path: '/drivers',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/account': typeof AccountRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/buyer': typeof BuyerRouteWithChildren
+  '/driver': typeof DriverRouteWithChildren
   '/marketplace': typeof MarketplaceRoute
   '/sell': typeof SellRoute
   '/seller': typeof SellerRouteWithChildren
+  '/admin/drivers': typeof AdminDriversRoute
+  '/admin/inventory': typeof AdminInventoryRoute
+  '/admin/logistics': typeof AdminLogisticsRoute
+  '/admin/sellers': typeof AdminSellersRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
+  '/buyer/profile': typeof BuyerProfileRoute
+  '/buyer/tracking': typeof BuyerTrackingRoute
   '/categories/$slug': typeof CategoriesSlugRoute
+  '/driver/active': typeof DriverActiveRoute
+  '/driver/onboarding': typeof DriverOnboardingRoute
+  '/driver/proof': typeof DriverProofRoute
   '/listing/$id': typeof ListingIdRoute
+  '/seller/dispatches': typeof SellerDispatchesRoute
+  '/seller/drivers': typeof SellerDriversRoute
   '/seller/listings': typeof SellerListingsRoute
   '/seller/onboarding': typeof SellerOnboardingRoute
+  '/seller/orders': typeof SellerOrdersRoute
   '/seller/upload': typeof SellerUploadRoute
+  '/admin/': typeof AdminIndexRoute
+  '/buyer/': typeof BuyerIndexRoute
   '/categories/': typeof CategoriesIndexRoute
+  '/driver/': typeof DriverIndexRoute
   '/seller/': typeof SellerIndexRoute
 }
 export interface FileRoutesByTo {
@@ -116,31 +242,64 @@ export interface FileRoutesByTo {
   '/account': typeof AccountRoute
   '/marketplace': typeof MarketplaceRoute
   '/sell': typeof SellRoute
+  '/admin/drivers': typeof AdminDriversRoute
+  '/admin/inventory': typeof AdminInventoryRoute
+  '/admin/logistics': typeof AdminLogisticsRoute
+  '/admin/sellers': typeof AdminSellersRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
+  '/buyer/profile': typeof BuyerProfileRoute
+  '/buyer/tracking': typeof BuyerTrackingRoute
   '/categories/$slug': typeof CategoriesSlugRoute
+  '/driver/active': typeof DriverActiveRoute
+  '/driver/onboarding': typeof DriverOnboardingRoute
+  '/driver/proof': typeof DriverProofRoute
   '/listing/$id': typeof ListingIdRoute
+  '/seller/dispatches': typeof SellerDispatchesRoute
+  '/seller/drivers': typeof SellerDriversRoute
   '/seller/listings': typeof SellerListingsRoute
   '/seller/onboarding': typeof SellerOnboardingRoute
+  '/seller/orders': typeof SellerOrdersRoute
   '/seller/upload': typeof SellerUploadRoute
+  '/admin': typeof AdminIndexRoute
+  '/buyer': typeof BuyerIndexRoute
   '/categories': typeof CategoriesIndexRoute
+  '/driver': typeof DriverIndexRoute
   '/seller': typeof SellerIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/account': typeof AccountRoute
+  '/admin': typeof AdminRouteWithChildren
+  '/buyer': typeof BuyerRouteWithChildren
+  '/driver': typeof DriverRouteWithChildren
   '/marketplace': typeof MarketplaceRoute
   '/sell': typeof SellRoute
   '/seller': typeof SellerRouteWithChildren
+  '/admin/drivers': typeof AdminDriversRoute
+  '/admin/inventory': typeof AdminInventoryRoute
+  '/admin/logistics': typeof AdminLogisticsRoute
+  '/admin/sellers': typeof AdminSellersRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
+  '/buyer/profile': typeof BuyerProfileRoute
+  '/buyer/tracking': typeof BuyerTrackingRoute
   '/categories/$slug': typeof CategoriesSlugRoute
+  '/driver/active': typeof DriverActiveRoute
+  '/driver/onboarding': typeof DriverOnboardingRoute
+  '/driver/proof': typeof DriverProofRoute
   '/listing/$id': typeof ListingIdRoute
+  '/seller/dispatches': typeof SellerDispatchesRoute
+  '/seller/drivers': typeof SellerDriversRoute
   '/seller/listings': typeof SellerListingsRoute
   '/seller/onboarding': typeof SellerOnboardingRoute
+  '/seller/orders': typeof SellerOrdersRoute
   '/seller/upload': typeof SellerUploadRoute
+  '/admin/': typeof AdminIndexRoute
+  '/buyer/': typeof BuyerIndexRoute
   '/categories/': typeof CategoriesIndexRoute
+  '/driver/': typeof DriverIndexRoute
   '/seller/': typeof SellerIndexRoute
 }
 export interface FileRouteTypes {
@@ -148,17 +307,35 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/account'
+    | '/admin'
+    | '/buyer'
+    | '/driver'
     | '/marketplace'
     | '/sell'
     | '/seller'
+    | '/admin/drivers'
+    | '/admin/inventory'
+    | '/admin/logistics'
+    | '/admin/sellers'
     | '/auth/login'
     | '/auth/signup'
+    | '/buyer/profile'
+    | '/buyer/tracking'
     | '/categories/$slug'
+    | '/driver/active'
+    | '/driver/onboarding'
+    | '/driver/proof'
     | '/listing/$id'
+    | '/seller/dispatches'
+    | '/seller/drivers'
     | '/seller/listings'
     | '/seller/onboarding'
+    | '/seller/orders'
     | '/seller/upload'
+    | '/admin/'
+    | '/buyer/'
     | '/categories/'
+    | '/driver/'
     | '/seller/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -166,36 +343,72 @@ export interface FileRouteTypes {
     | '/account'
     | '/marketplace'
     | '/sell'
+    | '/admin/drivers'
+    | '/admin/inventory'
+    | '/admin/logistics'
+    | '/admin/sellers'
     | '/auth/login'
     | '/auth/signup'
+    | '/buyer/profile'
+    | '/buyer/tracking'
     | '/categories/$slug'
+    | '/driver/active'
+    | '/driver/onboarding'
+    | '/driver/proof'
     | '/listing/$id'
+    | '/seller/dispatches'
+    | '/seller/drivers'
     | '/seller/listings'
     | '/seller/onboarding'
+    | '/seller/orders'
     | '/seller/upload'
+    | '/admin'
+    | '/buyer'
     | '/categories'
+    | '/driver'
     | '/seller'
   id:
     | '__root__'
     | '/'
     | '/account'
+    | '/admin'
+    | '/buyer'
+    | '/driver'
     | '/marketplace'
     | '/sell'
     | '/seller'
+    | '/admin/drivers'
+    | '/admin/inventory'
+    | '/admin/logistics'
+    | '/admin/sellers'
     | '/auth/login'
     | '/auth/signup'
+    | '/buyer/profile'
+    | '/buyer/tracking'
     | '/categories/$slug'
+    | '/driver/active'
+    | '/driver/onboarding'
+    | '/driver/proof'
     | '/listing/$id'
+    | '/seller/dispatches'
+    | '/seller/drivers'
     | '/seller/listings'
     | '/seller/onboarding'
+    | '/seller/orders'
     | '/seller/upload'
+    | '/admin/'
+    | '/buyer/'
     | '/categories/'
+    | '/driver/'
     | '/seller/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AccountRoute: typeof AccountRoute
+  AdminRoute: typeof AdminRouteWithChildren
+  BuyerRoute: typeof BuyerRouteWithChildren
+  DriverRoute: typeof DriverRouteWithChildren
   MarketplaceRoute: typeof MarketplaceRoute
   SellRoute: typeof SellRoute
   SellerRoute: typeof SellerRouteWithChildren
@@ -229,6 +442,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MarketplaceRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/driver': {
+      id: '/driver'
+      path: '/driver'
+      fullPath: '/driver'
+      preLoaderRoute: typeof DriverRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/buyer': {
+      id: '/buyer'
+      path: '/buyer'
+      fullPath: '/buyer'
+      preLoaderRoute: typeof BuyerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/account': {
       id: '/account'
       path: '/account'
@@ -250,6 +484,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SellerIndexRouteImport
       parentRoute: typeof SellerRoute
     }
+    '/driver/': {
+      id: '/driver/'
+      path: '/'
+      fullPath: '/driver/'
+      preLoaderRoute: typeof DriverIndexRouteImport
+      parentRoute: typeof DriverRoute
+    }
     '/categories/': {
       id: '/categories/'
       path: '/categories'
@@ -257,11 +498,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CategoriesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/buyer/': {
+      id: '/buyer/'
+      path: '/'
+      fullPath: '/buyer/'
+      preLoaderRoute: typeof BuyerIndexRouteImport
+      parentRoute: typeof BuyerRoute
+    }
+    '/admin/': {
+      id: '/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AdminIndexRouteImport
+      parentRoute: typeof AdminRoute
+    }
     '/seller/upload': {
       id: '/seller/upload'
       path: '/upload'
       fullPath: '/seller/upload'
       preLoaderRoute: typeof SellerUploadRouteImport
+      parentRoute: typeof SellerRoute
+    }
+    '/seller/orders': {
+      id: '/seller/orders'
+      path: '/orders'
+      fullPath: '/seller/orders'
+      preLoaderRoute: typeof SellerOrdersRouteImport
       parentRoute: typeof SellerRoute
     }
     '/seller/onboarding': {
@@ -278,6 +540,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SellerListingsRouteImport
       parentRoute: typeof SellerRoute
     }
+    '/seller/drivers': {
+      id: '/seller/drivers'
+      path: '/drivers'
+      fullPath: '/seller/drivers'
+      preLoaderRoute: typeof SellerDriversRouteImport
+      parentRoute: typeof SellerRoute
+    }
+    '/seller/dispatches': {
+      id: '/seller/dispatches'
+      path: '/dispatches'
+      fullPath: '/seller/dispatches'
+      preLoaderRoute: typeof SellerDispatchesRouteImport
+      parentRoute: typeof SellerRoute
+    }
     '/listing/$id': {
       id: '/listing/$id'
       path: '/listing/$id'
@@ -285,12 +561,47 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ListingIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/driver/proof': {
+      id: '/driver/proof'
+      path: '/proof'
+      fullPath: '/driver/proof'
+      preLoaderRoute: typeof DriverProofRouteImport
+      parentRoute: typeof DriverRoute
+    }
+    '/driver/onboarding': {
+      id: '/driver/onboarding'
+      path: '/onboarding'
+      fullPath: '/driver/onboarding'
+      preLoaderRoute: typeof DriverOnboardingRouteImport
+      parentRoute: typeof DriverRoute
+    }
+    '/driver/active': {
+      id: '/driver/active'
+      path: '/active'
+      fullPath: '/driver/active'
+      preLoaderRoute: typeof DriverActiveRouteImport
+      parentRoute: typeof DriverRoute
+    }
     '/categories/$slug': {
       id: '/categories/$slug'
       path: '/categories/$slug'
       fullPath: '/categories/$slug'
       preLoaderRoute: typeof CategoriesSlugRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/buyer/tracking': {
+      id: '/buyer/tracking'
+      path: '/tracking'
+      fullPath: '/buyer/tracking'
+      preLoaderRoute: typeof BuyerTrackingRouteImport
+      parentRoute: typeof BuyerRoute
+    }
+    '/buyer/profile': {
+      id: '/buyer/profile'
+      path: '/profile'
+      fullPath: '/buyer/profile'
+      preLoaderRoute: typeof BuyerProfileRouteImport
+      parentRoute: typeof BuyerRoute
     }
     '/auth/signup': {
       id: '/auth/signup'
@@ -306,19 +617,102 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/sellers': {
+      id: '/admin/sellers'
+      path: '/sellers'
+      fullPath: '/admin/sellers'
+      preLoaderRoute: typeof AdminSellersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/logistics': {
+      id: '/admin/logistics'
+      path: '/logistics'
+      fullPath: '/admin/logistics'
+      preLoaderRoute: typeof AdminLogisticsRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/inventory': {
+      id: '/admin/inventory'
+      path: '/inventory'
+      fullPath: '/admin/inventory'
+      preLoaderRoute: typeof AdminInventoryRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/drivers': {
+      id: '/admin/drivers'
+      path: '/drivers'
+      fullPath: '/admin/drivers'
+      preLoaderRoute: typeof AdminDriversRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
+interface AdminRouteChildren {
+  AdminDriversRoute: typeof AdminDriversRoute
+  AdminInventoryRoute: typeof AdminInventoryRoute
+  AdminLogisticsRoute: typeof AdminLogisticsRoute
+  AdminSellersRoute: typeof AdminSellersRoute
+  AdminIndexRoute: typeof AdminIndexRoute
+}
+
+const AdminRouteChildren: AdminRouteChildren = {
+  AdminDriversRoute: AdminDriversRoute,
+  AdminInventoryRoute: AdminInventoryRoute,
+  AdminLogisticsRoute: AdminLogisticsRoute,
+  AdminSellersRoute: AdminSellersRoute,
+  AdminIndexRoute: AdminIndexRoute,
+}
+
+const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
+
+interface BuyerRouteChildren {
+  BuyerProfileRoute: typeof BuyerProfileRoute
+  BuyerTrackingRoute: typeof BuyerTrackingRoute
+  BuyerIndexRoute: typeof BuyerIndexRoute
+}
+
+const BuyerRouteChildren: BuyerRouteChildren = {
+  BuyerProfileRoute: BuyerProfileRoute,
+  BuyerTrackingRoute: BuyerTrackingRoute,
+  BuyerIndexRoute: BuyerIndexRoute,
+}
+
+const BuyerRouteWithChildren = BuyerRoute._addFileChildren(BuyerRouteChildren)
+
+interface DriverRouteChildren {
+  DriverActiveRoute: typeof DriverActiveRoute
+  DriverOnboardingRoute: typeof DriverOnboardingRoute
+  DriverProofRoute: typeof DriverProofRoute
+  DriverIndexRoute: typeof DriverIndexRoute
+}
+
+const DriverRouteChildren: DriverRouteChildren = {
+  DriverActiveRoute: DriverActiveRoute,
+  DriverOnboardingRoute: DriverOnboardingRoute,
+  DriverProofRoute: DriverProofRoute,
+  DriverIndexRoute: DriverIndexRoute,
+}
+
+const DriverRouteWithChildren =
+  DriverRoute._addFileChildren(DriverRouteChildren)
+
 interface SellerRouteChildren {
+  SellerDispatchesRoute: typeof SellerDispatchesRoute
+  SellerDriversRoute: typeof SellerDriversRoute
   SellerListingsRoute: typeof SellerListingsRoute
   SellerOnboardingRoute: typeof SellerOnboardingRoute
+  SellerOrdersRoute: typeof SellerOrdersRoute
   SellerUploadRoute: typeof SellerUploadRoute
   SellerIndexRoute: typeof SellerIndexRoute
 }
 
 const SellerRouteChildren: SellerRouteChildren = {
+  SellerDispatchesRoute: SellerDispatchesRoute,
+  SellerDriversRoute: SellerDriversRoute,
   SellerListingsRoute: SellerListingsRoute,
   SellerOnboardingRoute: SellerOnboardingRoute,
+  SellerOrdersRoute: SellerOrdersRoute,
   SellerUploadRoute: SellerUploadRoute,
   SellerIndexRoute: SellerIndexRoute,
 }
@@ -329,6 +723,9 @@ const SellerRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AccountRoute: AccountRoute,
+  AdminRoute: AdminRouteWithChildren,
+  BuyerRoute: BuyerRouteWithChildren,
+  DriverRoute: DriverRouteWithChildren,
   MarketplaceRoute: MarketplaceRoute,
   SellRoute: SellRoute,
   SellerRoute: SellerRouteWithChildren,

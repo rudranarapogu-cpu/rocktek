@@ -7,13 +7,21 @@ import { useAuth } from "@/lib/auth-context";
 export function SiteHeader() {
   const { user, roles, signOut } = useAuth();
   const [open, setOpen] = useState(false);
-  const isSeller = roles.includes("seller");
+
+  const dash = roles.includes("admin")
+    ? { to: "/admin", label: "Admin" }
+    : roles.includes("seller")
+      ? { to: "/seller", label: "Seller Dashboard" }
+      : roles.includes("driver")
+        ? { to: "/driver", label: "Driver Dashboard" }
+        : { to: "/buyer", label: "My Dashboard" };
 
   const links = [
     { to: "/", label: "Home" },
     { to: "/marketplace", label: "Marketplace" },
     { to: "/categories", label: "Categories" },
     { to: "/sell", label: "Sell on RockTek" },
+    { to: "/driver/onboarding", label: "Drive" },
   ];
 
   return (
@@ -45,7 +53,7 @@ export function SiteHeader() {
           {user ? (
             <>
               <Button asChild variant="ghost" size="sm">
-                <Link to={isSeller ? "/seller" : "/account"}>{isSeller ? "Seller Dashboard" : "Account"}</Link>
+                <Link to={dash.to}>{dash.label}</Link>
               </Button>
               <Button variant="outline" size="sm" onClick={signOut}>Sign out</Button>
             </>
@@ -77,8 +85,8 @@ export function SiteHeader() {
             <div className="my-2 h-px bg-border" />
             {user ? (
               <>
-                <Link to={isSeller ? "/seller" : "/account"} onClick={() => setOpen(false)} className="rounded-md px-3 py-2 text-sm hover:bg-muted">
-                  {isSeller ? "Seller Dashboard" : "My Account"}
+                <Link to={dash.to} onClick={() => setOpen(false)} className="rounded-md px-3 py-2 text-sm hover:bg-muted">
+                  {dash.label}
                 </Link>
                 <button onClick={() => { signOut(); setOpen(false); }} className="text-left rounded-md px-3 py-2 text-sm hover:bg-muted">Sign out</button>
               </>
