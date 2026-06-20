@@ -53,7 +53,7 @@ export function SiteHeader() {
           {user ? (
             <>
               <Button asChild variant="ghost" size="sm">
-                <Link to={isSeller ? "/seller" : "/account"}>{isSeller ? "Seller Dashboard" : "Account"}</Link>
+                <Link to={dash.to}>{dash.label}</Link>
               </Button>
               <Button variant="outline" size="sm" onClick={signOut}>Sign out</Button>
             </>
