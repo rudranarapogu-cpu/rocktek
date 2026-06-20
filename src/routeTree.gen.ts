@@ -22,6 +22,8 @@ import { Route as SellerUploadRouteImport } from './routes/seller/upload'
 import { Route as SellerOrdersRouteImport } from './routes/seller/orders'
 import { Route as SellerOnboardingRouteImport } from './routes/seller/onboarding'
 import { Route as SellerListingsRouteImport } from './routes/seller/listings'
+import { Route as SellerDriversRouteImport } from './routes/seller/drivers'
+import { Route as SellerDispatchesRouteImport } from './routes/seller/dispatches'
 import { Route as ListingIdRouteImport } from './routes/listing/$id'
 import { Route as CategoriesSlugRouteImport } from './routes/categories/$slug'
 import { Route as BuyerTrackingRouteImport } from './routes/buyer/tracking'
@@ -94,6 +96,16 @@ const SellerListingsRoute = SellerListingsRouteImport.update({
   path: '/listings',
   getParentRoute: () => SellerRoute,
 } as any)
+const SellerDriversRoute = SellerDriversRouteImport.update({
+  id: '/drivers',
+  path: '/drivers',
+  getParentRoute: () => SellerRoute,
+} as any)
+const SellerDispatchesRoute = SellerDispatchesRouteImport.update({
+  id: '/dispatches',
+  path: '/dispatches',
+  getParentRoute: () => SellerRoute,
+} as any)
 const ListingIdRoute = ListingIdRouteImport.update({
   id: '/listing/$id',
   path: '/listing/$id',
@@ -138,6 +150,8 @@ export interface FileRoutesByFullPath {
   '/buyer/tracking': typeof BuyerTrackingRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/listing/$id': typeof ListingIdRoute
+  '/seller/dispatches': typeof SellerDispatchesRoute
+  '/seller/drivers': typeof SellerDriversRoute
   '/seller/listings': typeof SellerListingsRoute
   '/seller/onboarding': typeof SellerOnboardingRoute
   '/seller/orders': typeof SellerOrdersRoute
@@ -157,6 +171,8 @@ export interface FileRoutesByTo {
   '/buyer/tracking': typeof BuyerTrackingRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/listing/$id': typeof ListingIdRoute
+  '/seller/dispatches': typeof SellerDispatchesRoute
+  '/seller/drivers': typeof SellerDriversRoute
   '/seller/listings': typeof SellerListingsRoute
   '/seller/onboarding': typeof SellerOnboardingRoute
   '/seller/orders': typeof SellerOrdersRoute
@@ -179,6 +195,8 @@ export interface FileRoutesById {
   '/buyer/tracking': typeof BuyerTrackingRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/listing/$id': typeof ListingIdRoute
+  '/seller/dispatches': typeof SellerDispatchesRoute
+  '/seller/drivers': typeof SellerDriversRoute
   '/seller/listings': typeof SellerListingsRoute
   '/seller/onboarding': typeof SellerOnboardingRoute
   '/seller/orders': typeof SellerOrdersRoute
@@ -202,6 +220,8 @@ export interface FileRouteTypes {
     | '/buyer/tracking'
     | '/categories/$slug'
     | '/listing/$id'
+    | '/seller/dispatches'
+    | '/seller/drivers'
     | '/seller/listings'
     | '/seller/onboarding'
     | '/seller/orders'
@@ -221,6 +241,8 @@ export interface FileRouteTypes {
     | '/buyer/tracking'
     | '/categories/$slug'
     | '/listing/$id'
+    | '/seller/dispatches'
+    | '/seller/drivers'
     | '/seller/listings'
     | '/seller/onboarding'
     | '/seller/orders'
@@ -242,6 +264,8 @@ export interface FileRouteTypes {
     | '/buyer/tracking'
     | '/categories/$slug'
     | '/listing/$id'
+    | '/seller/dispatches'
+    | '/seller/drivers'
     | '/seller/listings'
     | '/seller/onboarding'
     | '/seller/orders'
@@ -358,6 +382,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SellerListingsRouteImport
       parentRoute: typeof SellerRoute
     }
+    '/seller/drivers': {
+      id: '/seller/drivers'
+      path: '/drivers'
+      fullPath: '/seller/drivers'
+      preLoaderRoute: typeof SellerDriversRouteImport
+      parentRoute: typeof SellerRoute
+    }
+    '/seller/dispatches': {
+      id: '/seller/dispatches'
+      path: '/dispatches'
+      fullPath: '/seller/dispatches'
+      preLoaderRoute: typeof SellerDispatchesRouteImport
+      parentRoute: typeof SellerRoute
+    }
     '/listing/$id': {
       id: '/listing/$id'
       path: '/listing/$id'
@@ -418,6 +456,8 @@ const BuyerRouteChildren: BuyerRouteChildren = {
 const BuyerRouteWithChildren = BuyerRoute._addFileChildren(BuyerRouteChildren)
 
 interface SellerRouteChildren {
+  SellerDispatchesRoute: typeof SellerDispatchesRoute
+  SellerDriversRoute: typeof SellerDriversRoute
   SellerListingsRoute: typeof SellerListingsRoute
   SellerOnboardingRoute: typeof SellerOnboardingRoute
   SellerOrdersRoute: typeof SellerOrdersRoute
@@ -426,6 +466,8 @@ interface SellerRouteChildren {
 }
 
 const SellerRouteChildren: SellerRouteChildren = {
+  SellerDispatchesRoute: SellerDispatchesRoute,
+  SellerDriversRoute: SellerDriversRoute,
   SellerListingsRoute: SellerListingsRoute,
   SellerOnboardingRoute: SellerOnboardingRoute,
   SellerOrdersRoute: SellerOrdersRoute,
