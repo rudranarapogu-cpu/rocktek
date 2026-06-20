@@ -85,8 +85,8 @@ export function SiteHeader() {
             <div className="my-2 h-px bg-border" />
             {user ? (
               <>
-                <Link to={isSeller ? "/seller" : "/account"} onClick={() => setOpen(false)} className="rounded-md px-3 py-2 text-sm hover:bg-muted">
-                  {isSeller ? "Seller Dashboard" : "My Account"}
+                <Link to={dash.to} onClick={() => setOpen(false)} className="rounded-md px-3 py-2 text-sm hover:bg-muted">
+                  {dash.label}
                 </Link>
                 <button onClick={() => { signOut(); setOpen(false); }} className="text-left rounded-md px-3 py-2 text-sm hover:bg-muted">Sign out</button>
               </>
