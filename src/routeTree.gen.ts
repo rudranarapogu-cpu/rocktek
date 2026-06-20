@@ -37,6 +37,8 @@ import { Route as BuyerTrackingRouteImport } from './routes/buyer/tracking'
 import { Route as BuyerProfileRouteImport } from './routes/buyer/profile'
 import { Route as AuthSignupRouteImport } from './routes/auth/signup'
 import { Route as AuthLoginRouteImport } from './routes/auth/login'
+import { Route as AdminSellersRouteImport } from './routes/admin/sellers'
+import { Route as AdminDriversRouteImport } from './routes/admin/drivers'
 
 const SellerRoute = SellerRouteImport.update({
   id: '/seller',
@@ -178,6 +180,16 @@ const AuthLoginRoute = AuthLoginRouteImport.update({
   path: '/auth/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminSellersRoute = AdminSellersRouteImport.update({
+  id: '/sellers',
+  path: '/sellers',
+  getParentRoute: () => AdminRoute,
+} as any)
+const AdminDriversRoute = AdminDriversRouteImport.update({
+  id: '/drivers',
+  path: '/drivers',
+  getParentRoute: () => AdminRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -188,6 +200,8 @@ export interface FileRoutesByFullPath {
   '/marketplace': typeof MarketplaceRoute
   '/sell': typeof SellRoute
   '/seller': typeof SellerRouteWithChildren
+  '/admin/drivers': typeof AdminDriversRoute
+  '/admin/sellers': typeof AdminSellersRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
   '/buyer/profile': typeof BuyerProfileRoute
@@ -214,6 +228,8 @@ export interface FileRoutesByTo {
   '/account': typeof AccountRoute
   '/marketplace': typeof MarketplaceRoute
   '/sell': typeof SellRoute
+  '/admin/drivers': typeof AdminDriversRoute
+  '/admin/sellers': typeof AdminSellersRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
   '/buyer/profile': typeof BuyerProfileRoute
@@ -245,6 +261,8 @@ export interface FileRoutesById {
   '/marketplace': typeof MarketplaceRoute
   '/sell': typeof SellRoute
   '/seller': typeof SellerRouteWithChildren
+  '/admin/drivers': typeof AdminDriversRoute
+  '/admin/sellers': typeof AdminSellersRoute
   '/auth/login': typeof AuthLoginRoute
   '/auth/signup': typeof AuthSignupRoute
   '/buyer/profile': typeof BuyerProfileRoute
@@ -277,6 +295,8 @@ export interface FileRouteTypes {
     | '/marketplace'
     | '/sell'
     | '/seller'
+    | '/admin/drivers'
+    | '/admin/sellers'
     | '/auth/login'
     | '/auth/signup'
     | '/buyer/profile'
@@ -303,6 +323,8 @@ export interface FileRouteTypes {
     | '/account'
     | '/marketplace'
     | '/sell'
+    | '/admin/drivers'
+    | '/admin/sellers'
     | '/auth/login'
     | '/auth/signup'
     | '/buyer/profile'
@@ -333,6 +355,8 @@ export interface FileRouteTypes {
     | '/marketplace'
     | '/sell'
     | '/seller'
+    | '/admin/drivers'
+    | '/admin/sellers'
     | '/auth/login'
     | '/auth/signup'
     | '/buyer/profile'
@@ -569,14 +593,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin/sellers': {
+      id: '/admin/sellers'
+      path: '/sellers'
+      fullPath: '/admin/sellers'
+      preLoaderRoute: typeof AdminSellersRouteImport
+      parentRoute: typeof AdminRoute
+    }
+    '/admin/drivers': {
+      id: '/admin/drivers'
+      path: '/drivers'
+      fullPath: '/admin/drivers'
+      preLoaderRoute: typeof AdminDriversRouteImport
+      parentRoute: typeof AdminRoute
+    }
   }
 }
 
 interface AdminRouteChildren {
+  AdminDriversRoute: typeof AdminDriversRoute
+  AdminSellersRoute: typeof AdminSellersRoute
   AdminIndexRoute: typeof AdminIndexRoute
 }
 
 const AdminRouteChildren: AdminRouteChildren = {
+  AdminDriversRoute: AdminDriversRoute,
+  AdminSellersRoute: AdminSellersRoute,
   AdminIndexRoute: AdminIndexRoute,
 }
 
