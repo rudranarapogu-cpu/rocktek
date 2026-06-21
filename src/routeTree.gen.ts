@@ -13,6 +13,7 @@ import { Route as SellerRouteImport } from './routes/seller'
 import { Route as SellRouteImport } from './routes/sell'
 import { Route as MarketplaceRouteImport } from './routes/marketplace'
 import { Route as DriverRouteImport } from './routes/driver'
+import { Route as ContactRouteImport } from './routes/contact'
 import { Route as BuyerRouteImport } from './routes/buyer'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AccountRouteImport } from './routes/account'
@@ -61,6 +62,11 @@ const MarketplaceRoute = MarketplaceRouteImport.update({
 const DriverRoute = DriverRouteImport.update({
   id: '/driver',
   path: '/driver',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BuyerRoute = BuyerRouteImport.update({
@@ -215,6 +221,7 @@ export interface FileRoutesByFullPath {
   '/account': typeof AccountRoute
   '/admin': typeof AdminRouteWithChildren
   '/buyer': typeof BuyerRouteWithChildren
+  '/contact': typeof ContactRoute
   '/driver': typeof DriverRouteWithChildren
   '/marketplace': typeof MarketplaceRoute
   '/sell': typeof SellRoute
@@ -248,6 +255,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/account': typeof AccountRoute
+  '/contact': typeof ContactRoute
   '/marketplace': typeof MarketplaceRoute
   '/sell': typeof SellRoute
   '/admin/drivers': typeof AdminDriversRoute
@@ -282,6 +290,7 @@ export interface FileRoutesById {
   '/account': typeof AccountRoute
   '/admin': typeof AdminRouteWithChildren
   '/buyer': typeof BuyerRouteWithChildren
+  '/contact': typeof ContactRoute
   '/driver': typeof DriverRouteWithChildren
   '/marketplace': typeof MarketplaceRoute
   '/sell': typeof SellRoute
@@ -319,6 +328,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/admin'
     | '/buyer'
+    | '/contact'
     | '/driver'
     | '/marketplace'
     | '/sell'
@@ -352,6 +362,7 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/account'
+    | '/contact'
     | '/marketplace'
     | '/sell'
     | '/admin/drivers'
@@ -385,6 +396,7 @@ export interface FileRouteTypes {
     | '/account'
     | '/admin'
     | '/buyer'
+    | '/contact'
     | '/driver'
     | '/marketplace'
     | '/sell'
@@ -421,6 +433,7 @@ export interface RootRouteChildren {
   AccountRoute: typeof AccountRoute
   AdminRoute: typeof AdminRouteWithChildren
   BuyerRoute: typeof BuyerRouteWithChildren
+  ContactRoute: typeof ContactRoute
   DriverRoute: typeof DriverRouteWithChildren
   MarketplaceRoute: typeof MarketplaceRoute
   SellRoute: typeof SellRoute
@@ -460,6 +473,13 @@ declare module '@tanstack/react-router' {
       path: '/driver'
       fullPath: '/driver'
       preLoaderRoute: typeof DriverRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/buyer': {
@@ -746,6 +766,7 @@ const rootRouteChildren: RootRouteChildren = {
   AccountRoute: AccountRoute,
   AdminRoute: AdminRouteWithChildren,
   BuyerRoute: BuyerRouteWithChildren,
+  ContactRoute: ContactRoute,
   DriverRoute: DriverRouteWithChildren,
   MarketplaceRoute: MarketplaceRoute,
   SellRoute: SellRoute,
