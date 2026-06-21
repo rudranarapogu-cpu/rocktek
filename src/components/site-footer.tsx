@@ -24,8 +24,9 @@ export function SiteFooter() {
             { to: "/auth/signup?role=seller", label: "Seller Sign-up" },
           ]} />
           <FooterCol title="Company" links={[
-            { to: "/", label: "About" },
-            { to: "/", label: "Contact" },
+            { to: "/about", label: "About" },
+            { to: "/contact", label: "Contact" },
+            { to: "/sellers", label: "Sellers" },
           ]} />
         </div>
         <div className="mt-10 flex flex-col items-start justify-between gap-3 border-t border-sidebar-border pt-6 text-xs text-sidebar-foreground/60 sm:flex-row sm:items-center">
