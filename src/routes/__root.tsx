@@ -133,7 +133,10 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <Outlet />
+        <div className="pb-16 lg:pb-0">
+          <Outlet />
+        </div>
+        <MobileBottomNav />
         <Toaster richColors position="top-right" />
       </AuthProvider>
     </QueryClientProvider>
