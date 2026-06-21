@@ -11,6 +11,7 @@ import {
 import { useEffect } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "@/lib/auth-context";
+import { MobileBottomNav } from "@/components/mobile-bottom-nav";
 import { supabase } from "@/integrations/supabase/client";
 import appCss from "../styles.css?url";
 
@@ -133,7 +134,10 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <Outlet />
+        <div className="pb-16 lg:pb-0">
+          <Outlet />
+        </div>
+        <MobileBottomNav />
         <Toaster richColors position="top-right" />
       </AuthProvider>
     </QueryClientProvider>

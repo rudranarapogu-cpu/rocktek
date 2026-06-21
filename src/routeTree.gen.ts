@@ -9,13 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SellersRouteImport } from './routes/sellers'
 import { Route as SellerRouteImport } from './routes/seller'
 import { Route as SellRouteImport } from './routes/sell'
 import { Route as MarketplaceRouteImport } from './routes/marketplace'
 import { Route as DriverRouteImport } from './routes/driver'
+import { Route as ContactRouteImport } from './routes/contact'
 import { Route as BuyerRouteImport } from './routes/buyer'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AccountRouteImport } from './routes/account'
+import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SellerIndexRouteImport } from './routes/seller/index'
 import { Route as DriverIndexRouteImport } from './routes/driver/index'
@@ -42,6 +45,11 @@ import { Route as AdminLogisticsRouteImport } from './routes/admin/logistics'
 import { Route as AdminInventoryRouteImport } from './routes/admin/inventory'
 import { Route as AdminDriversRouteImport } from './routes/admin/drivers'
 
+const SellersRoute = SellersRouteImport.update({
+  id: '/sellers',
+  path: '/sellers',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SellerRoute = SellerRouteImport.update({
   id: '/seller',
   path: '/seller',
@@ -62,6 +70,11 @@ const DriverRoute = DriverRouteImport.update({
   path: '/driver',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ContactRoute = ContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BuyerRoute = BuyerRouteImport.update({
   id: '/buyer',
   path: '/buyer',
@@ -75,6 +88,11 @@ const AdminRoute = AdminRouteImport.update({
 const AccountRoute = AccountRouteImport.update({
   id: '/account',
   path: '/account',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -205,13 +223,16 @@ const AdminDriversRoute = AdminDriversRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/account': typeof AccountRoute
   '/admin': typeof AdminRouteWithChildren
   '/buyer': typeof BuyerRouteWithChildren
+  '/contact': typeof ContactRoute
   '/driver': typeof DriverRouteWithChildren
   '/marketplace': typeof MarketplaceRoute
   '/sell': typeof SellRoute
   '/seller': typeof SellerRouteWithChildren
+  '/sellers': typeof SellersRoute
   '/admin/drivers': typeof AdminDriversRoute
   '/admin/inventory': typeof AdminInventoryRoute
   '/admin/logistics': typeof AdminLogisticsRoute
@@ -239,9 +260,12 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/account': typeof AccountRoute
+  '/contact': typeof ContactRoute
   '/marketplace': typeof MarketplaceRoute
   '/sell': typeof SellRoute
+  '/sellers': typeof SellersRoute
   '/admin/drivers': typeof AdminDriversRoute
   '/admin/inventory': typeof AdminInventoryRoute
   '/admin/logistics': typeof AdminLogisticsRoute
@@ -270,13 +294,16 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/about': typeof AboutRoute
   '/account': typeof AccountRoute
   '/admin': typeof AdminRouteWithChildren
   '/buyer': typeof BuyerRouteWithChildren
+  '/contact': typeof ContactRoute
   '/driver': typeof DriverRouteWithChildren
   '/marketplace': typeof MarketplaceRoute
   '/sell': typeof SellRoute
   '/seller': typeof SellerRouteWithChildren
+  '/sellers': typeof SellersRoute
   '/admin/drivers': typeof AdminDriversRoute
   '/admin/inventory': typeof AdminInventoryRoute
   '/admin/logistics': typeof AdminLogisticsRoute
@@ -306,13 +333,16 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/about'
     | '/account'
     | '/admin'
     | '/buyer'
+    | '/contact'
     | '/driver'
     | '/marketplace'
     | '/sell'
     | '/seller'
+    | '/sellers'
     | '/admin/drivers'
     | '/admin/inventory'
     | '/admin/logistics'
@@ -340,9 +370,12 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/about'
     | '/account'
+    | '/contact'
     | '/marketplace'
     | '/sell'
+    | '/sellers'
     | '/admin/drivers'
     | '/admin/inventory'
     | '/admin/logistics'
@@ -370,13 +403,16 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/about'
     | '/account'
     | '/admin'
     | '/buyer'
+    | '/contact'
     | '/driver'
     | '/marketplace'
     | '/sell'
     | '/seller'
+    | '/sellers'
     | '/admin/drivers'
     | '/admin/inventory'
     | '/admin/logistics'
@@ -405,13 +441,16 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AboutRoute: typeof AboutRoute
   AccountRoute: typeof AccountRoute
   AdminRoute: typeof AdminRouteWithChildren
   BuyerRoute: typeof BuyerRouteWithChildren
+  ContactRoute: typeof ContactRoute
   DriverRoute: typeof DriverRouteWithChildren
   MarketplaceRoute: typeof MarketplaceRoute
   SellRoute: typeof SellRoute
   SellerRoute: typeof SellerRouteWithChildren
+  SellersRoute: typeof SellersRoute
   AuthLoginRoute: typeof AuthLoginRoute
   AuthSignupRoute: typeof AuthSignupRoute
   CategoriesSlugRoute: typeof CategoriesSlugRoute
@@ -421,6 +460,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sellers': {
+      id: '/sellers'
+      path: '/sellers'
+      fullPath: '/sellers'
+      preLoaderRoute: typeof SellersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/seller': {
       id: '/seller'
       path: '/seller'
@@ -449,6 +495,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DriverRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/buyer': {
       id: '/buyer'
       path: '/buyer'
@@ -468,6 +521,13 @@ declare module '@tanstack/react-router' {
       path: '/account'
       fullPath: '/account'
       preLoaderRoute: typeof AccountRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -722,13 +782,16 @@ const SellerRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AboutRoute: AboutRoute,
   AccountRoute: AccountRoute,
   AdminRoute: AdminRouteWithChildren,
   BuyerRoute: BuyerRouteWithChildren,
+  ContactRoute: ContactRoute,
   DriverRoute: DriverRouteWithChildren,
   MarketplaceRoute: MarketplaceRoute,
   SellRoute: SellRoute,
   SellerRoute: SellerRouteWithChildren,
+  SellersRoute: SellersRoute,
   AuthLoginRoute: AuthLoginRoute,
   AuthSignupRoute: AuthSignupRoute,
   CategoriesSlugRoute: CategoriesSlugRoute,
@@ -738,13 +801,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
