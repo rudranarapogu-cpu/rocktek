@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SellersRouteImport } from './routes/sellers'
 import { Route as SellerRouteImport } from './routes/seller'
 import { Route as SellRouteImport } from './routes/sell'
 import { Route as MarketplaceRouteImport } from './routes/marketplace'
@@ -44,6 +45,11 @@ import { Route as AdminLogisticsRouteImport } from './routes/admin/logistics'
 import { Route as AdminInventoryRouteImport } from './routes/admin/inventory'
 import { Route as AdminDriversRouteImport } from './routes/admin/drivers'
 
+const SellersRoute = SellersRouteImport.update({
+  id: '/sellers',
+  path: '/sellers',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SellerRoute = SellerRouteImport.update({
   id: '/seller',
   path: '/seller',
@@ -226,6 +232,7 @@ export interface FileRoutesByFullPath {
   '/marketplace': typeof MarketplaceRoute
   '/sell': typeof SellRoute
   '/seller': typeof SellerRouteWithChildren
+  '/sellers': typeof SellersRoute
   '/admin/drivers': typeof AdminDriversRoute
   '/admin/inventory': typeof AdminInventoryRoute
   '/admin/logistics': typeof AdminLogisticsRoute
@@ -258,6 +265,7 @@ export interface FileRoutesByTo {
   '/contact': typeof ContactRoute
   '/marketplace': typeof MarketplaceRoute
   '/sell': typeof SellRoute
+  '/sellers': typeof SellersRoute
   '/admin/drivers': typeof AdminDriversRoute
   '/admin/inventory': typeof AdminInventoryRoute
   '/admin/logistics': typeof AdminLogisticsRoute
@@ -295,6 +303,7 @@ export interface FileRoutesById {
   '/marketplace': typeof MarketplaceRoute
   '/sell': typeof SellRoute
   '/seller': typeof SellerRouteWithChildren
+  '/sellers': typeof SellersRoute
   '/admin/drivers': typeof AdminDriversRoute
   '/admin/inventory': typeof AdminInventoryRoute
   '/admin/logistics': typeof AdminLogisticsRoute
@@ -333,6 +342,7 @@ export interface FileRouteTypes {
     | '/marketplace'
     | '/sell'
     | '/seller'
+    | '/sellers'
     | '/admin/drivers'
     | '/admin/inventory'
     | '/admin/logistics'
@@ -365,6 +375,7 @@ export interface FileRouteTypes {
     | '/contact'
     | '/marketplace'
     | '/sell'
+    | '/sellers'
     | '/admin/drivers'
     | '/admin/inventory'
     | '/admin/logistics'
@@ -401,6 +412,7 @@ export interface FileRouteTypes {
     | '/marketplace'
     | '/sell'
     | '/seller'
+    | '/sellers'
     | '/admin/drivers'
     | '/admin/inventory'
     | '/admin/logistics'
@@ -438,6 +450,7 @@ export interface RootRouteChildren {
   MarketplaceRoute: typeof MarketplaceRoute
   SellRoute: typeof SellRoute
   SellerRoute: typeof SellerRouteWithChildren
+  SellersRoute: typeof SellersRoute
   AuthLoginRoute: typeof AuthLoginRoute
   AuthSignupRoute: typeof AuthSignupRoute
   CategoriesSlugRoute: typeof CategoriesSlugRoute
@@ -447,6 +460,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sellers': {
+      id: '/sellers'
+      path: '/sellers'
+      fullPath: '/sellers'
+      preLoaderRoute: typeof SellersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/seller': {
       id: '/seller'
       path: '/seller'
@@ -771,6 +791,7 @@ const rootRouteChildren: RootRouteChildren = {
   MarketplaceRoute: MarketplaceRoute,
   SellRoute: SellRoute,
   SellerRoute: SellerRouteWithChildren,
+  SellersRoute: SellersRoute,
   AuthLoginRoute: AuthLoginRoute,
   AuthSignupRoute: AuthSignupRoute,
   CategoriesSlugRoute: CategoriesSlugRoute,
