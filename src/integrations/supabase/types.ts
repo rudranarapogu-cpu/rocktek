@@ -258,6 +258,13 @@ export type Database = {
             referencedRelation: "sellers"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "listings_seller_id_fkey"
+            columns: ["seller_id"]
+            isOneToOne: false
+            referencedRelation: "sellers_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       orders: {
@@ -327,6 +334,13 @@ export type Database = {
             referencedRelation: "sellers"
             referencedColumns: ["id"]
           },
+          {
+            foreignKeyName: "orders_seller_id_fkey"
+            columns: ["seller_id"]
+            isOneToOne: false
+            referencedRelation: "sellers_public"
+            referencedColumns: ["id"]
+          },
         ]
       }
       profiles: {
@@ -384,6 +398,13 @@ export type Database = {
             columns: ["seller_id"]
             isOneToOne: false
             referencedRelation: "sellers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "seller_documents_seller_id_fkey"
+            columns: ["seller_id"]
+            isOneToOne: false
+            referencedRelation: "sellers_public"
             referencedColumns: ["id"]
           },
         ]
@@ -517,6 +538,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "trips_driver_id_fkey"
+            columns: ["driver_id"]
+            isOneToOne: false
+            referencedRelation: "drivers_public"
+            referencedColumns: ["id"]
+          },
+          {
             foreignKeyName: "trips_order_id_fkey"
             columns: ["order_id"]
             isOneToOne: false
@@ -528,6 +556,13 @@ export type Database = {
             columns: ["seller_id"]
             isOneToOne: false
             referencedRelation: "sellers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "trips_seller_id_fkey"
+            columns: ["seller_id"]
+            isOneToOne: false
+            referencedRelation: "sellers_public"
             referencedColumns: ["id"]
           },
         ]
@@ -555,7 +590,60 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      drivers_public: {
+        Row: {
+          full_name: string | null
+          id: string | null
+          state: string | null
+          status: Database["public"]["Enums"]["driver_status"] | null
+          vehicle_type: string | null
+          verified_at: string | null
+        }
+        Insert: {
+          full_name?: string | null
+          id?: string | null
+          state?: string | null
+          status?: Database["public"]["Enums"]["driver_status"] | null
+          vehicle_type?: string | null
+          verified_at?: string | null
+        }
+        Update: {
+          full_name?: string | null
+          id?: string | null
+          state?: string | null
+          status?: Database["public"]["Enums"]["driver_status"] | null
+          vehicle_type?: string | null
+          verified_at?: string | null
+        }
+        Relationships: []
+      }
+      sellers_public: {
+        Row: {
+          company_name: string | null
+          created_at: string | null
+          id: string | null
+          owner_name: string | null
+          state: string | null
+          verified_at: string | null
+        }
+        Insert: {
+          company_name?: string | null
+          created_at?: string | null
+          id?: string | null
+          owner_name?: string | null
+          state?: string | null
+          verified_at?: string | null
+        }
+        Update: {
+          company_name?: string | null
+          created_at?: string | null
+          id?: string | null
+          owner_name?: string | null
+          state?: string | null
+          verified_at?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       can_view_trip: { Args: { _trip_id: string }; Returns: boolean }

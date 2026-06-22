@@ -12,7 +12,7 @@ function SellerDrivers() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    supabase.from("drivers").select("*").eq("status", "approved").order("full_name").then(({ data }) => {
+    supabase.from("drivers_public").select("id,full_name,vehicle_type,state").order("full_name").then(({ data }) => {
       setDrivers(data ?? []);
       setLoading(false);
     });
@@ -39,8 +39,8 @@ function SellerDrivers() {
                 <p className="font-display text-lg">{d.full_name}</p>
                 <ShieldCheck className="h-4 w-4 text-primary" />
               </div>
-              <p className="mt-1 text-sm text-muted-foreground">{d.vehicle_type ?? "Truck"} · {d.vehicle_number}</p>
-              <p className="text-sm text-muted-foreground">{d.phone} · {d.state ?? "—"}</p>
+              <p className="mt-1 text-sm text-muted-foreground">{d.vehicle_type ?? "Truck"} · {d.state ?? "—"}</p>
+              <p className="text-xs text-muted-foreground">Contact details shared once assigned to your trip.</p>
             </div>
           ))}
         </div>

@@ -36,7 +36,7 @@ function HomePage() {
     supabase.from("categories").select("*").then(({ data }) => setCategories(data ?? []));
     supabase
       .from("listings")
-      .select("id,title,price,quantity,unit_type,state,district,created_at,listing_images(url),categories(name),sellers(company_name)")
+      .select("id,title,price,quantity,unit_type,state,district,created_at,listing_images(url),categories(name)")
       .eq("status", "active")
       .order("created_at", { ascending: false })
       .limit(8)
