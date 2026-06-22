@@ -41,7 +41,7 @@ function Marketplace() {
     setLoading(true);
     let q = supabase
       .from("listings")
-      .select("id,title,price,quantity,unit_type,state,district,created_at,listing_images(url),categories!inner(name,slug),sellers(company_name)")
+      .select("id,title,price,quantity,unit_type,state,district,created_at,listing_images(url),categories!inner(name,slug)")
       .eq("status", "active")
       .order("created_at", { ascending: false })
       .limit(60);

@@ -27,9 +27,8 @@ function Sellers() {
 
   useEffect(() => {
     supabase
-      .from("sellers")
+      .from("sellers_public")
       .select("id,company_name,owner_name,state,verified_at")
-      .eq("status", "approved")
       .order("company_name")
       .then(({ data }) => { setSellers((data as Seller[]) ?? []); setLoading(false); });
   }, []);

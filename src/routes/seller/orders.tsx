@@ -25,7 +25,7 @@ function SellerOrders() {
     const [{ data: o }, { data: t }, { data: d }] = await Promise.all([
       supabase.from("orders").select("*,listings(title,unit_type)").eq("seller_id", sellerId).order("created_at", { ascending: false }),
       supabase.from("trips").select("*").eq("seller_id", sellerId),
-      supabase.from("drivers").select("id,full_name,vehicle_number").eq("status", "approved"),
+      supabase.from("drivers_public").select("id,full_name,vehicle_type"),
     ]);
     setOrders(o ?? []);
     setTrips(Object.fromEntries((t ?? []).map((x) => [x.order_id, x])));
@@ -100,7 +100,7 @@ function SellerOrders() {
                           {drivers.length === 0 ? (
                             <div className="px-2 py-1.5 text-xs text-muted-foreground">No approved drivers yet</div>
                           ) : drivers.map((d) => (
-                            <SelectItem key={d.id} value={d.id}>{d.full_name} · {d.vehicle_number}</SelectItem>
+                            <SelectItem key={d.id} value={d.id}>{d.full_name} · {d.vehicle_type ?? "Truck"}</SelectItem>
                           ))}
                         </SelectContent>
                       </Select>
