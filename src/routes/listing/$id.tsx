@@ -20,6 +20,7 @@ function ListingDetail() {
   const { id } = Route.useParams();
   const { user } = useAuth();
   const [listing, setListing] = useState<any>(null);
+  const [seller, setSeller] = useState<any>(null);
   const [activeImg, setActiveImg] = useState(0);
   const [loading, setLoading] = useState(true);
   const [booking, setBooking] = useState(false);
@@ -27,10 +28,21 @@ function ListingDetail() {
   useEffect(() => {
     supabase
       .from("listings")
-      .select("*,listing_images(url,position),listing_videos(url),categories(name,slug),sellers(company_name,owner_name,state)")
+      .select("*,listing_images(url,position),listing_videos(url),categories(name,slug)")
       .eq("id", id)
       .maybeSingle()
-      .then(({ data }) => { setListing(data); setLoading(false); });
+      .then(async ({ data }) => {
+        setListing(data);
+        if (data?.seller_id) {
+          const { data: s } = await supabase
+            .from("sellers_public")
+            .select("company_name,owner_name,state")
+            .eq("id", data.seller_id)
+            .maybeSingle();
+          setSeller(s);
+        }
+        setLoading(false);
+      });
   }, [id]);
 
   if (loading) return <PageShell><div className="h-96 animate-pulse rounded-xl bg-muted" /></PageShell>;
@@ -103,8 +115,8 @@ function ListingDetail() {
 
           <div className="mt-6 rounded-xl border border-border bg-secondary/5 p-4 text-sm">
             <p className="font-display text-base">Sold by</p>
-            <p className="mt-1 font-semibold">{listing.sellers?.company_name}</p>
-            <p className="text-muted-foreground">{listing.sellers?.owner_name} · {listing.sellers?.state}</p>
+            <p className="mt-1 font-semibold">{seller?.company_name ?? "Verified seller"}</p>
+            <p className="text-muted-foreground">{[seller?.owner_name, seller?.state].filter(Boolean).join(" · ")}</p>
           </div>
         </div>
       </div>
