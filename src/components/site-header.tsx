@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth-context";
 import { HEADER_NAV, activeRole, type Role } from "@/lib/navigation";
+import { NotificationBell } from "@/components/notification-bell";
 
 export function SiteHeader() {
   const { user, roles, signOut } = useAuth();
