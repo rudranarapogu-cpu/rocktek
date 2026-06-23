@@ -63,15 +63,8 @@ export function SiteHeader() {
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
-
-        <button
-          className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md hover:bg-muted lg:hidden"
-          onClick={() => setOpen((v) => !v)}
-          aria-label="Toggle menu"
-        >
-          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
       </div>
+
 
       {open && (
         <div className="border-t border-border bg-background lg:hidden">
