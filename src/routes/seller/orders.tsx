@@ -28,7 +28,9 @@ function SellerOrders() {
       supabase.from("drivers_public").select("id,full_name,vehicle_type"),
     ]);
     setOrders(o ?? []);
-    setTrips(Object.fromEntries((t ?? []).map((x) => [x.order_id, x])));
+    // ignore rejected trips so the order can be reassigned
+    const active = (t ?? []).filter((x) => x.acceptance !== "rejected");
+    setTrips(Object.fromEntries(active.map((x) => [x.order_id, x])));
     setDrivers(d ?? []);
     setLoading(false);
   };
