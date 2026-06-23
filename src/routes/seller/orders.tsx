@@ -90,8 +90,13 @@ function SellerOrders() {
                 </div>
 
                 {trip ? (
-                  <div className="mt-3 inline-flex items-center gap-2 rounded-md bg-primary/10 px-3 py-1.5 text-sm text-primary">
-                    <Truck className="h-4 w-4" /> Dispatched — trip status: {trip.status}
+                  <div className={`mt-3 inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-sm ${
+                    trip.acceptance === "pending" ? "bg-accent/10 text-accent" : "bg-primary/10 text-primary"
+                  }`}>
+                    <Truck className="h-4 w-4" />
+                    {trip.acceptance === "pending"
+                      ? "Awaiting driver acceptance"
+                      : `Driver accepted — trip status: ${trip.status}`}
                   </div>
                 ) : o.status === "confirmed" ? (
                   <div className="mt-3 flex flex-wrap items-center gap-2">
