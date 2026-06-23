@@ -69,6 +69,9 @@ function TrackingCard({ trip }: { trip: any }) {
         <TripMap lat={live?.current_lat} lng={live?.current_lng} />
         <TripTimeline status={status} />
       </div>
+      <div className="mt-4">
+        <TripEventsLog tripId={trip.id} />
+      </div>
     </div>
   );
 }
