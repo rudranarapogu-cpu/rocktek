@@ -41,13 +41,27 @@ export function SiteHeader() {
 
         <div className="hidden shrink-0 items-center gap-2 lg:flex">
           {user ? (
-            <Button variant="outline" size="sm" onClick={signOut}>Sign out</Button>
+            <>
+              <NotificationBell />
+              <Button variant="outline" size="sm" onClick={signOut}>Sign out</Button>
+            </>
           ) : (
             <>
               <Button asChild variant="ghost" size="sm"><Link to="/auth/login">Login</Link></Button>
               <Button asChild size="sm" className="bg-primary"><Link to="/auth/signup">Get Started</Link></Button>
             </>
           )}
+        </div>
+
+        <div className="flex items-center gap-1 lg:hidden">
+          {user && <NotificationBell />}
+          <button
+            className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md hover:bg-muted"
+            onClick={() => setOpen((v) => !v)}
+            aria-label="Toggle menu"
+          >
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
         </div>
 
         <button
