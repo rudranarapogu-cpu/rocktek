@@ -27,6 +27,7 @@ function ActiveTrips() {
       .from("trips")
       .select("*,orders(buyer_name,delivery_address,listings(title))")
       .eq("driver_id", d.id)
+      .eq("acceptance", "accepted")
       .neq("status", "delivered")
       .order("created_at", { ascending: false });
     setTrips(data ?? []);

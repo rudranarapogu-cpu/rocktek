@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth-context";
 import { HEADER_NAV, activeRole, type Role } from "@/lib/navigation";
+import { NotificationBell } from "@/components/notification-bell";
 
 export function SiteHeader() {
   const { user, roles, signOut } = useAuth();
@@ -40,7 +41,10 @@ export function SiteHeader() {
 
         <div className="hidden shrink-0 items-center gap-2 lg:flex">
           {user ? (
-            <Button variant="outline" size="sm" onClick={signOut}>Sign out</Button>
+            <>
+              <NotificationBell />
+              <Button variant="outline" size="sm" onClick={signOut}>Sign out</Button>
+            </>
           ) : (
             <>
               <Button asChild variant="ghost" size="sm"><Link to="/auth/login">Login</Link></Button>
@@ -49,14 +53,18 @@ export function SiteHeader() {
           )}
         </div>
 
-        <button
-          className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md hover:bg-muted lg:hidden"
-          onClick={() => setOpen((v) => !v)}
-          aria-label="Toggle menu"
-        >
-          {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-        </button>
+        <div className="flex items-center gap-1 lg:hidden">
+          {user && <NotificationBell />}
+          <button
+            className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-md hover:bg-muted"
+            onClick={() => setOpen((v) => !v)}
+            aria-label="Toggle menu"
+          >
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
       </div>
+
 
       {open && (
         <div className="border-t border-border bg-background lg:hidden">
