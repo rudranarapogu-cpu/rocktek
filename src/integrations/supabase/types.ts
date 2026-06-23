@@ -267,6 +267,39 @@ export type Database = {
           },
         ]
       }
+      notifications: {
+        Row: {
+          body: string | null
+          created_at: string
+          id: string
+          link: string | null
+          read: boolean
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          link?: string | null
+          read?: boolean
+          title: string
+          type?: string
+          user_id: string
+        }
+        Update: {
+          body?: string | null
+          created_at?: string
+          id?: string
+          link?: string | null
+          read?: boolean
+          title?: string
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       orders: {
         Row: {
           advance_amount: number
@@ -457,6 +490,44 @@ export type Database = {
         }
         Relationships: []
       }
+      trip_events: {
+        Row: {
+          created_at: string
+          id: string
+          lat: number | null
+          lng: number | null
+          note: string | null
+          status: string
+          trip_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          lat?: number | null
+          lng?: number | null
+          note?: string | null
+          status: string
+          trip_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          lat?: number | null
+          lng?: number | null
+          note?: string | null
+          status?: string
+          trip_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "trip_events_trip_id_fkey"
+            columns: ["trip_id"]
+            isOneToOne: false
+            referencedRelation: "trips"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       trip_locations: {
         Row: {
           id: string
@@ -491,6 +562,8 @@ export type Database = {
       }
       trips: {
         Row: {
+          acceptance: string
+          accepted_at: string | null
           created_at: string
           current_lat: number | null
           current_lng: number | null
@@ -498,12 +571,16 @@ export type Database = {
           driver_id: string
           id: string
           order_id: string
+          reject_reason: string | null
+          rejected_at: string | null
           seller_id: string
           started_at: string | null
           status: Database["public"]["Enums"]["trip_status"]
           updated_at: string
         }
         Insert: {
+          acceptance?: string
+          accepted_at?: string | null
           created_at?: string
           current_lat?: number | null
           current_lng?: number | null
@@ -511,12 +588,16 @@ export type Database = {
           driver_id: string
           id?: string
           order_id: string
+          reject_reason?: string | null
+          rejected_at?: string | null
           seller_id: string
           started_at?: string | null
           status?: Database["public"]["Enums"]["trip_status"]
           updated_at?: string
         }
         Update: {
+          acceptance?: string
+          accepted_at?: string | null
           created_at?: string
           current_lat?: number | null
           current_lng?: number | null
@@ -524,6 +605,8 @@ export type Database = {
           driver_id?: string
           id?: string
           order_id?: string
+          reject_reason?: string | null
+          rejected_at?: string | null
           seller_id?: string
           started_at?: string | null
           status?: Database["public"]["Enums"]["trip_status"]
@@ -655,6 +738,16 @@ export type Database = {
           _user_id: string
         }
         Returns: boolean
+      }
+      notify: {
+        Args: {
+          _body: string
+          _link: string
+          _title: string
+          _type: string
+          _user_id: string
+        }
+        Returns: undefined
       }
     }
     Enums: {
