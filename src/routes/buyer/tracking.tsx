@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { TripMap } from "@/components/trip-map";
 import { TripTimeline } from "@/components/trip-timeline";
+import { TripEventsLog } from "@/components/trip-events-log";
 import { useTripLive } from "@/hooks/use-trip-live";
 import { TRIP_STATUS_LABEL, type TripStatus } from "@/lib/logistics";
 
