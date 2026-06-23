@@ -75,7 +75,7 @@ function NotificationRow({ n, onRead }: { n: AppNotification; onRead: (id: strin
 
   if (n.link) {
     return (
-      <Link to={n.link} onClick={() => onRead(n.id)} className="block">
+      <Link to={n.link as string} onClick={() => onRead(n.id)} className="block">
         {inner}
       </Link>
     );
