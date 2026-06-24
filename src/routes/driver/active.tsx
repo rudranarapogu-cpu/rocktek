@@ -51,7 +51,7 @@ function ActiveTrips() {
           <p className="mt-3 text-muted-foreground">No active trips. Delivered trips move to history.</p>
         </div>
       ) : (
-        <div className="mt-6 space-y-6">{trips.map((t) => <ActiveTripCard key={t.id} trip={t} onChange={load} />)}</div>
+        <div className="mt-6 space-y-6">{trips.map((t) => <ActiveTripCard key={t.id} trip={t} userId={user!.id} onChange={load} />)}</div>
       )}
     </div>
   );
