@@ -24,6 +24,7 @@ function ListingDetail() {
   const [activeImg, setActiveImg] = useState(0);
   const [loading, setLoading] = useState(true);
   const [booking, setBooking] = useState(false);
+  const [isOwner, setIsOwner] = useState(false);
 
   useEffect(() => {
     supabase
@@ -40,10 +41,18 @@ function ListingDetail() {
             .eq("id", data.seller_id)
             .maybeSingle();
           setSeller(s);
+          if (user) {
+            const { data: mine } = await supabase
+              .from("sellers")
+              .select("id")
+              .eq("user_id", user.id)
+              .maybeSingle();
+            setIsOwner(!!mine && mine.id === data.seller_id);
+          }
         }
         setLoading(false);
       });
-  }, [id]);
+  }, [id, user]);
 
   if (loading) return <PageShell><div className="h-96 animate-pulse rounded-xl bg-muted" /></PageShell>;
   if (!listing) return <PageShell><p>Listing not found.</p></PageShell>;
