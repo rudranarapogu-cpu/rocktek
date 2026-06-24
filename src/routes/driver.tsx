@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { Package, Navigation, Camera } from "lucide-react";
+import { Package, Navigation, Camera, History } from "lucide-react";
 import { DashboardLayout } from "@/components/dashboard-layout";
 import { useAuth } from "@/lib/auth-context";
 
