@@ -24,6 +24,7 @@ function DriverLayout() {
         { to: "/driver", icon: Package, label: "Assigned Loads", exact: true },
         { to: "/driver/active", icon: Navigation, label: "Active Trips & GPS" },
         { to: "/driver/proof", icon: Camera, label: "Delivery Proof" },
+        { to: "/driver/history", icon: History, label: "Completed Deliveries" },
       ]}
     />
   );
