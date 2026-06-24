@@ -1,7 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { Navigation, Play, Square, ArrowRight } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { Navigation, Play, Square, ArrowRight, Camera, Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { useGpsShare } from "@/hooks/use-gps-share";
