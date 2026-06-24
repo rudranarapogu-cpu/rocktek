@@ -34,6 +34,7 @@ import { Route as SellerDispatchesRouteImport } from './routes/seller/dispatches
 import { Route as ListingIdRouteImport } from './routes/listing/$id'
 import { Route as DriverProofRouteImport } from './routes/driver/proof'
 import { Route as DriverOnboardingRouteImport } from './routes/driver/onboarding'
+import { Route as DriverHistoryRouteImport } from './routes/driver/history'
 import { Route as DriverActiveRouteImport } from './routes/driver/active'
 import { Route as CategoriesSlugRouteImport } from './routes/categories/$slug'
 import { Route as BuyerTrackingRouteImport } from './routes/buyer/tracking'
@@ -170,6 +171,11 @@ const DriverOnboardingRoute = DriverOnboardingRouteImport.update({
   path: '/onboarding',
   getParentRoute: () => DriverRoute,
 } as any)
+const DriverHistoryRoute = DriverHistoryRouteImport.update({
+  id: '/history',
+  path: '/history',
+  getParentRoute: () => DriverRoute,
+} as any)
 const DriverActiveRoute = DriverActiveRouteImport.update({
   id: '/active',
   path: '/active',
@@ -243,6 +249,7 @@ export interface FileRoutesByFullPath {
   '/buyer/tracking': typeof BuyerTrackingRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/driver/active': typeof DriverActiveRoute
+  '/driver/history': typeof DriverHistoryRoute
   '/driver/onboarding': typeof DriverOnboardingRoute
   '/driver/proof': typeof DriverProofRoute
   '/listing/$id': typeof ListingIdRoute
@@ -276,6 +283,7 @@ export interface FileRoutesByTo {
   '/buyer/tracking': typeof BuyerTrackingRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/driver/active': typeof DriverActiveRoute
+  '/driver/history': typeof DriverHistoryRoute
   '/driver/onboarding': typeof DriverOnboardingRoute
   '/driver/proof': typeof DriverProofRoute
   '/listing/$id': typeof ListingIdRoute
@@ -314,6 +322,7 @@ export interface FileRoutesById {
   '/buyer/tracking': typeof BuyerTrackingRoute
   '/categories/$slug': typeof CategoriesSlugRoute
   '/driver/active': typeof DriverActiveRoute
+  '/driver/history': typeof DriverHistoryRoute
   '/driver/onboarding': typeof DriverOnboardingRoute
   '/driver/proof': typeof DriverProofRoute
   '/listing/$id': typeof ListingIdRoute
@@ -353,6 +362,7 @@ export interface FileRouteTypes {
     | '/buyer/tracking'
     | '/categories/$slug'
     | '/driver/active'
+    | '/driver/history'
     | '/driver/onboarding'
     | '/driver/proof'
     | '/listing/$id'
@@ -386,6 +396,7 @@ export interface FileRouteTypes {
     | '/buyer/tracking'
     | '/categories/$slug'
     | '/driver/active'
+    | '/driver/history'
     | '/driver/onboarding'
     | '/driver/proof'
     | '/listing/$id'
@@ -423,6 +434,7 @@ export interface FileRouteTypes {
     | '/buyer/tracking'
     | '/categories/$slug'
     | '/driver/active'
+    | '/driver/history'
     | '/driver/onboarding'
     | '/driver/proof'
     | '/listing/$id'
@@ -635,6 +647,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DriverOnboardingRouteImport
       parentRoute: typeof DriverRoute
     }
+    '/driver/history': {
+      id: '/driver/history'
+      path: '/history'
+      fullPath: '/driver/history'
+      preLoaderRoute: typeof DriverHistoryRouteImport
+      parentRoute: typeof DriverRoute
+    }
     '/driver/active': {
       id: '/driver/active'
       path: '/active'
@@ -742,6 +761,7 @@ const BuyerRouteWithChildren = BuyerRoute._addFileChildren(BuyerRouteChildren)
 
 interface DriverRouteChildren {
   DriverActiveRoute: typeof DriverActiveRoute
+  DriverHistoryRoute: typeof DriverHistoryRoute
   DriverOnboardingRoute: typeof DriverOnboardingRoute
   DriverProofRoute: typeof DriverProofRoute
   DriverIndexRoute: typeof DriverIndexRoute
@@ -749,6 +769,7 @@ interface DriverRouteChildren {
 
 const DriverRouteChildren: DriverRouteChildren = {
   DriverActiveRoute: DriverActiveRoute,
+  DriverHistoryRoute: DriverHistoryRoute,
   DriverOnboardingRoute: DriverOnboardingRoute,
   DriverProofRoute: DriverProofRoute,
   DriverIndexRoute: DriverIndexRoute,
