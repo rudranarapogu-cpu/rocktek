@@ -114,12 +114,18 @@ function ListingDetail() {
                 <p className="font-display text-xl text-primary">{inr(Number(listing.price) * ADVANCE_RATE)}</p>
               </div>
             </div>
-            {soldOut ? (
+            {isOwner ? (
+              <Button asChild size="lg" className="mt-4 w-full bg-primary">
+                <Link to="/seller/listings">Edit your listing</Link>
+              </Button>
+            ) : soldOut ? (
               <Button disabled size="lg" className="mt-4 w-full">Sold out</Button>
             ) : (
               <Button onClick={() => setBooking(true)} size="lg" className="mt-4 w-full bg-primary">Book Now</Button>
             )}
-            <p className="mt-2 text-center text-xs text-muted-foreground">RockTek mediates the full transaction. Pay 1% to lock the order.</p>
+            <p className="mt-2 text-center text-xs text-muted-foreground">
+              {isOwner ? "This is your own listing. You cannot purchase your own products." : "RockTek mediates the full transaction. Pay 1% to lock the order."}
+            </p>
           </div>
 
           <div className="mt-6 rounded-xl border border-border bg-secondary/5 p-4 text-sm">
