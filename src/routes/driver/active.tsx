@@ -83,7 +83,7 @@ function ActiveTripCard({ trip, userId, onChange }: { trip: any; userId: string;
     if (!photo) return toast.error("A delivery photo is required to complete delivery");
     setSaving(true);
     try {
-      const path = `proofs/${userId}/${trip.id}/${Date.now()}-${photo.name}`;
+      const path = `${userId}/proofs/${trip.id}/${Date.now()}-${photo.name}`;
       const { error: upErr } = await supabase.storage.from("listing-media").upload(path, photo);
       if (upErr) throw upErr;
       const image_url = supabase.storage.from("listing-media").getPublicUrl(path).data.publicUrl;
