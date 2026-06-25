@@ -19,7 +19,6 @@ function BuyerLayout() {
     <DashboardLayout
       nav={[
         { to: "/buyer", icon: ShoppingBag, label: "Orders", exact: true },
-        { to: "/buyer/tracking", icon: MapPin, label: "Tracking" },
         { to: "/buyer/profile", icon: User, label: "Profile" },
       ]}
     />
