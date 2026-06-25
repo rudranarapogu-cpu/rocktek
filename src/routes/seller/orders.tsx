@@ -19,6 +19,7 @@ function SellerOrders() {
   const [trips, setTrips] = useState<Record<string, any>>({});
   const [drivers, setDrivers] = useState<any[]>([]);
   const [pick, setPick] = useState<Record<string, string>>({});
+  const [search, setSearch] = useState<Record<string, string>>({});
   const [loading, setLoading] = useState(true);
 
   const load = async (sellerId: string) => {
