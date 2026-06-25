@@ -99,21 +99,44 @@ function SellerOrders() {
                       ? "Awaiting driver acceptance"
                       : `Driver accepted — trip status: ${trip.status}`}
                   </div>
+                ) : o.buyer_has_vehicle ? (
+                  <div className="mt-3 inline-flex items-center gap-2 rounded-md bg-secondary px-3 py-1.5 text-sm text-secondary-foreground">
+                    <Truck className="h-4 w-4" /> Buyer arranges own transport — no driver assignment needed.
+                  </div>
                 ) : o.status === "confirmed" ? (
-                  <div className="mt-3 flex flex-wrap items-center gap-2">
-                    <div className="w-56">
-                      <Select value={pick[o.id] ?? ""} onValueChange={(v) => setPick((p) => ({ ...p, [o.id]: v }))}>
-                        <SelectTrigger><SelectValue placeholder="Assign a driver" /></SelectTrigger>
-                        <SelectContent>
-                          {drivers.length === 0 ? (
-                            <div className="px-2 py-1.5 text-xs text-muted-foreground">No approved drivers yet</div>
-                          ) : drivers.map((d) => (
-                            <SelectItem key={d.id} value={d.id}>{d.full_name} · {d.vehicle_type ?? "Truck"}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
+                  <div className="mt-3 space-y-2">
+                    <Input
+                      value={search[o.id] ?? ""}
+                      onChange={(e) => setSearch((s) => ({ ...s, [o.id]: e.target.value }))}
+                      placeholder="Search driver by code or name (e.g. DRV-AB12CD)"
+                      className="max-w-sm"
+                    />
+                    <div className="flex flex-wrap items-center gap-2">
+                      <div className="w-72">
+                        <Select value={pick[o.id] ?? ""} onValueChange={(v) => setPick((p) => ({ ...p, [o.id]: v }))}>
+                          <SelectTrigger><SelectValue placeholder="Assign a driver" /></SelectTrigger>
+                          <SelectContent>
+                            {(() => {
+                              const q = (search[o.id] ?? "").trim().toLowerCase();
+                              const list = drivers.filter((d) =>
+                                !q ||
+                                (d.public_code ?? "").toLowerCase().includes(q) ||
+                                (d.full_name ?? "").toLowerCase().includes(q));
+                              if (drivers.length === 0)
+                                return <div className="px-2 py-1.5 text-xs text-muted-foreground">No approved drivers yet</div>;
+                              if (list.length === 0)
+                                return <div className="px-2 py-1.5 text-xs text-muted-foreground">No driver matches that search</div>;
+                              return list.map((d) => (
+                                <SelectItem key={d.id} value={d.id}>
+                                  {d.public_code} · {d.full_name} · {d.vehicle_type ?? "Truck"}
+                                </SelectItem>
+                              ));
+                            })()}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <Button onClick={() => assign(o)} className="bg-primary">Dispatch</Button>
                     </div>
-                    <Button onClick={() => assign(o)} className="bg-primary">Dispatch</Button>
                   </div>
                 ) : null}
               </div>
