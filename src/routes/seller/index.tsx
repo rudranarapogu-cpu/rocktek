@@ -38,6 +38,13 @@ function SellerOverview() {
         <Button asChild className="bg-primary"><Link to="/seller/upload"><PlusCircle className="mr-2 h-4 w-4" />Upload inventory</Link></Button>
       </div>
 
+      {seller?.public_code && (
+        <div className="mt-3 inline-flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-sm">
+          <span className="text-muted-foreground">Your seller ID</span>
+          <span className="font-mono font-semibold tracking-wide text-primary">{seller.public_code}</span>
+        </div>
+      )}
+
       {!seller ? (
         <div className="mt-6 rounded-xl border border-dashed border-border bg-card p-8 text-center">
           <p className="font-display text-2xl">Complete your seller profile</p>
