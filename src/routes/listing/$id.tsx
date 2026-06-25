@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
-import { ADVANCE_RATE, inr } from "@/lib/logistics";
+import { ADVANCE_RATE, deliveryCharge, inr } from "@/lib/logistics";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/listing/$id")({
@@ -147,34 +147,54 @@ function BookingDialog({ listing, user, onClose }: { listing: any; user: any; on
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
+  const [state, setState] = useState("");
+  const [district, setDistrict] = useState("");
+  const [mandal, setMandal] = useState("");
+  const [ownVehicle, setOwnVehicle] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   const stock = Number(listing.stock_available);
   const quantity = Math.max(0, Number(qty) || 0);
   const total = quantity * Number(listing.price);
   const advance = total * ADVANCE_RATE;
+  const delivery = ownVehicle
+    ? 0
+    : deliveryCharge({
+        originState: listing.state,
+        originDistrict: listing.district,
+        destState: state,
+        destDistrict: district,
+        quantity,
+      });
+  const payNow = advance + delivery;
 
   const confirm = async () => {
     if (!user) { toast.info("Please sign in to book."); nav({ to: "/auth/login" }); return; }
     if (quantity <= 0) return toast.error("Enter a valid quantity");
     if (quantity > stock) return toast.error(`Only ${stock} ${listing.unit_type} available`);
     if (!name || !phone || !address) return toast.error("Fill in your contact & delivery details");
+    if (!ownVehicle && (!state || !district || !mandal))
+      return toast.error("Add delivery state, district & mandal to calculate delivery charge");
 
     setSubmitting(true);
-    // Mock payment: assume 1% advance succeeds, mark order confirmed (stock auto-reduces via DB trigger).
     const { error } = await supabase.from("orders").insert({
       listing_id: listing.id,
       buyer_id: user.id,
       seller_id: listing.seller_id,
       quantity,
       unit_price: Number(listing.price),
-      total_amount: total,
+      total_amount: total + delivery,
       advance_amount: advance,
       status: "confirmed",
       payment_status: "advance_paid",
       buyer_name: name,
       buyer_phone: phone,
       delivery_address: address,
+      buyer_has_vehicle: ownVehicle,
+      delivery_state: state || null,
+      delivery_district: district || null,
+      delivery_mandal: mandal || null,
+      delivery_charge: delivery,
     });
     setSubmitting(false);
     if (error) return toast.error(error.message);
@@ -184,7 +204,7 @@ function BookingDialog({ listing, user, onClose }: { listing: any; user: any; on
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4" onClick={onClose}>
-      <div className="w-full max-w-md rounded-2xl border border-border bg-background p-6 shadow-xl" onClick={(e) => e.stopPropagation()}>
+      <div className="max-h-[90vh] w-full max-w-md overflow-y-auto rounded-2xl border border-border bg-background p-6 shadow-xl" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-start justify-between">
           <div>
             <p className="font-display text-xs uppercase tracking-[0.3em] text-primary">Booking</p>
@@ -200,16 +220,47 @@ function BookingDialog({ listing, user, onClose }: { listing: any; user: any; on
           <F label="Your name"><Input value={name} onChange={(e) => setName(e.target.value)} /></F>
           <F label="Phone"><Input value={phone} onChange={(e) => setPhone(e.target.value)} /></F>
           <F label="Delivery address"><Textarea rows={2} value={address} onChange={(e) => setAddress(e.target.value)} /></F>
+
+          <div className="rounded-xl border border-border bg-secondary/5 p-3">
+            <p className="text-sm font-semibold">Do you have your own vehicle?</p>
+            <div className="mt-2 flex gap-2">
+              <button
+                type="button"
+                onClick={() => setOwnVehicle(true)}
+                className={`flex-1 rounded-md border px-3 py-2 text-sm font-medium ${ownVehicle ? "border-primary bg-primary/10 text-primary" : "border-border"}`}
+              >Yes, I'll arrange transport</button>
+              <button
+                type="button"
+                onClick={() => setOwnVehicle(false)}
+                className={`flex-1 rounded-md border px-3 py-2 text-sm font-medium ${!ownVehicle ? "border-primary bg-primary/10 text-primary" : "border-border"}`}
+              >No, seller delivers</button>
+            </div>
+            <p className="mt-2 text-xs text-muted-foreground">
+              {ownVehicle
+                ? "You'll assign your own driver from your Orders after booking. No delivery charge."
+                : "The seller assigns a driver. Delivery charge is calculated from your location below."}
+            </p>
+          </div>
+
+          {!ownVehicle && (
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+              <F label="State"><Input value={state} onChange={(e) => setState(e.target.value)} /></F>
+              <F label="District"><Input value={district} onChange={(e) => setDistrict(e.target.value)} /></F>
+              <F label="Mandal"><Input value={mandal} onChange={(e) => setMandal(e.target.value)} /></F>
+            </div>
+          )}
         </div>
 
         <div className="mt-4 space-y-1 rounded-xl bg-muted p-4 text-sm">
           <Row label="Order total" value={inr(total)} />
+          {!ownVehicle && <Row label="Delivery charge" value={inr(delivery)} />}
           <Row label="Advance now (1%)" value={inr(advance)} highlight />
+          <Row label="Pay now (advance + delivery)" value={inr(payNow)} highlight />
           <Row label="Balance on delivery" value={inr(total - advance)} muted />
         </div>
 
         <Button onClick={confirm} disabled={submitting} size="lg" className="mt-4 w-full bg-primary">
-          {submitting ? "Processing payment…" : `Pay ${inr(advance)} & confirm`}
+          {submitting ? "Processing payment…" : `Pay ${inr(payNow)} & confirm`}
         </Button>
         <p className="mt-2 text-center text-xs text-muted-foreground">Mock payment for demo. Stock reduces automatically.</p>
       </div>

@@ -83,6 +83,7 @@ export type Database = {
           id: string
           license_number: string
           phone: string
+          public_code: string | null
           state: string | null
           status: Database["public"]["Enums"]["driver_status"]
           updated_at: string
@@ -97,6 +98,7 @@ export type Database = {
           id?: string
           license_number: string
           phone: string
+          public_code?: string | null
           state?: string | null
           status?: Database["public"]["Enums"]["driver_status"]
           updated_at?: string
@@ -111,6 +113,7 @@ export type Database = {
           id?: string
           license_number?: string
           phone?: string
+          public_code?: string | null
           state?: string | null
           status?: Database["public"]["Enums"]["driver_status"]
           updated_at?: string
@@ -303,11 +306,16 @@ export type Database = {
       orders: {
         Row: {
           advance_amount: number
+          buyer_has_vehicle: boolean
           buyer_id: string
           buyer_name: string | null
           buyer_phone: string | null
           created_at: string
           delivery_address: string | null
+          delivery_charge: number
+          delivery_district: string | null
+          delivery_mandal: string | null
+          delivery_state: string | null
           id: string
           listing_id: string
           payment_status: Database["public"]["Enums"]["payment_status"]
@@ -320,11 +328,16 @@ export type Database = {
         }
         Insert: {
           advance_amount: number
+          buyer_has_vehicle?: boolean
           buyer_id: string
           buyer_name?: string | null
           buyer_phone?: string | null
           created_at?: string
           delivery_address?: string | null
+          delivery_charge?: number
+          delivery_district?: string | null
+          delivery_mandal?: string | null
+          delivery_state?: string | null
           id?: string
           listing_id: string
           payment_status?: Database["public"]["Enums"]["payment_status"]
@@ -337,11 +350,16 @@ export type Database = {
         }
         Update: {
           advance_amount?: number
+          buyer_has_vehicle?: boolean
           buyer_id?: string
           buyer_name?: string | null
           buyer_phone?: string | null
           created_at?: string
           delivery_address?: string | null
+          delivery_charge?: number
+          delivery_district?: string | null
+          delivery_mandal?: string | null
+          delivery_state?: string | null
           id?: string
           listing_id?: string
           payment_status?: Database["public"]["Enums"]["payment_status"]
@@ -452,6 +470,7 @@ export type Database = {
           id: string
           owner_name: string
           phone: string
+          public_code: string | null
           state: string
           status: Database["public"]["Enums"]["seller_status"]
           updated_at: string
@@ -467,6 +486,7 @@ export type Database = {
           id?: string
           owner_name: string
           phone: string
+          public_code?: string | null
           state: string
           status?: Database["public"]["Enums"]["seller_status"]
           updated_at?: string
@@ -482,6 +502,7 @@ export type Database = {
           id?: string
           owner_name?: string
           phone?: string
+          public_code?: string | null
           state?: string
           status?: Database["public"]["Enums"]["seller_status"]
           updated_at?: string
@@ -677,6 +698,7 @@ export type Database = {
         Row: {
           full_name: string | null
           id: string | null
+          public_code: string | null
           state: string | null
           status: Database["public"]["Enums"]["driver_status"] | null
           vehicle_type: string | null
@@ -685,6 +707,7 @@ export type Database = {
         Insert: {
           full_name?: string | null
           id?: string | null
+          public_code?: string | null
           state?: string | null
           status?: Database["public"]["Enums"]["driver_status"] | null
           vehicle_type?: string | null
@@ -693,6 +716,7 @@ export type Database = {
         Update: {
           full_name?: string | null
           id?: string | null
+          public_code?: string | null
           state?: string | null
           status?: Database["public"]["Enums"]["driver_status"] | null
           vehicle_type?: string | null
@@ -706,6 +730,7 @@ export type Database = {
           created_at: string | null
           id: string | null
           owner_name: string | null
+          public_code: string | null
           state: string | null
           verified_at: string | null
         }
@@ -714,6 +739,7 @@ export type Database = {
           created_at?: string | null
           id?: string | null
           owner_name?: string | null
+          public_code?: string | null
           state?: string | null
           verified_at?: string | null
         }
@@ -722,6 +748,7 @@ export type Database = {
           created_at?: string | null
           id?: string | null
           owner_name?: string | null
+          public_code?: string | null
           state?: string | null
           verified_at?: string | null
         }
@@ -730,6 +757,7 @@ export type Database = {
     }
     Functions: {
       can_view_trip: { Args: { _trip_id: string }; Returns: boolean }
+      gen_public_code: { Args: { _prefix: string }; Returns: string }
       get_my_driver_id: { Args: never; Returns: string }
       get_my_seller_id: { Args: never; Returns: string }
       has_role: {

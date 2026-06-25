@@ -41,7 +41,6 @@ export const HEADER_NAV: Record<"public" | Role, NavLink[]> = {
     { to: "/", label: "Home", icon: Home, exact: true },
     { to: "/marketplace", label: "Products", icon: Boxes },
     { to: "/buyer", label: "My Orders", icon: ShoppingBag, exact: true },
-    { to: "/buyer/tracking", label: "Tracking", icon: MapPin },
     { to: "/buyer/profile", label: "Profile", icon: User },
   ],
   seller: [
@@ -83,7 +82,7 @@ export const MOBILE_NAV: Record<"public" | Role, NavLink[]> = {
     { to: "/", label: "Home", icon: Home, exact: true },
     { to: "/marketplace", label: "Products", icon: Boxes },
     { to: "/buyer", label: "Orders", icon: ShoppingBag, exact: true },
-    { to: "/buyer/tracking", label: "Tracking", icon: MapPin },
+    
     { to: "/buyer/profile", label: "Profile", icon: User },
   ],
   seller: [
