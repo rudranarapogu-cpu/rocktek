@@ -58,6 +58,13 @@ function AssignedLoads() {
       <p className="font-display text-xs uppercase tracking-[0.3em] text-primary">Driver</p>
       <h1 className="mt-1 font-display text-3xl">Assigned Loads</h1>
 
+      {driver?.public_code && (
+        <div className="mt-3 inline-flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-sm">
+          <span className="text-muted-foreground">Your driver ID</span>
+          <span className="font-mono font-semibold tracking-wide text-primary">{driver.public_code}</span>
+        </div>
+      )}
+
       {driver && driver.status !== "approved" && (
         <div className="mt-4 flex items-start gap-3 rounded-xl border border-accent bg-accent/10 p-4 text-sm">
           <AlertCircle className="mt-0.5 h-5 w-5 text-accent" />
