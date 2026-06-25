@@ -25,7 +25,7 @@ function SellerOrders() {
     const [{ data: o }, { data: t }, { data: d }] = await Promise.all([
       supabase.from("orders").select("*,listings(title,unit_type)").eq("seller_id", sellerId).order("created_at", { ascending: false }),
       supabase.from("trips").select("*").eq("seller_id", sellerId),
-      supabase.from("drivers_public").select("id,full_name,vehicle_type"),
+      supabase.from("drivers_public").select("id,full_name,vehicle_type,public_code"),
     ]);
     setOrders(o ?? []);
     // ignore rejected trips so the order can be reassigned
