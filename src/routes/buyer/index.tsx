@@ -116,7 +116,7 @@ function AssignOwnDriver({ order, onChange }: { order: any; onChange: () => void
     if (!drv) { setSaving(false); return toast.error("No verified driver found with that code"); }
     const { error } = await supabase.from("trips").insert({
       order_id: order.id,
-      driver_id: drv.id,
+      driver_id: drv.id as string,
       seller_id: order.seller_id,
       status: "assigned",
     });
