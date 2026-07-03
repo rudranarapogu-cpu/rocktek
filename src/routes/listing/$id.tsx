@@ -172,7 +172,7 @@ function BookingDialog({ listing, user, onClose }: { listing: any; user: any; on
         destination: { state: addr.state, district: addr.district, mandal: addr.mandal },
       },
     })
-      .then((r) => { if (!cancelled) setDist(r); })
+      .then((r: { km: number; charge: number; estimated: boolean }) => { if (!cancelled) setDist(r); })
       .catch(() => { if (!cancelled) setDist(null); })
       .finally(() => { if (!cancelled) setCalcLoading(false); });
     return () => { cancelled = true; };
