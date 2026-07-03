@@ -10,7 +10,9 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
-import { ADVANCE_RATE, deliveryCharge, inr } from "@/lib/logistics";
+import { ADVANCE_RATE, inr } from "@/lib/logistics";
+import { computeDeliveryDistance } from "@/lib/geo.functions";
+import { AddressPicker } from "@/components/address-picker";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/listing/$id")({
