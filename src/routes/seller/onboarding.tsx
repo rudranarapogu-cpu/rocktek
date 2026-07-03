@@ -11,6 +11,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { toast } from "sonner";
 import { ShieldCheck, Upload } from "lucide-react";
+import { sanitizePhone } from "@/lib/validation";
 
 export const Route = createFileRoute("/seller/onboarding")({
   component: Onboarding,
