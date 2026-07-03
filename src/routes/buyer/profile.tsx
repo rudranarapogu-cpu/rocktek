@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
+import { AddressPicker } from "@/components/address-picker";
 
 export const Route = createFileRoute("/buyer/profile")({
   component: BuyerProfile,
