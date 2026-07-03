@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { toast } from "sonner";
+import { sanitizePhone } from "@/lib/validation";
 
 export const Route = createFileRoute("/driver/onboarding")({
   head: () => ({ meta: [{ title: "Driver registration — RockTek Services" }] }),
