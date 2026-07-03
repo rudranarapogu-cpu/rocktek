@@ -54,7 +54,7 @@ function Onboarding() {
       gst_number: z.string().min(10).max(20),
       gst_address: z.string().min(10).max(500),
       state: z.string().min(2).max(60),
-      phone: z.string().min(7).max(20),
+      phone: z.string().regex(/^[6-9]\d{9}$/, "Enter a valid 10-digit mobile number"),
       email: z.string().email(),
     });
     const parsed = schema.safeParse(form);
