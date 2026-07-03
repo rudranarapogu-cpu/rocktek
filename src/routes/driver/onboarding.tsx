@@ -35,7 +35,7 @@ function DriverOnboarding() {
     if (!user) return;
     const parsed = z.object({
       full_name: z.string().min(2).max(100),
-      phone: z.string().min(7).max(20),
+      phone: z.string().regex(/^[6-9]\d{9}$/, "Enter a valid 10-digit mobile number"),
       license_number: z.string().min(3).max(40),
       vehicle_number: z.string().min(3).max(20),
     }).safeParse(form);
