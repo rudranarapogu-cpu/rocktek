@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { toast } from "sonner";
 import { AuthShell } from "@/routes/auth/login";
+import { sanitizePhone } from "@/lib/validation";
 
 export const Route = createFileRoute("/auth/signup")({
   validateSearch: z.object({ role: z.enum(["buyer", "seller"]).optional() }),
@@ -29,7 +30,7 @@ function Signup() {
     const parsed = z.object({
       full_name: z.string().min(2).max(100),
       email: z.string().email(),
-      phone: z.string().min(7).max(20),
+      phone: z.string().regex(/^[6-9]\d{9}$/, "Enter a valid 10-digit mobile number"),
       password: z.string().min(8).max(72),
     }).safeParse(form);
     if (!parsed.success) return toast.error(parsed.error.issues[0].message);
@@ -67,7 +68,7 @@ function Signup() {
       <form onSubmit={submit} className="space-y-3">
         <Field label="Full name"><Input value={form.full_name} onChange={(e) => set("full_name", e.target.value)} required /></Field>
         <Field label="Email"><Input type="email" value={form.email} onChange={(e) => set("email", e.target.value)} required /></Field>
-        <Field label="Phone"><Input value={form.phone} onChange={(e) => set("phone", e.target.value)} required /></Field>
+        <Field label="Phone (10 digits)"><Input inputMode="numeric" value={form.phone} onChange={(e) => set("phone", sanitizePhone(e.target.value))} placeholder="9XXXXXXXXX" required /></Field>
         <Field label="Password"><Input type="password" value={form.password} onChange={(e) => set("password", e.target.value)} required minLength={8} /></Field>
         <Button type="submit" disabled={loading} className="w-full bg-primary">{loading ? "Creating…" : "Create account"}</Button>
       </form>

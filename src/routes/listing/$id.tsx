@@ -1,4 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
 import { ArrowLeft, MapPin, Package, ShieldCheck, Clock, Hammer, Building2, X } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
@@ -9,7 +10,9 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
-import { ADVANCE_RATE, deliveryCharge, inr } from "@/lib/logistics";
+import { ADVANCE_RATE, inr } from "@/lib/logistics";
+import { computeDeliveryDistance } from "@/lib/geo.functions";
+import { AddressPicker } from "@/components/address-picker";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/listing/$id")({
@@ -143,38 +146,44 @@ function ListingDetail() {
 
 function BookingDialog({ listing, user, onClose }: { listing: any; user: any; onClose: () => void }) {
   const nav = useNavigate();
+  const computeDistance = useServerFn(computeDeliveryDistance);
   const [qty, setQty] = useState("1");
-  const [name, setName] = useState("");
-  const [phone, setPhone] = useState("");
-  const [address, setAddress] = useState("");
-  const [state, setState] = useState("");
-  const [district, setDistrict] = useState("");
-  const [mandal, setMandal] = useState("");
   const [ownVehicle, setOwnVehicle] = useState(false);
+  const [addr, setAddr] = useState<any>(null);
+  const [dist, setDist] = useState<{ km: number; charge: number; estimated: boolean } | null>(null);
+  const [calcLoading, setCalcLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 
   const stock = Number(listing.stock_available);
   const quantity = Math.max(0, Number(qty) || 0);
   const total = quantity * Number(listing.price);
   const advance = total * ADVANCE_RATE;
-  const delivery = ownVehicle
-    ? 0
-    : deliveryCharge({
-        originState: listing.state,
-        originDistrict: listing.district,
-        destState: state,
-        destDistrict: district,
-        quantity,
-      });
+  const delivery = ownVehicle ? 0 : (dist?.charge ?? 0);
   const payNow = advance + delivery;
+
+  // Recalculate distance-based delivery charge whenever the destination changes.
+  useEffect(() => {
+    if (ownVehicle || !addr) { setDist(null); return; }
+    let cancelled = false;
+    setCalcLoading(true);
+    computeDistance({
+      data: {
+        origin: { state: listing.state, district: listing.district ?? "", mandal: listing.district ?? "" },
+        destination: { state: addr.state, district: addr.district, mandal: addr.mandal },
+      },
+    })
+      .then((r: { km: number; charge: number; estimated: boolean }) => { if (!cancelled) setDist(r); })
+      .catch(() => { if (!cancelled) setDist(null); })
+      .finally(() => { if (!cancelled) setCalcLoading(false); });
+    return () => { cancelled = true; };
+  }, [ownVehicle, addr, listing.state, listing.district]);
 
   const confirm = async () => {
     if (!user) { toast.info("Please sign in to book."); nav({ to: "/auth/login" }); return; }
     if (quantity <= 0) return toast.error("Enter a valid quantity");
     if (quantity > stock) return toast.error(`Only ${stock} ${listing.unit_type} available`);
-    if (!name || !phone || !address) return toast.error("Fill in your contact & delivery details");
-    if (!ownVehicle && (!state || !district || !mandal))
-      return toast.error("Add delivery state, district & mandal to calculate delivery charge");
+    if (!addr) return toast.error("Select or add a delivery address");
+    if (!ownVehicle && !dist) return toast.error("Delivery charge is still being calculated");
 
     setSubmitting(true);
     const { error } = await supabase.from("orders").insert({
@@ -187,14 +196,16 @@ function BookingDialog({ listing, user, onClose }: { listing: any; user: any; on
       advance_amount: advance,
       status: "confirmed",
       payment_status: "advance_paid",
-      buyer_name: name,
-      buyer_phone: phone,
-      delivery_address: address,
+      buyer_name: addr.contact_name,
+      buyer_phone: addr.phone,
+      delivery_address: [addr.line1, addr.mandal].filter(Boolean).join(", "),
       buyer_has_vehicle: ownVehicle,
-      delivery_state: state || null,
-      delivery_district: district || null,
-      delivery_mandal: mandal || null,
+      delivery_state: addr.state,
+      delivery_district: addr.district,
+      delivery_mandal: addr.mandal,
+      delivery_pincode: addr.pincode || null,
       delivery_charge: delivery,
+      distance_km: ownVehicle ? null : (dist?.km ?? null),
     });
     setSubmitting(false);
     if (error) return toast.error(error.message);
@@ -217,49 +228,48 @@ function BookingDialog({ listing, user, onClose }: { listing: any; user: any; on
           <F label={`Quantity (${listing.unit_type}) — max ${stock}`}>
             <Input type="number" min="1" max={stock} value={qty} onChange={(e) => setQty(e.target.value)} />
           </F>
-          <F label="Your name"><Input value={name} onChange={(e) => setName(e.target.value)} /></F>
-          <F label="Phone"><Input value={phone} onChange={(e) => setPhone(e.target.value)} /></F>
-          <F label="Delivery address"><Textarea rows={2} value={address} onChange={(e) => setAddress(e.target.value)} /></F>
 
           <div className="rounded-xl border border-border bg-secondary/5 p-3">
             <p className="text-sm font-semibold">Do you have your own vehicle?</p>
             <div className="mt-2 flex gap-2">
-              <button
-                type="button"
-                onClick={() => setOwnVehicle(true)}
-                className={`flex-1 rounded-md border px-3 py-2 text-sm font-medium ${ownVehicle ? "border-primary bg-primary/10 text-primary" : "border-border"}`}
-              >Yes, I'll arrange transport</button>
-              <button
-                type="button"
-                onClick={() => setOwnVehicle(false)}
-                className={`flex-1 rounded-md border px-3 py-2 text-sm font-medium ${!ownVehicle ? "border-primary bg-primary/10 text-primary" : "border-border"}`}
-              >No, seller delivers</button>
+              <button type="button" onClick={() => setOwnVehicle(true)}
+                className={`flex-1 rounded-md border px-3 py-2 text-sm font-medium ${ownVehicle ? "border-primary bg-primary/10 text-primary" : "border-border"}`}>Yes, I'll arrange transport</button>
+              <button type="button" onClick={() => setOwnVehicle(false)}
+                className={`flex-1 rounded-md border px-3 py-2 text-sm font-medium ${!ownVehicle ? "border-primary bg-primary/10 text-primary" : "border-border"}`}>No, seller delivers</button>
             </div>
             <p className="mt-2 text-xs text-muted-foreground">
               {ownVehicle
                 ? "You'll assign your own driver from your Orders after booking. No delivery charge."
-                : "The seller assigns a driver. Delivery charge is calculated from your location below."}
+                : "The seller assigns a driver. Delivery charge is ₹10/km from the seller to your address."}
             </p>
           </div>
 
-          {!ownVehicle && (
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-              <F label="State"><Input value={state} onChange={(e) => setState(e.target.value)} /></F>
-              <F label="District"><Input value={district} onChange={(e) => setDistrict(e.target.value)} /></F>
-              <F label="Mandal"><Input value={mandal} onChange={(e) => setMandal(e.target.value)} /></F>
-            </div>
-          )}
+          <div>
+            <Label>Delivery address</Label>
+            {user ? (
+              <div className="mt-1.5">
+                <AddressPicker userId={user.id} selectedId={addr?.id} onSelect={setAddr} />
+              </div>
+            ) : (
+              <p className="mt-1.5 text-sm text-muted-foreground">Sign in to add a delivery address.</p>
+            )}
+          </div>
         </div>
 
         <div className="mt-4 space-y-1 rounded-xl bg-muted p-4 text-sm">
           <Row label="Order total" value={inr(total)} />
-          {!ownVehicle && <Row label="Delivery charge" value={inr(delivery)} />}
+          {!ownVehicle && (
+            <Row
+              label={dist ? `Delivery (${dist.km} km${dist.estimated ? ", est." : ""})` : "Delivery charge"}
+              value={calcLoading ? "Calculating…" : dist ? inr(delivery) : "—"}
+            />
+          )}
           <Row label="Advance now (1%)" value={inr(advance)} highlight />
           <Row label="Pay now (advance + delivery)" value={inr(payNow)} highlight />
           <Row label="Balance on delivery" value={inr(total - advance)} muted />
         </div>
 
-        <Button onClick={confirm} disabled={submitting} size="lg" className="mt-4 w-full bg-primary">
+        <Button onClick={confirm} disabled={submitting || calcLoading} size="lg" className="mt-4 w-full bg-primary">
           {submitting ? "Processing payment…" : `Pay ${inr(payNow)} & confirm`}
         </Button>
         <p className="mt-2 text-center text-xs text-muted-foreground">Mock payment for demo. Stock reduces automatically.</p>

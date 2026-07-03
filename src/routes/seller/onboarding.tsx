@@ -11,6 +11,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { toast } from "sonner";
 import { ShieldCheck, Upload } from "lucide-react";
+import { sanitizePhone } from "@/lib/validation";
 
 export const Route = createFileRoute("/seller/onboarding")({
   component: Onboarding,
@@ -53,7 +54,7 @@ function Onboarding() {
       gst_number: z.string().min(10).max(20),
       gst_address: z.string().min(10).max(500),
       state: z.string().min(2).max(60),
-      phone: z.string().min(7).max(20),
+      phone: z.string().regex(/^[6-9]\d{9}$/, "Enter a valid 10-digit mobile number"),
       email: z.string().email(),
     });
     const parsed = schema.safeParse(form);
@@ -117,7 +118,7 @@ function Onboarding() {
           <Field label="Owner name"><Input value={form.owner_name} onChange={(e) => set("owner_name", e.target.value)} /></Field>
           <Field label="GST number"><Input value={form.gst_number} onChange={(e) => set("gst_number", e.target.value)} /></Field>
           <Field label="State"><Input value={form.state} onChange={(e) => set("state", e.target.value)} /></Field>
-          <Field label="Phone"><Input value={form.phone} onChange={(e) => set("phone", e.target.value)} /></Field>
+          <Field label="Phone (10 digits)"><Input inputMode="numeric" value={form.phone} onChange={(e) => set("phone", sanitizePhone(e.target.value))} placeholder="9XXXXXXXXX" /></Field>
           <Field label="Email"><Input type="email" value={form.email} onChange={(e) => set("email", e.target.value)} /></Field>
           <div className="sm:col-span-2"><Field label="GST registered address"><Textarea rows={2} value={form.gst_address} onChange={(e) => set("gst_address", e.target.value)} /></Field></div>
           <div className="sm:col-span-2">

@@ -69,19 +69,6 @@ export function SiteHeader() {
       {open && (
         <div className="border-t border-border bg-background lg:hidden">
           <div className="flex flex-col gap-1 p-4">
-            {links.map((l) => (
-              <Link
-                key={l.to + l.label}
-                to={l.to}
-                onClick={() => setOpen(false)}
-                className="flex items-center gap-3 rounded-md px-3 py-2.5 text-sm hover:bg-muted"
-                activeOptions={{ exact: l.exact }}
-                activeProps={{ className: "bg-primary/10 text-primary" }}
-              >
-                <l.icon className="h-4 w-4" /> {l.label}
-              </Link>
-            ))}
-            <div className="my-2 h-px bg-border" />
             {user ? (
               <button onClick={() => { signOut(); setOpen(false); }} className="rounded-md px-3 py-2.5 text-left text-sm hover:bg-muted">Sign out</button>
             ) : (

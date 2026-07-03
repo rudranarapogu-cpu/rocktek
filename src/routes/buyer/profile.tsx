@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
+import { AddressPicker } from "@/components/address-picker";
 
 export const Route = createFileRoute("/buyer/profile")({
   component: BuyerProfile,
@@ -24,7 +25,16 @@ function BuyerProfile() {
         <Card label="Email" value={user?.email ?? "—"} />
         <Card label="Phone" value={profile?.phone ?? "—"} />
       </div>
-      <div className="mt-6 flex flex-wrap gap-3">
+
+      <div className="mt-8">
+        <h2 className="font-display text-2xl">Saved addresses</h2>
+        <p className="text-sm text-muted-foreground">Reuse these at checkout — no need to retype every time.</p>
+        <div className="mt-4 max-w-2xl">
+          {user && <AddressPicker userId={user.id} />}
+        </div>
+      </div>
+
+      <div className="mt-8 flex flex-wrap gap-3">
         <Button asChild variant="outline"><Link to="/auth/signup" search={{ role: "seller" }}>Become a seller</Link></Button>
         <Button asChild variant="outline"><Link to="/driver/onboarding">Become a driver</Link></Button>
         <Button variant="outline" onClick={signOut}>Sign out</Button>

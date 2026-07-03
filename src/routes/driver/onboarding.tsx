@@ -10,6 +10,7 @@ import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { toast } from "sonner";
+import { sanitizePhone } from "@/lib/validation";
 
 export const Route = createFileRoute("/driver/onboarding")({
   head: () => ({ meta: [{ title: "Driver registration — RockTek Services" }] }),
@@ -34,7 +35,7 @@ function DriverOnboarding() {
     if (!user) return;
     const parsed = z.object({
       full_name: z.string().min(2).max(100),
-      phone: z.string().min(7).max(20),
+      phone: z.string().regex(/^[6-9]\d{9}$/, "Enter a valid 10-digit mobile number"),
       license_number: z.string().min(3).max(40),
       vehicle_number: z.string().min(3).max(20),
     }).safeParse(form);
@@ -69,7 +70,7 @@ function DriverOnboarding() {
         ) : (
           <form onSubmit={submit} className="mt-6 grid gap-4 sm:grid-cols-2">
             <F label="Full name"><Input value={form.full_name} onChange={(e) => set("full_name", e.target.value)} /></F>
-            <F label="Phone"><Input value={form.phone} onChange={(e) => set("phone", e.target.value)} /></F>
+            <F label="Phone (10 digits)"><Input inputMode="numeric" value={form.phone} onChange={(e) => set("phone", sanitizePhone(e.target.value))} placeholder="9XXXXXXXXX" /></F>
             <F label="Driving license number"><Input value={form.license_number} onChange={(e) => set("license_number", e.target.value)} /></F>
             <F label="Vehicle number"><Input value={form.vehicle_number} onChange={(e) => set("vehicle_number", e.target.value)} placeholder="e.g. KA01AB1234" /></F>
             <F label="Vehicle type"><Input value={form.vehicle_type} onChange={(e) => set("vehicle_type", e.target.value)} placeholder="e.g. 10-wheeler truck" /></F>
