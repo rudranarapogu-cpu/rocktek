@@ -68,7 +68,7 @@ function Signup() {
       <form onSubmit={submit} className="space-y-3">
         <Field label="Full name"><Input value={form.full_name} onChange={(e) => set("full_name", e.target.value)} required /></Field>
         <Field label="Email"><Input type="email" value={form.email} onChange={(e) => set("email", e.target.value)} required /></Field>
-        <Field label="Phone"><Input value={form.phone} onChange={(e) => set("phone", e.target.value)} required /></Field>
+        <Field label="Phone (10 digits)"><Input inputMode="numeric" value={form.phone} onChange={(e) => set("phone", sanitizePhone(e.target.value))} placeholder="9XXXXXXXXX" required /></Field>
         <Field label="Password"><Input type="password" value={form.password} onChange={(e) => set("password", e.target.value)} required minLength={8} /></Field>
         <Button type="submit" disabled={loading} className="w-full bg-primary">{loading ? "Creating…" : "Create account"}</Button>
       </form>
