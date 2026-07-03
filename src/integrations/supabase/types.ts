@@ -14,6 +14,60 @@ export type Database = {
   }
   public: {
     Tables: {
+      addresses: {
+        Row: {
+          contact_name: string
+          created_at: string
+          district: string
+          id: string
+          is_default: boolean
+          label: string
+          lat: number | null
+          line1: string
+          lng: number | null
+          mandal: string
+          phone: string
+          pincode: string | null
+          state: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          contact_name: string
+          created_at?: string
+          district: string
+          id?: string
+          is_default?: boolean
+          label?: string
+          lat?: number | null
+          line1: string
+          lng?: number | null
+          mandal: string
+          phone: string
+          pincode?: string | null
+          state: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          contact_name?: string
+          created_at?: string
+          district?: string
+          id?: string
+          is_default?: boolean
+          label?: string
+          lat?: number | null
+          line1?: string
+          lng?: number | null
+          mandal?: string
+          phone?: string
+          pincode?: string | null
+          state?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       categories: {
         Row: {
           created_at: string
@@ -315,7 +369,9 @@ export type Database = {
           delivery_charge: number
           delivery_district: string | null
           delivery_mandal: string | null
+          delivery_pincode: string | null
           delivery_state: string | null
+          distance_km: number | null
           id: string
           listing_id: string
           payment_status: Database["public"]["Enums"]["payment_status"]
@@ -337,7 +393,9 @@ export type Database = {
           delivery_charge?: number
           delivery_district?: string | null
           delivery_mandal?: string | null
+          delivery_pincode?: string | null
           delivery_state?: string | null
+          distance_km?: number | null
           id?: string
           listing_id: string
           payment_status?: Database["public"]["Enums"]["payment_status"]
@@ -359,7 +417,9 @@ export type Database = {
           delivery_charge?: number
           delivery_district?: string | null
           delivery_mandal?: string | null
+          delivery_pincode?: string | null
           delivery_state?: string | null
+          distance_km?: number | null
           id?: string
           listing_id?: string
           payment_status?: Database["public"]["Enums"]["payment_status"]
