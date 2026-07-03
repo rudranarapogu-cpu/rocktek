@@ -70,7 +70,7 @@ function DriverOnboarding() {
         ) : (
           <form onSubmit={submit} className="mt-6 grid gap-4 sm:grid-cols-2">
             <F label="Full name"><Input value={form.full_name} onChange={(e) => set("full_name", e.target.value)} /></F>
-            <F label="Phone"><Input value={form.phone} onChange={(e) => set("phone", e.target.value)} /></F>
+            <F label="Phone (10 digits)"><Input inputMode="numeric" value={form.phone} onChange={(e) => set("phone", sanitizePhone(e.target.value))} placeholder="9XXXXXXXXX" /></F>
             <F label="Driving license number"><Input value={form.license_number} onChange={(e) => set("license_number", e.target.value)} /></F>
             <F label="Vehicle number"><Input value={form.vehicle_number} onChange={(e) => set("vehicle_number", e.target.value)} placeholder="e.g. KA01AB1234" /></F>
             <F label="Vehicle type"><Input value={form.vehicle_type} onChange={(e) => set("vehicle_type", e.target.value)} placeholder="e.g. 10-wheeler truck" /></F>
