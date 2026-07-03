@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 import { toast } from "sonner";
 import { AuthShell } from "@/routes/auth/login";
+import { sanitizePhone } from "@/lib/validation";
 
 export const Route = createFileRoute("/auth/signup")({
   validateSearch: z.object({ role: z.enum(["buyer", "seller"]).optional() }),
