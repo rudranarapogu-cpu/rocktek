@@ -69,29 +69,47 @@ function Marketplace() {
           <p className="text-sm text-muted-foreground">{loading ? "Loading…" : `${listings.length} listings`}</p>
         </div>
 
-        <div className="mt-6 grid gap-3 sm:grid-cols-3">
-          <div className="relative sm:col-span-1">
+        <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="relative">
             <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               defaultValue={search.q ?? ""}
-              placeholder="Search title…"
+              placeholder="Search stone type / title…"
               className="pl-9"
               onChange={(e) => navigate({ search: (s: any) => ({ ...s, q: e.target.value || undefined }), replace: true })}
             />
           </div>
           <Select value={search.category ?? "all"} onValueChange={(v) => navigate({ search: (s: any) => ({ ...s, category: v === "all" ? undefined : v }) })}>
-            <SelectTrigger><SelectValue placeholder="Category" /></SelectTrigger>
+            <SelectTrigger><SelectValue placeholder="Stone type" /></SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All categories</SelectItem>
+              <SelectItem value="all">All stone types</SelectItem>
               {categories.map((c) => <SelectItem key={c.id} value={c.slug}>{c.name}</SelectItem>)}
             </SelectContent>
           </Select>
           <Input
-            defaultValue={search.state ?? ""}
-            placeholder="Filter by state (e.g. Karnataka)"
-            onChange={(e) => navigate({ search: (s: any) => ({ ...s, state: e.target.value || undefined }), replace: true })}
+            defaultValue={search.district ?? ""}
+            placeholder="District (e.g. Khammam)"
+            onChange={(e) => navigate({ search: (s: any) => ({ ...s, district: e.target.value || undefined }), replace: true })}
+          />
+          <Input
+            defaultValue={search.finish ?? ""}
+            placeholder="Finish (e.g. Polished)"
+            onChange={(e) => navigate({ search: (s: any) => ({ ...s, finish: e.target.value || undefined }), replace: true })}
+          />
+          <Input
+            type="number"
+            defaultValue={search.minPrice ?? ""}
+            placeholder="Min price ₹"
+            onChange={(e) => navigate({ search: (s: any) => ({ ...s, minPrice: e.target.value || undefined }), replace: true })}
+          />
+          <Input
+            type="number"
+            defaultValue={search.maxPrice ?? ""}
+            placeholder="Max price ₹"
+            onChange={(e) => navigate({ search: (s: any) => ({ ...s, maxPrice: e.target.value || undefined }), replace: true })}
           />
         </div>
+
 
         {loading ? (
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
