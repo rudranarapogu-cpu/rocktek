@@ -217,7 +217,7 @@ function BookingDialog({ listing, user, onClose }: { listing: any; user: any; on
     });
     setSubmitting(false);
     if (error) return toast.error(error.message);
-    toast.success("Booking confirmed! Advance paid.");
+    toast.success("Reserved! 1% advance paid to hold your order. The seller will reach out to discuss next steps.");
     nav({ to: "/buyer" });
   };
 
