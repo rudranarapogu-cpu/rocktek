@@ -90,7 +90,10 @@ function ListingDetail() {
         </div>
 
         <div>
-          <div className="inline-flex items-center gap-1 rounded-md bg-secondary px-2 py-1 text-[10px] font-semibold text-secondary-foreground">
+          <div
+            className="inline-flex items-center gap-1 rounded-md bg-secondary px-2 py-1 text-[10px] font-semibold text-secondary-foreground"
+            title="Verified Seller — documents manually reviewed and approved by the RockTek team, not automated."
+          >
             <ShieldCheck className="h-3 w-3 text-accent" /> Verified Seller
           </div>
           <p className="mt-3 text-xs font-semibold uppercase tracking-widest text-primary">{listing.categories?.name}</p>
