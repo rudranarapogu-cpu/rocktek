@@ -12,7 +12,10 @@ import { Search } from "lucide-react";
 const searchSchema = z.object({
   q: z.string().optional(),
   category: z.string().optional(),
-  state: z.string().optional(),
+  district: z.string().optional(),
+  finish: z.string().optional(),
+  minPrice: z.string().optional(),
+  maxPrice: z.string().optional(),
 });
 
 export const Route = createFileRoute("/marketplace")({
