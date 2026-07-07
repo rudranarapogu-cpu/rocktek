@@ -12,9 +12,9 @@ export const TRIP_STATUSES = [
 export type TripStatus = (typeof TRIP_STATUSES)[number];
 
 export const TRIP_STATUS_LABEL: Record<TripStatus, string> = {
-  assigned: "Assigned",
+  assigned: "Booked",
   loading: "Loading",
-  picked_up: "Picked Up",
+  picked_up: "Dispatched",
   in_transit: "In Transit",
   near_destination: "Near Destination",
   delivered: "Delivered",
