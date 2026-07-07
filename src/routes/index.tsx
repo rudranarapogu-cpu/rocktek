@@ -22,9 +22,10 @@ interface Category { id: string; name: string; slug: string; description: string
 interface Listing {
   id: string; title: string; price: number; quantity: number; unit_type: string;
   state: string; district: string | null; created_at: string;
+  finish_type: string | null; dimensions: string | null;
   listing_images: { url: string }[];
   categories: { name: string } | null;
-  sellers: { company_name: string } | null;
+  sellers?: { company_name: string } | null;
 }
 
 function HomePage() {
