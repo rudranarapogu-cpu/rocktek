@@ -151,7 +151,7 @@ function TrackingBlock({ trip }: { trip: any }) {
         </span>
       </div>
       <div className="mt-4 grid gap-5 md:grid-cols-2">
-        <TripMap lat={live?.current_lat} lng={live?.current_lng} />
+        <TripMap lat={live?.current_lat} lng={live?.current_lng} updatedAt={live?.updated_at} />
         <TripTimeline status={status} />
       </div>
       <div className="mt-4">
