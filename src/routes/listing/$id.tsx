@@ -27,6 +27,7 @@ function ListingDetail() {
   const [activeImg, setActiveImg] = useState(0);
   const [loading, setLoading] = useState(true);
   const [booking, setBooking] = useState(false);
+  const [quote, setQuote] = useState(false);
   const [isOwner, setIsOwner] = useState(false);
 
   useEffect(() => {
