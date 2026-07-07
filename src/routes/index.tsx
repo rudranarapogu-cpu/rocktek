@@ -200,23 +200,31 @@ export function ListingCard({ l }: { l: Listing }) {
         ) : (
           <div className="flex h-full w-full items-center justify-center granite-texture text-muted-foreground"><Hammer className="h-8 w-8" /></div>
         )}
-        <div className="absolute left-2 top-2 inline-flex items-center gap-1 rounded-md bg-secondary/90 px-2 py-1 text-[10px] font-semibold text-secondary-foreground backdrop-blur">
-          <ShieldCheck className="h-3 w-3 text-accent" /> Verified
+        <div
+          className="absolute left-2 top-2 inline-flex items-center gap-1 rounded-md bg-secondary/90 px-2 py-1 text-[10px] font-semibold text-secondary-foreground backdrop-blur"
+          title="Verified Seller — documents manually reviewed and approved by the RockTek team."
+        >
+          <ShieldCheck className="h-3 w-3 text-accent" /> Verified Seller
         </div>
       </div>
       <div className="p-3">
         <p className="text-[10px] font-semibold uppercase tracking-wider text-primary">{l.categories?.name ?? "Stone"}</p>
         <h3 className="mt-1 line-clamp-1 font-display text-lg leading-tight">{l.title}</h3>
+        {(l.finish_type || l.dimensions) && (
+          <p className="mt-0.5 line-clamp-1 text-[11px] text-muted-foreground">
+            {[l.finish_type, l.dimensions].filter(Boolean).join(" · ")}
+          </p>
+        )}
         <div className="mt-2 flex items-center justify-between text-xs text-muted-foreground">
           <span className="inline-flex items-center gap-1"><MapPin className="h-3 w-3" />{l.district ?? l.state}</span>
           <span className="inline-flex items-center gap-1"><Clock className="h-3 w-3" />New</span>
         </div>
         <div className="mt-3 flex items-end justify-between border-t border-border pt-2">
           <div>
-            <p className="text-[10px] uppercase text-muted-foreground">Price</p>
+            <p className="text-[10px] uppercase text-muted-foreground">Price / {l.unit_type}</p>
             <p className="font-display text-lg leading-none">₹{Number(l.price).toLocaleString("en-IN")}<span className="text-xs text-muted-foreground">/{l.unit_type}</span></p>
           </div>
-          <span className="text-[10px] text-muted-foreground">{l.quantity} {l.unit_type} avail.</span>
+          <span className="text-[10px] text-muted-foreground">MOQ 1 · {l.quantity} {l.unit_type} avail.</span>
         </div>
       </div>
     </Link>
