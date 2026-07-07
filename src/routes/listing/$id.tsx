@@ -147,6 +147,7 @@ function ListingDetail() {
       </div>
 
       {booking && <BookingDialog listing={listing} user={user} onClose={() => setBooking(false)} />}
+      {quote && <QuoteDialog listing={listing} seller={seller} onClose={() => setQuote(false)} />}
     </PageShell>
   );
 }
