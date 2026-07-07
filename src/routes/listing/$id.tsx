@@ -127,10 +127,13 @@ function ListingDetail() {
             ) : soldOut ? (
               <Button disabled size="lg" className="mt-4 w-full">Sold out</Button>
             ) : (
-              <Button onClick={() => setBooking(true)} size="lg" className="mt-4 w-full bg-primary">Book Now</Button>
+              <div className="mt-4 space-y-2">
+                <Button onClick={() => setBooking(true)} size="lg" className="w-full bg-primary">Reserve & Discuss</Button>
+                <Button onClick={() => setQuote(true)} variant="outline" size="lg" className="w-full">Request Quote</Button>
+              </div>
             )}
             <p className="mt-2 text-center text-xs text-muted-foreground">
-              {isOwner ? "This is your own listing. You cannot purchase your own products." : "RockTek mediates the full transaction. Pay 1% to lock the order."}
+              {isOwner ? "This is your own listing. You cannot purchase your own products." : "Pay 1% advance to reserve this order and start the conversation with the seller — this holds the stock, it's not a completed purchase."}
             </p>
           </div>
 
