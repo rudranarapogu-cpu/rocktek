@@ -27,6 +27,7 @@ function ListingDetail() {
   const [activeImg, setActiveImg] = useState(0);
   const [loading, setLoading] = useState(true);
   const [booking, setBooking] = useState(false);
+  const [quote, setQuote] = useState(false);
   const [isOwner, setIsOwner] = useState(false);
 
   useEffect(() => {
@@ -90,7 +91,10 @@ function ListingDetail() {
         </div>
 
         <div>
-          <div className="inline-flex items-center gap-1 rounded-md bg-secondary px-2 py-1 text-[10px] font-semibold text-secondary-foreground">
+          <div
+            className="inline-flex items-center gap-1 rounded-md bg-secondary px-2 py-1 text-[10px] font-semibold text-secondary-foreground"
+            title="Verified Seller — documents manually reviewed and approved by the RockTek team, not automated."
+          >
             <ShieldCheck className="h-3 w-3 text-accent" /> Verified Seller
           </div>
           <p className="mt-3 text-xs font-semibold uppercase tracking-widest text-primary">{listing.categories?.name}</p>
@@ -124,10 +128,13 @@ function ListingDetail() {
             ) : soldOut ? (
               <Button disabled size="lg" className="mt-4 w-full">Sold out</Button>
             ) : (
-              <Button onClick={() => setBooking(true)} size="lg" className="mt-4 w-full bg-primary">Book Now</Button>
+              <div className="mt-4 space-y-2">
+                <Button onClick={() => setBooking(true)} size="lg" className="w-full bg-primary">Reserve & Discuss</Button>
+                <Button onClick={() => setQuote(true)} variant="outline" size="lg" className="w-full">Request Quote</Button>
+              </div>
             )}
             <p className="mt-2 text-center text-xs text-muted-foreground">
-              {isOwner ? "This is your own listing. You cannot purchase your own products." : "RockTek mediates the full transaction. Pay 1% to lock the order."}
+              {isOwner ? "This is your own listing. You cannot purchase your own products." : "Pay 1% advance to reserve this order and start the conversation with the seller — this holds the stock, it's not a completed purchase."}
             </p>
           </div>
 
@@ -140,6 +147,7 @@ function ListingDetail() {
       </div>
 
       {booking && <BookingDialog listing={listing} user={user} onClose={() => setBooking(false)} />}
+      {quote && <QuoteDialog listing={listing} seller={seller} onClose={() => setQuote(false)} />}
     </PageShell>
   );
 }
@@ -209,7 +217,7 @@ function BookingDialog({ listing, user, onClose }: { listing: any; user: any; on
     });
     setSubmitting(false);
     if (error) return toast.error(error.message);
-    toast.success("Booking confirmed! Advance paid.");
+    toast.success("Reserved! 1% advance paid to hold your order. The seller will reach out to discuss next steps.");
     nav({ to: "/buyer" });
   };
 
@@ -273,6 +281,47 @@ function BookingDialog({ listing, user, onClose }: { listing: any; user: any; on
           {submitting ? "Processing payment…" : `Pay ${inr(payNow)} & confirm`}
         </Button>
         <p className="mt-2 text-center text-xs text-muted-foreground">Mock payment for demo. Stock reduces automatically.</p>
+      </div>
+    </div>
+  );
+}
+
+function QuoteDialog({ listing, seller, onClose }: { listing: any; seller: any; onClose: () => void }) {
+  const [message, setMessage] = useState("");
+  const [sent, setSent] = useState(false);
+
+  const submit = () => {
+    // Contact-only quote request — no payment, no order created.
+    setSent(true);
+    toast.success("Quote request noted. The RockTek team will connect you with the seller.");
+    setTimeout(onClose, 1200);
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4" onClick={onClose}>
+      <div className="w-full max-w-md rounded-2xl border border-border bg-background p-6 shadow-xl" onClick={(e) => e.stopPropagation()}>
+        <div className="flex items-start justify-between">
+          <div>
+            <p className="font-display text-xs uppercase tracking-[0.3em] text-primary">Request Quote</p>
+            <h2 className="mt-1 font-display text-2xl">{listing.title}</h2>
+          </div>
+          <button onClick={onClose} className="rounded-md p-1 hover:bg-muted"><X className="h-5 w-5" /></button>
+        </div>
+        <p className="mt-3 text-sm text-muted-foreground">
+          No payment needed. Send a message and the RockTek team will connect you with {seller?.company_name ?? "the seller"} to discuss pricing and delivery.
+        </p>
+        <div className="mt-4 space-y-1.5">
+          <Label>Your requirement (optional)</Label>
+          <Textarea
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            placeholder="Quantity, finish, timeline, delivery location…"
+            rows={4}
+          />
+        </div>
+        <Button onClick={submit} disabled={sent} size="lg" className="mt-4 w-full bg-primary">
+          {sent ? "Request sent" : "Send quote request"}
+        </Button>
       </div>
     </div>
   );

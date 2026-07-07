@@ -66,7 +66,7 @@ function TrackingCard({ trip }: { trip: any }) {
         <span className="rounded-md bg-primary/15 px-2 py-1 text-xs font-semibold text-primary">{TRIP_STATUS_LABEL[status]}</span>
       </div>
       <div className="mt-4 grid gap-5 md:grid-cols-2">
-        <TripMap lat={live?.current_lat} lng={live?.current_lng} />
+        <TripMap lat={live?.current_lat} lng={live?.current_lng} updatedAt={live?.updated_at} />
         <TripTimeline status={status} />
       </div>
       <div className="mt-4">

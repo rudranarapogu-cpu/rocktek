@@ -23,7 +23,7 @@ function CategoryPage() {
       if (c) {
         const { data } = await supabase
           .from("listings")
-          .select("id,title,price,quantity,unit_type,state,district,created_at,listing_images(url),categories(name),sellers(company_name)")
+          .select("id,title,price,quantity,unit_type,state,district,finish_type,dimensions,created_at,listing_images(url),categories(name)")
           .eq("status", "active")
           .eq("category_id", c.id)
           .order("created_at", { ascending: false });

@@ -7,6 +7,7 @@ export interface LiveTrip {
   status: TripStatus;
   current_lat: number | null;
   current_lng: number | null;
+  updated_at?: string | null;
 }
 
 // Subscribes to realtime updates for a single trip (status + live coordinates).
@@ -18,6 +19,7 @@ export function useTripLive(tripId: string | null, initial?: Partial<LiveTrip>) 
           status: (initial.status as TripStatus) ?? "assigned",
           current_lat: initial.current_lat ?? null,
           current_lng: initial.current_lng ?? null,
+          updated_at: initial.updated_at ?? null,
         }
       : null,
   );
@@ -28,7 +30,7 @@ export function useTripLive(tripId: string | null, initial?: Partial<LiveTrip>) 
 
     supabase
       .from("trips")
-      .select("id,status,current_lat,current_lng")
+      .select("id,status,current_lat,current_lng,updated_at")
       .eq("id", tripId)
       .maybeSingle()
       .then(({ data }) => {
@@ -42,7 +44,7 @@ export function useTripLive(tripId: string | null, initial?: Partial<LiveTrip>) 
         { event: "UPDATE", schema: "public", table: "trips", filter: `id=eq.${tripId}` },
         (payload) => {
           const r = payload.new as LiveTrip;
-          setTrip({ id: r.id, status: r.status, current_lat: r.current_lat, current_lng: r.current_lng });
+          setTrip({ id: r.id, status: r.status, current_lat: r.current_lat, current_lng: r.current_lng, updated_at: r.updated_at });
         },
       )
       .subscribe();

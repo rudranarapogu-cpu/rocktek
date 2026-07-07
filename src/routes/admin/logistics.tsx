@@ -57,7 +57,7 @@ function MonitorCard({ trip }: { trip: any }) {
       <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-muted">
         <div className="h-full bg-primary transition-all" style={{ width: `${tripProgress(status)}%` }} />
       </div>
-      <div className="mt-3"><TripMap lat={live?.current_lat} lng={live?.current_lng} /></div>
+      <div className="mt-3"><TripMap lat={live?.current_lat} lng={live?.current_lng} updatedAt={live?.updated_at} /></div>
     </div>
   );
 }
