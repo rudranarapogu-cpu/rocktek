@@ -44,15 +44,18 @@ function Marketplace() {
     setLoading(true);
     let q = supabase
       .from("listings")
-      .select("id,title,price,quantity,unit_type,state,district,created_at,listing_images(url),categories!inner(name,slug)")
+      .select("id,title,price,quantity,unit_type,state,district,finish_type,dimensions,created_at,listing_images(url),categories!inner(name,slug)")
       .eq("status", "active")
       .order("created_at", { ascending: false })
       .limit(60);
     if (search.q) q = q.ilike("title", `%${search.q}%`);
-    if (search.state) q = q.eq("state", search.state);
+    if (search.district) q = q.ilike("district", `%${search.district}%`);
+    if (search.finish) q = q.ilike("finish_type", `%${search.finish}%`);
+    if (search.minPrice) q = q.gte("price", Number(search.minPrice));
+    if (search.maxPrice) q = q.lte("price", Number(search.maxPrice));
     if (search.category) q = q.eq("categories.slug", search.category);
     q.then(({ data }) => { setListings(data ?? []); setLoading(false); });
-  }, [search.q, search.state, search.category]);
+  }, [search.q, search.district, search.finish, search.minPrice, search.maxPrice, search.category]);
 
   return (
     <div className="min-h-screen bg-background">
