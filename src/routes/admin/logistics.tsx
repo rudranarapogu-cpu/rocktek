@@ -17,7 +17,7 @@ function AdminLogistics() {
   useEffect(() => {
     supabase
       .from("trips")
-      .select("*,orders(buyer_name,listings(title)),drivers(full_name,vehicle_number),sellers(company_name)")
+      .select("*,orders(buyer_name,total_amount,created_at,delivery_district,listings(title)),drivers(full_name,vehicle_number),sellers(company_name)")
       .order("created_at", { ascending: false })
       .then(({ data }) => { setTrips(data ?? []); setLoading(false); });
   }, []);
