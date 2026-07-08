@@ -4,7 +4,7 @@ import { Radar } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { TripMap } from "@/components/trip-map";
 import { useTripLive } from "@/hooks/use-trip-live";
-import { TRIP_STATUS_LABEL, tripProgress, type TripStatus } from "@/lib/logistics";
+import { TRIP_STATUS_LABEL, tripProgress, inr, type TripStatus } from "@/lib/logistics";
 
 export const Route = createFileRoute("/admin/logistics")({
   component: AdminLogistics,
@@ -17,7 +17,7 @@ function AdminLogistics() {
   useEffect(() => {
     supabase
       .from("trips")
-      .select("*,orders(buyer_name,listings(title)),drivers(full_name,vehicle_number),sellers(company_name)")
+      .select("*,orders(buyer_name,total_amount,created_at,delivery_district,listings(title)),drivers(full_name,vehicle_number),sellers(company_name)")
       .order("created_at", { ascending: false })
       .then(({ data }) => { setTrips(data ?? []); setLoading(false); });
   }, []);
@@ -38,7 +38,43 @@ function AdminLogistics() {
           <p className="mt-3 text-muted-foreground">No shipments in the system yet.</p>
         </div>
       ) : (
-        <div className="mt-6 grid gap-5 lg:grid-cols-2">{trips.map((t) => <MonitorCard key={t.id} trip={t} />)}</div>
+        <>
+          {/* Dense scannable table across all bookings */}
+          <div className="mt-6 overflow-x-auto rounded-xl border border-border">
+            <table className="w-full min-w-[720px] text-sm">
+              <thead className="bg-muted/60 text-left text-xs uppercase tracking-wider text-muted-foreground">
+                <tr>
+                  <th className="px-3 py-2 font-medium">Status</th>
+                  <th className="px-3 py-2 font-medium">Item</th>
+                  <th className="px-3 py-2 font-medium">Seller</th>
+                  <th className="px-3 py-2 font-medium">Buyer</th>
+                  <th className="px-3 py-2 font-medium">Driver</th>
+                  <th className="px-3 py-2 font-medium">District</th>
+                  <th className="px-3 py-2 text-right font-medium">Amount</th>
+                  <th className="px-3 py-2 font-medium">Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                {trips.map((t) => (
+                  <tr key={t.id} className="border-t border-border">
+                    <td className="px-3 py-2"><span className="rounded bg-primary/10 px-1.5 py-0.5 text-xs font-medium text-primary">{TRIP_STATUS_LABEL[t.status as TripStatus]}</span></td>
+                    <td className="px-3 py-2">{t.orders?.listings?.title ?? "—"}</td>
+                    <td className="px-3 py-2 text-muted-foreground">{t.sellers?.company_name ?? "—"}</td>
+                    <td className="px-3 py-2 text-muted-foreground">{t.orders?.buyer_name ?? "—"}</td>
+                    <td className="px-3 py-2 text-muted-foreground">{t.drivers?.full_name ?? "—"}</td>
+                    <td className="px-3 py-2 text-muted-foreground">{t.orders?.delivery_district ?? "—"}</td>
+                    <td className="px-3 py-2 text-right">{t.orders?.total_amount ? inr(Number(t.orders.total_amount)) : "—"}</td>
+                    <td className="px-3 py-2 text-muted-foreground">{t.orders?.created_at ? new Date(t.orders.created_at).toLocaleDateString("en-IN") : "—"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Live GPS monitoring */}
+          <h2 className="mt-8 font-display text-xl">Live GPS monitoring</h2>
+          <div className="mt-3 grid gap-5 lg:grid-cols-2">{trips.map((t) => <MonitorCard key={t.id} trip={t} />)}</div>
+        </>
       )}
     </div>
   );
