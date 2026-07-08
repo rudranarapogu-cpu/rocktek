@@ -85,19 +85,26 @@ function AssignedLoads() {
             const pending = t.acceptance === "pending";
             const rejected = t.acceptance === "rejected";
             return (
-              <div key={t.id} className="rounded-xl border border-border bg-card p-4">
-                <div className="flex flex-wrap items-start justify-between gap-2">
-                  <div>
-                    <p className="font-display text-lg">{t.orders?.listings?.title}</p>
-                    <p className="text-sm text-muted-foreground">{t.orders?.quantity} {t.orders?.listings?.unit_type} → {t.orders?.buyer_name}</p>
-                    <p className="text-xs text-muted-foreground">{t.orders?.delivery_address}</p>
-                  </div>
+              <div key={t.id} className="overflow-hidden rounded-xl border border-border bg-card">
+                <div className="flex flex-wrap items-start justify-between gap-2 p-4">
+                  <p className="font-display text-xl leading-tight">
+                    {pending ? "Awaiting your response" : rejected ? "Rejected" : TRIP_STATUS_LABEL[t.status as TripStatus]}
+                  </p>
                   <span className={`rounded-md px-2 py-1 text-xs font-semibold ${
                     pending ? "bg-accent/15 text-accent" : rejected ? "bg-destructive/15 text-destructive" : "bg-primary/15 text-primary"
                   }`}>
-                    {pending ? "Awaiting your response" : rejected ? "Rejected" : TRIP_STATUS_LABEL[t.status as TripStatus]}
+                    {pending ? "Action needed" : rejected ? "Closed" : "Active"}
                   </span>
                 </div>
+
+                <div className="flex flex-wrap items-center gap-x-6 gap-y-1 border-t border-border bg-muted/40 px-4 py-3 text-sm">
+                  <span className="font-medium">{t.orders?.listings?.title}</span>
+                  <span className="text-muted-foreground">{t.orders?.quantity} {t.orders?.listings?.unit_type} → {t.orders?.buyer_name}</span>
+                  <span className="text-muted-foreground">Drop: {t.orders?.delivery_address}</span>
+                </div>
+
+                <div className="px-4 py-3">
+
 
                 {pending ? (
                   <div className="mt-3 flex flex-wrap gap-2">
