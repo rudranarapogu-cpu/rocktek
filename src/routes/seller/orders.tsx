@@ -77,19 +77,26 @@ function SellerOrders() {
           {orders.map((o) => {
             const trip = trips[o.id];
             return (
-              <div key={o.id} className="rounded-xl border border-border bg-card p-4">
-                <div className="flex flex-wrap items-start justify-between gap-2">
+              <div key={o.id} className="overflow-hidden rounded-xl border border-border bg-card">
+                <div className="flex flex-wrap items-start justify-between gap-2 p-4">
                   <div>
-                    <p className="font-display text-lg">{o.listings?.title}</p>
-                    <p className="text-sm text-muted-foreground">{o.buyer_name} · {o.buyer_phone} · {o.quantity} {o.listings?.unit_type}</p>
-                    <p className="text-xs text-muted-foreground">{o.delivery_address}</p>
+                    <p className="font-display text-2xl leading-tight">{ORDER_STATUS_LABEL[o.status]}</p>
+                    <p className="mt-0.5 text-xs text-muted-foreground">#{String(o.id).slice(0, 8).toUpperCase()} · {new Date(o.created_at).toLocaleDateString("en-IN")}</p>
                   </div>
-                  <span className="rounded-md bg-secondary px-2 py-1 text-xs font-semibold text-secondary-foreground">{ORDER_STATUS_LABEL[o.status]}</span>
+                  <span className={`rounded-md px-2 py-1 text-xs font-semibold ${o.payment_status === "advance_paid" ? "bg-primary/15 text-primary" : "bg-secondary text-secondary-foreground"}`}>
+                    Advance {o.payment_status === "advance_paid" ? "Received" : "Pending"}
+                  </span>
                 </div>
-                <div className="mt-3 flex flex-wrap items-center gap-x-6 gap-y-1 text-sm">
+
+                <div className="flex flex-wrap items-center gap-x-6 gap-y-1 border-t border-border bg-muted/40 px-4 py-3 text-sm">
+                  <span className="font-medium">{o.listings?.title}</span>
+                  <span className="text-muted-foreground">{o.buyer_name} · {o.buyer_phone} · {o.quantity} {o.listings?.unit_type}</span>
                   <span className="text-muted-foreground">Total <b className="text-foreground">{inr(Number(o.total_amount))}</b></span>
-                  <span className="text-muted-foreground">Advance <b className="text-primary">{inr(Number(o.advance_amount))}</b></span>
+                  <span className="text-muted-foreground">{o.delivery_address}</span>
                 </div>
+
+                <div className="px-4 py-3">
+
 
                 {trip ? (
                   <div className={`mt-3 inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-sm ${
