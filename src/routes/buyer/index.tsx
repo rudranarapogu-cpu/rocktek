@@ -114,6 +114,7 @@ function OrderCard({ order, onChange }: { order: any; onChange: () => void }) {
           )}
         </div>
       )}
+      </div>
     </div>
   );
 }
