@@ -65,18 +65,33 @@ function ListingDetail() {
   const expiresIn = Math.max(0, Math.ceil((new Date(listing.expires_at).getTime() - Date.now()) / 86400000));
   const soldOut = listing.status === "sold" || Number(listing.stock_available) <= 0;
 
+  const specs = [
+    { label: "Category", value: listing.categories?.name },
+    { label: "Location", value: `${listing.district ?? ""} ${listing.state}`.trim() },
+    { label: "Available stock", value: `${listing.stock_available} ${listing.unit_type}` },
+    { label: "Finish", value: listing.finish_type },
+    { label: "Dimensions", value: listing.dimensions },
+    { label: "Shading / grade", value: listing.shading_quality },
+    { label: "Listing valid", value: `${expiresIn} day${expiresIn === 1 ? "" : "s"} left` },
+  ].filter((s) => s.value);
+
   return (
     <PageShell>
       <Link to="/marketplace" className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-primary">
         <ArrowLeft className="h-4 w-4" /> Back to marketplace
       </Link>
-      <div className="mt-6 grid gap-8 lg:grid-cols-2">
-        <div>
-          <div className="aspect-[4/3] overflow-hidden rounded-xl border border-border bg-muted">
+
+      <div className="mt-6 grid gap-8 lg:grid-cols-12">
+        {/* GALLERY ~35% */}
+        <div className="lg:col-span-4">
+          <div className="aspect-square overflow-hidden rounded-xl border border-border bg-muted">
             {images[activeImg]?.url ? (
               <img src={images[activeImg].url} alt={listing.title} className="h-full w-full object-cover" />
             ) : (
-              <div className="flex h-full w-full items-center justify-center granite-texture text-muted-foreground"><Hammer className="h-12 w-12" /></div>
+              <div className="flex h-full w-full flex-col items-center justify-center gap-2 granite-texture text-muted-foreground">
+                <Hammer className="h-10 w-10" />
+                <span className="text-xs uppercase tracking-wider">Photos pending</span>
+              </div>
             )}
           </div>
           {images.length > 1 && (
@@ -90,58 +105,100 @@ function ListingDetail() {
           )}
         </div>
 
-        <div>
-          <div
-            className="inline-flex items-center gap-1 rounded-md bg-secondary px-2 py-1 text-[10px] font-semibold text-secondary-foreground"
-            title="Verified Seller — documents manually reviewed and approved by the RockTek team, not automated."
-          >
-            <ShieldCheck className="h-3 w-3 text-accent" /> Verified Seller
-          </div>
-          <p className="mt-3 text-xs font-semibold uppercase tracking-widest text-primary">{listing.categories?.name}</p>
+        {/* DETAILS (center) */}
+        <div className="lg:col-span-5">
+          <p className="text-xs font-semibold uppercase tracking-widest text-primary">{listing.categories?.name}</p>
           <h1 className="mt-1 font-display text-4xl">{listing.title}</h1>
-          <p className="mt-3 text-muted-foreground">{listing.description}</p>
 
-          <div className="mt-5 grid grid-cols-2 gap-3 text-sm">
-            <Spec icon={MapPin} label="Location" value={`${listing.district ?? ""} ${listing.state}`.trim()} />
-            <Spec icon={Package} label="Available" value={`${listing.stock_available} ${listing.unit_type}`} />
-            <Spec icon={Hammer} label="Finish" value={listing.finish_type ?? "—"} />
-            <Spec icon={Building2} label="Dimensions" value={listing.dimensions ?? "—"} />
-            <Spec icon={ShieldCheck} label="Shading" value={listing.shading_quality ?? "—"} />
-            <Spec icon={Clock} label="Expires in" value={`${expiresIn} day${expiresIn === 1 ? "" : "s"}`} />
+          {/* Factory / seller name + verified badge */}
+          <div className="mt-2 flex flex-wrap items-center gap-2">
+            <span className="text-sm text-muted-foreground">by</span>
+            <span className="font-semibold">{seller?.company_name ?? "Verified factory"}</span>
+            <span
+              className="inline-flex items-center gap-1 rounded-md bg-secondary px-2 py-0.5 text-[10px] font-semibold text-secondary-foreground"
+              title="Verified Factory — documents manually reviewed and approved by the RockTek team."
+            >
+              <ShieldCheck className="h-3 w-3 text-accent" /> Verified Factory
+            </span>
           </div>
 
-          <div className="mt-6 rounded-xl border border-border bg-card p-5 shadow-sm">
-            <div className="flex items-end justify-between">
-              <div>
-                <p className="text-xs uppercase text-muted-foreground">Price</p>
-                <p className="font-display text-4xl">{inr(Number(listing.price))}<span className="text-base text-muted-foreground">/{listing.unit_type}</span></p>
-              </div>
-              <div className="text-right">
-                <p className="text-xs uppercase text-muted-foreground">1% advance only</p>
-                <p className="font-display text-xl text-primary">{inr(Number(listing.price) * ADVANCE_RATE)}</p>
-              </div>
+          {/* Variant / attribute chips (only real data) */}
+          {(listing.finish_type || listing.dimensions) && (
+            <div className="mt-5 space-y-3">
+              {listing.finish_type && (
+                <VariantRow label="Finish" options={[listing.finish_type]} />
+              )}
+              {listing.dimensions && (
+                <VariantRow label="Slab size" options={[listing.dimensions]} />
+              )}
             </div>
-            {isOwner ? (
-              <Button asChild size="lg" className="mt-4 w-full bg-primary">
-                <Link to="/seller/listings">Edit your listing</Link>
-              </Button>
-            ) : soldOut ? (
-              <Button disabled size="lg" className="mt-4 w-full">Sold out</Button>
-            ) : (
-              <div className="mt-4 space-y-2">
-                <Button onClick={() => setBooking(true)} size="lg" className="w-full bg-primary">Reserve & Discuss</Button>
-                <Button onClick={() => setQuote(true)} variant="outline" size="lg" className="w-full">Request Quote</Button>
-              </div>
-            )}
-            <p className="mt-2 text-center text-xs text-muted-foreground">
-              {isOwner ? "This is your own listing. You cannot purchase your own products." : "Pay 1% advance to reserve this order and start the conversation with the seller — this holds the stock, it's not a completed purchase."}
-            </p>
+          )}
+
+          {/* Spec table */}
+          <div className="mt-6 overflow-hidden rounded-xl border border-border">
+            <table className="w-full text-sm">
+              <tbody>
+                {specs.map((s, i) => (
+                  <tr key={s.label} className={i % 2 ? "bg-card" : "bg-background"}>
+                    <td className="w-1/2 border-b border-border px-4 py-2.5 text-muted-foreground">{s.label}</td>
+                    <td className="border-b border-border px-4 py-2.5 font-medium">{s.value}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
 
-          <div className="mt-6 rounded-xl border border-border bg-secondary/5 p-4 text-sm">
-            <p className="font-display text-base">Sold by</p>
-            <p className="mt-1 font-semibold">{seller?.company_name ?? "Verified seller"}</p>
-            <p className="text-muted-foreground">{[seller?.owner_name, seller?.state].filter(Boolean).join(" · ")}</p>
+          {/* Description */}
+          {listing.description && (
+            <div className="mt-6">
+              <h2 className="font-display text-xl">Description</h2>
+              <p className="mt-2 whitespace-pre-line text-sm text-muted-foreground">{listing.description}</p>
+            </div>
+          )}
+
+          {/* Reviews — honest empty state (no fabricated ratings) */}
+          <div className="mt-6 rounded-xl border border-dashed border-border p-4">
+            <h2 className="font-display text-lg">Reviews</h2>
+            <p className="mt-1 text-sm text-muted-foreground">No reviews yet for this factory.</p>
+          </div>
+        </div>
+
+        {/* STICKY BUY BOX ~25% */}
+        <div className="lg:col-span-3">
+          <div className="lg:sticky lg:top-24">
+            <div className="rounded-xl border border-border bg-card p-5 shadow-sm">
+              <p className="text-xs uppercase text-muted-foreground">Price</p>
+              <p className="font-display text-3xl leading-tight">{inr(Number(listing.price))}<span className="text-base text-muted-foreground">/{listing.unit_type}</span></p>
+              <p className="mt-0.5 text-xs text-muted-foreground">GST extra, as applicable</p>
+
+              <div className="mt-3 flex items-center justify-between rounded-lg bg-muted px-3 py-2 text-sm">
+                <span className="text-muted-foreground">1% advance to reserve</span>
+                <span className="font-display text-primary">{inr(Number(listing.price) * ADVANCE_RATE)}</span>
+              </div>
+
+              <dl className="mt-3 space-y-1 text-xs text-muted-foreground">
+                <div className="flex justify-between"><dt>Dispatch</dt><dd className="text-foreground">1–3 working days</dd></div>
+                <div className="flex justify-between"><dt>Transit</dt><dd className="text-foreground">By district distance</dd></div>
+                <div className="flex justify-between"><dt>Tracking</dt><dd className="text-foreground">Live GPS available</dd></div>
+              </dl>
+
+              {isOwner ? (
+                <Button asChild size="lg" className="mt-4 w-full bg-primary">
+                  <Link to="/seller/listings">Edit your listing</Link>
+                </Button>
+              ) : soldOut ? (
+                <Button disabled size="lg" className="mt-4 w-full">Sold out</Button>
+              ) : (
+                <div className="mt-4 space-y-2">
+                  <Button onClick={() => setBooking(true)} size="lg" className="w-full bg-primary">Book Order</Button>
+                  <Button onClick={() => setQuote(true)} variant="outline" size="lg" className="w-full">Request Quote</Button>
+                  <Button onClick={() => setQuote(true)} variant="ghost" size="lg" className="w-full">Chat with Factory</Button>
+                </div>
+              )}
+              <p className="mt-2 text-center text-xs text-muted-foreground">
+                {isOwner ? "This is your own listing." : "The 1% advance holds the stock — it is a reservation, not a completed purchase."}
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -151,6 +208,20 @@ function ListingDetail() {
     </PageShell>
   );
 }
+
+function VariantRow({ label, options }: { label: string; options: string[] }) {
+  return (
+    <div>
+      <p className="text-[11px] uppercase tracking-wider text-muted-foreground">{label}</p>
+      <div className="mt-1.5 flex flex-wrap gap-2">
+        {options.map((o) => (
+          <span key={o} className="rounded-md border border-primary bg-primary/10 px-3 py-1.5 text-sm font-medium text-primary">{o}</span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 
 function BookingDialog({ listing, user, onClose }: { listing: any; user: any; onClose: () => void }) {
   const nav = useNavigate();
