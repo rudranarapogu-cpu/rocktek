@@ -60,25 +60,39 @@ function OrderCard({ order, onChange }: { order: any; onChange: () => void }) {
   const trip = (order.trips ?? []).filter((t: any) => t.acceptance !== "rejected")[0];
 
   return (
-    <div className="rounded-xl border border-border bg-card p-4">
-      <button onClick={() => setOpen((v) => !v)} className="flex w-full flex-wrap items-start justify-between gap-2 text-left">
+    <div className="overflow-hidden rounded-xl border border-border bg-card">
+      {/* STATUS FIRST */}
+      <div className="flex flex-wrap items-start justify-between gap-2 p-4">
         <div>
-          <p className="font-display text-lg">{order.listings?.title ?? "Listing"}</p>
-          <p className="text-sm text-muted-foreground">{order.sellers?.company_name} · {order.quantity} {order.listings?.unit_type}</p>
+          <p className="font-display text-2xl leading-tight">{ORDER_STATUS_LABEL[order.status] ?? order.status}</p>
+          <p className="mt-0.5 text-xs text-muted-foreground">
+            #{String(order.id).slice(0, 8).toUpperCase()} · {new Date(order.created_at).toLocaleDateString("en-IN")}
+          </p>
         </div>
-        <div className="flex items-center gap-2">
-          <StatusPill status={order.status} />
-          {open ? <ChevronUp className="h-4 w-4 text-muted-foreground" /> : <ChevronDown className="h-4 w-4 text-muted-foreground" />}
-        </div>
-      </button>
+        <StatusPill status={order.status} />
+      </div>
 
-      <div className="mt-3 flex flex-wrap items-center gap-x-6 gap-y-1 text-sm">
+      {/* METADATA STRIP (read-only) */}
+      <div className="flex flex-wrap items-center gap-x-6 gap-y-1 border-t border-border bg-muted/40 px-4 py-3 text-sm">
+        <span className="font-medium">{order.listings?.title ?? "Listing"}</span>
+        <span className="text-muted-foreground">{order.sellers?.company_name} · {order.quantity} {order.listings?.unit_type}</span>
         <span className="text-muted-foreground">Total <b className="text-foreground">{inr(Number(order.total_amount))}</b></span>
-        <span className="text-muted-foreground">Advance paid <b className="text-primary">{inr(Number(order.advance_amount))}</b></span>
+        <span className="text-muted-foreground">Advance <b className="text-primary">{inr(Number(order.advance_amount))}</b></span>
         {Number(order.delivery_charge) > 0 && (
           <span className="text-muted-foreground">Delivery <b className="text-foreground">{inr(Number(order.delivery_charge))}</b></span>
         )}
       </div>
+
+      {/* ACTIONS */}
+      <div className="flex flex-wrap gap-2 border-t border-border px-4 py-3">
+        <Button size="sm" variant={open ? "default" : "outline"} onClick={() => setOpen((v) => !v)}>
+          {open ? <ChevronUp className="mr-1 h-4 w-4" /> : <Truck className="mr-1 h-4 w-4" />} Track Delivery
+        </Button>
+        <Button size="sm" variant="outline" asChild><Link to="/contact">Contact Seller</Link></Button>
+      </div>
+
+      <div className="px-4 pb-4">
+
 
       {open && (
         <div className="mt-4 space-y-4 border-t border-border pt-4">
