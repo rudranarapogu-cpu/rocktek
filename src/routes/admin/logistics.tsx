@@ -4,7 +4,7 @@ import { Radar } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { TripMap } from "@/components/trip-map";
 import { useTripLive } from "@/hooks/use-trip-live";
-import { TRIP_STATUS_LABEL, tripProgress, type TripStatus } from "@/lib/logistics";
+import { TRIP_STATUS_LABEL, tripProgress, inr, type TripStatus } from "@/lib/logistics";
 
 export const Route = createFileRoute("/admin/logistics")({
   component: AdminLogistics,
