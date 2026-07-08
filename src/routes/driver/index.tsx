@@ -120,6 +120,7 @@ function AssignedLoads() {
                 ) : (
                   <Link to="/driver/active" className="mt-3 inline-block text-sm text-primary hover:underline">Manage trip →</Link>
                 )}
+                </div>
               </div>
             );
           })}
