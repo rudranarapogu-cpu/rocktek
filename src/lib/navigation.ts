@@ -124,4 +124,20 @@ export const DASHBOARD_HOME: Record<Role, string> = {
   buyer: "/buyer",
 };
 
+/** Role-aware account menu label. */
+export const ROLE_LABEL: Record<Role, string> = {
+  admin: "Admin",
+  seller: "Seller Dashboard",
+  driver: "Driver Dashboard",
+  buyer: "Buyer Dashboard",
+};
+
+/** Where the header "Bookings / Orders" icon points for each role. */
+export const ORDERS_LINK: Record<Role, string> = {
+  admin: "/admin/logistics",
+  seller: "/seller/orders",
+  driver: "/driver",
+  buyer: "/buyer",
+};
+
 export { PlusCircle };
