@@ -147,6 +147,7 @@ function SellerOrders() {
                     </div>
                   </div>
                 ) : null}
+                </div>
               </div>
             );
           })}
