@@ -1,18 +1,18 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { ArrowRight, Search, ShieldCheck, Truck, Hammer, MapPin, Clock } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { ArrowRight, ShieldCheck, Truck, MapPin, Hammer, Clock } from "lucide-react";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
-import heroImg from "@/assets/hero-granite.jpg";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "RockTek Services — Verified Granite & Stone Marketplace" },
-      { name: "description", content: "Browse thousands of verified granite, marble, and natural stone listings from approved Indian sellers. Book with just 1% advance." },
+      { name: "description", content: "Source granite, marble and natural stone directly from verified factories across India. District-level delivery with live GPS tracking." },
     ],
   }),
   component: HomePage,
@@ -25,13 +25,14 @@ interface Listing {
   finish_type: string | null; dimensions: string | null;
   listing_images: { url: string }[];
   categories: { name: string } | null;
-  sellers?: { company_name: string } | null;
 }
 
 function HomePage() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [listings, setListings] = useState<Listing[]>([]);
-  const [search, setSearch] = useState("");
+  const [fDistrict, setFDistrict] = useState("");
+  const [fFinish, setFFinish] = useState("all");
+  const [fMax, setFMax] = useState("");
 
   useEffect(() => {
     supabase.from("categories").select("*").then(({ data }) => setCategories(data ?? []));
@@ -40,77 +41,60 @@ function HomePage() {
       .select("id,title,price,quantity,unit_type,state,district,finish_type,dimensions,created_at,listing_images(url),categories(name)")
       .eq("status", "active")
       .order("created_at", { ascending: false })
-      .limit(8)
+      .limit(24)
       .then(({ data }) => setListings((data as any) ?? []));
   }, []);
+
+  const finishes = useMemo(
+    () => [...new Set(listings.map((l) => l.finish_type).filter(Boolean) as string[])],
+    [listings],
+  );
+
+  const filtered = useMemo(() => listings.filter((l) => {
+    if (fDistrict && !(l.district ?? l.state ?? "").toLowerCase().includes(fDistrict.toLowerCase())) return false;
+    if (fFinish !== "all" && l.finish_type !== fFinish) return false;
+    if (fMax && Number(l.price) > Number(fMax)) return false;
+    return true;
+  }), [listings, fDistrict, fFinish, fMax]);
 
   return (
     <div className="min-h-screen bg-background">
       <SiteHeader />
 
-      {/* HERO */}
-      <section className="relative overflow-hidden bg-hero text-white">
-        <div className="absolute inset-0 opacity-30">
-          <img src={heroImg} alt="" className="h-full w-full object-cover" />
-        </div>
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 py-20 md:py-32">
-          <div className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/10 px-3 py-1 text-xs font-medium text-accent">
-              <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" />
-              India's verified granite marketplace
-            </div>
-            <h1 className="mt-5 font-display text-5xl leading-[0.95] sm:text-6xl md:text-7xl">
-              QUARRY TO PROJECT.<br />
-              <span className="text-flame">MEDIATED. VERIFIED.</span>
-            </h1>
-            <p className="mt-5 max-w-xl text-base text-white/80 sm:text-lg">
-              Book inventory directly from approved sellers across India. Pay just <strong className="text-accent">1% advance</strong>. RockTek handles the rest.
-            </p>
-
-            <form
-              onSubmit={(e) => { e.preventDefault(); }}
-              className="mt-8 flex max-w-xl items-center gap-2 rounded-xl bg-white p-2 shadow-industrial"
-            >
-              <div className="flex flex-1 items-center gap-2 px-2">
-                <Search className="h-4 w-4 text-muted-foreground" />
-                <Input
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  placeholder="Search granite, marble, quartz…"
-                  className="border-0 bg-transparent text-foreground shadow-none focus-visible:ring-0"
-                />
-              </div>
-              <Button asChild size="sm" className="bg-primary">
-                <Link to="/marketplace" search={{ q: search }}>Search</Link>
-              </Button>
-            </form>
-
-            <div className="mt-6 flex flex-wrap items-center gap-5 text-xs text-white/70">
-              <span className="inline-flex items-center gap-1.5"><ShieldCheck className="h-4 w-4 text-accent" /> Verified sellers</span>
-              <span className="inline-flex items-center gap-1.5"><Truck className="h-4 w-4 text-accent" /> Pan-India delivery</span>
-              <span className="inline-flex items-center gap-1.5"><Hammer className="h-4 w-4 text-accent" /> Direct from quarries</span>
-            </div>
+      {/* COMPACT INTRO + TRUST SIGNALS (no promo hero) */}
+      <section className="border-b border-border bg-card/40">
+        <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6">
+          <h1 className="max-w-3xl font-display text-3xl leading-tight sm:text-4xl">
+            Source granite &amp; stone directly from verified factories.
+          </h1>
+          <p className="mt-2 max-w-2xl text-muted-foreground">
+            RockTek connects contractors and buyers with approved stone factories — district-level delivery, transparent pricing, live tracking.
+          </p>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <TrustSignal icon={ShieldCheck} label="Verified Factories" note="Documents manually reviewed" />
+            <TrustSignal icon={MapPin} label="Districts Covered" note="Local sourcing first" />
+            <TrustSignal icon={Truck} label="GPS-Tracked Delivery" note="Live location on every trip" />
           </div>
         </div>
       </section>
 
-      {/* CATEGORIES */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 py-16">
-        <SectionHeader eyebrow="Categories" title="Browse by stone type" />
-        <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-5">
-          {categories.map((c, i) => (
+      {/* STONE-TYPE CARDS */}
+      <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6">
+        <SectionHeader eyebrow="Browse" title="Stone types" />
+        <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-4">
+          {categories.map((c) => (
             <Link
               key={c.id}
-              to="/categories/$slug"
-              params={{ slug: c.slug }}
-              className="group relative aspect-[4/5] overflow-hidden rounded-xl border border-border bg-secondary text-secondary-foreground shadow-industrial transition-transform hover:-translate-y-1"
+              to="/marketplace"
+              search={{ category: c.slug } as any}
+              className="group relative aspect-[4/3] overflow-hidden rounded-xl border border-border bg-secondary text-secondary-foreground transition-transform hover:-translate-y-0.5"
             >
               <div className="absolute inset-0 granite-texture opacity-30" />
-              <div className={`absolute inset-x-0 bottom-0 h-1/2 ${i % 2 === 0 ? "bg-flame" : "bg-gradient-to-t from-secondary to-transparent"} opacity-${i % 2 === 0 ? "20" : "100"}`} />
+              <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-secondary to-transparent" />
               <div className="relative flex h-full flex-col justify-end p-4">
-                <span className="font-display text-xl leading-tight sm:text-2xl">{c.name}</span>
+                <span className="font-display text-xl leading-tight">{c.name}</span>
                 <span className="mt-1 inline-flex items-center text-xs text-secondary-foreground/70 group-hover:text-accent">
-                  Explore <ArrowRight className="ml-1 h-3 w-3 transition-transform group-hover:translate-x-1" />
+                  View listings <ArrowRight className="ml-1 h-3 w-3 transition-transform group-hover:translate-x-1" />
                 </span>
               </div>
             </Link>
@@ -118,49 +102,49 @@ function HomePage() {
         </div>
       </section>
 
-      {/* LATEST INVENTORY */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 py-12">
-        <div className="flex items-end justify-between">
-          <SectionHeader eyebrow="Fresh inventory" title="Latest listings" />
+      {/* FILTERABLE LIVE LISTINGS */}
+      <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-6">
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <SectionHeader eyebrow="Live inventory" title="Current listings" />
           <Button asChild variant="ghost" className="hidden sm:inline-flex">
             <Link to="/marketplace">View all <ArrowRight className="ml-1 h-4 w-4" /></Link>
           </Button>
         </div>
-        {listings.length === 0 ? (
+
+        <div className="mt-6 grid gap-3 sm:grid-cols-3">
+          <Input value={fDistrict} onChange={(e) => setFDistrict(e.target.value)} placeholder="Filter by district" />
+          <Select value={fFinish} onValueChange={setFFinish}>
+            <SelectTrigger><SelectValue placeholder="Finish" /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All finishes</SelectItem>
+              {finishes.map((f) => <SelectItem key={f} value={f}>{f}</SelectItem>)}
+            </SelectContent>
+          </Select>
+          <Input type="number" value={fMax} onChange={(e) => setFMax(e.target.value)} placeholder="Max price ₹" />
+        </div>
+
+        {filtered.length === 0 ? (
           <EmptyState />
         ) : (
           <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {listings.map((l) => <ListingCard key={l.id} l={l} />)}
+            {filtered.map((l) => <ListingCard key={l.id} l={l} />)}
           </div>
         )}
       </section>
 
-      {/* SELLER CTA */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 py-16">
-        <div className="relative overflow-hidden rounded-2xl bg-secondary p-8 text-secondary-foreground shadow-industrial md:p-12">
-          <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-primary/30 blur-3xl" />
-          <div className="absolute -bottom-20 -left-10 h-64 w-64 rounded-full bg-accent/20 blur-3xl" />
-          <div className="relative grid gap-8 md:grid-cols-2 md:items-center">
-            <div>
-              <p className="font-display text-xs uppercase tracking-[0.3em] text-accent">For Sellers</p>
-              <h2 className="mt-2 font-display text-4xl md:text-5xl">List your inventory. Reach verified buyers.</h2>
-              <p className="mt-3 text-secondary-foreground/80">
-                Upload your stock in minutes. Listings are valid for 7 days and shown to thousands of vetted buyers across India.
-              </p>
-            </div>
-            <div className="flex flex-col gap-4">
-              <Button asChild size="lg" className="bg-primary text-primary-foreground">
-                <Link to="/auth/signup" search={{ role: "seller" }}>Become a verified seller <ArrowRight className="ml-2 h-4 w-4" /></Link>
-              </Button>
-              <Button asChild variant="outline" size="lg" className="border-accent/50 text-accent hover:bg-accent hover:text-accent-foreground">
-                <Link to="/sell">How it works</Link>
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <SiteFooter />
+    </div>
+  );
+}
+
+function TrustSignal({ icon: Icon, label, note }: { icon: any; label: string; note: string }) {
+  return (
+    <div className="flex items-center gap-3 rounded-lg border border-border bg-card px-4 py-3">
+      <Icon className="h-5 w-5 shrink-0 text-primary" />
+      <div>
+        <p className="text-sm font-semibold leading-tight">{label}</p>
+        <p className="text-xs text-muted-foreground">{note}</p>
+      </div>
     </div>
   );
 }
@@ -169,7 +153,7 @@ function SectionHeader({ eyebrow, title }: { eyebrow: string; title: string }) {
   return (
     <div>
       <p className="font-display text-xs uppercase tracking-[0.3em] text-primary">{eyebrow}</p>
-      <h2 className="mt-1 font-display text-3xl sm:text-4xl">{title}</h2>
+      <h2 className="mt-1 font-display text-3xl">{title}</h2>
     </div>
   );
 }
@@ -177,11 +161,9 @@ function SectionHeader({ eyebrow, title }: { eyebrow: string; title: string }) {
 function EmptyState() {
   return (
     <div className="mt-8 rounded-xl border border-dashed border-border bg-card p-10 text-center">
-      <p className="font-display text-xl">No listings yet</p>
-      <p className="mt-1 text-sm text-muted-foreground">Verified sellers are uploading inventory. Check back soon.</p>
-      <Button asChild className="mt-5">
-        <Link to="/auth/signup" search={{ role: "seller" }}>Become a seller</Link>
-      </Button>
+      <p className="font-display text-xl">No listings match</p>
+      <p className="mt-1 text-sm text-muted-foreground">Try widening your filters or browse the full marketplace.</p>
+      <Button asChild className="mt-5"><Link to="/marketplace">Open marketplace</Link></Button>
     </div>
   );
 }
@@ -198,14 +180,11 @@ export function ListingCard({ l }: { l: Listing }) {
         {img ? (
           <img src={img} alt={l.title} loading="lazy" className="h-full w-full object-cover transition-transform group-hover:scale-105" />
         ) : (
-          <div className="flex h-full w-full items-center justify-center granite-texture text-muted-foreground"><Hammer className="h-8 w-8" /></div>
+          <div className="flex h-full w-full flex-col items-center justify-center gap-1 granite-texture text-muted-foreground">
+            <Hammer className="h-7 w-7" />
+            <span className="text-[10px] uppercase tracking-wider">Photos pending</span>
+          </div>
         )}
-        <div
-          className="absolute left-2 top-2 inline-flex items-center gap-1 rounded-md bg-secondary/90 px-2 py-1 text-[10px] font-semibold text-secondary-foreground backdrop-blur"
-          title="Verified Seller — documents manually reviewed and approved by the RockTek team."
-        >
-          <ShieldCheck className="h-3 w-3 text-accent" /> Verified Seller
-        </div>
       </div>
       <div className="p-3">
         <p className="text-[10px] font-semibold uppercase tracking-wider text-primary">{l.categories?.name ?? "Stone"}</p>
@@ -224,7 +203,7 @@ export function ListingCard({ l }: { l: Listing }) {
             <p className="text-[10px] uppercase text-muted-foreground">Price / {l.unit_type}</p>
             <p className="font-display text-lg leading-none">₹{Number(l.price).toLocaleString("en-IN")}<span className="text-xs text-muted-foreground">/{l.unit_type}</span></p>
           </div>
-          <span className="text-[10px] text-muted-foreground">MOQ 1 · {l.quantity} {l.unit_type} avail.</span>
+          <span className="text-[10px] text-muted-foreground">{l.quantity} {l.unit_type} avail.</span>
         </div>
       </div>
     </Link>
