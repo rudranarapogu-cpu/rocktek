@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ChevronDown, ChevronUp, Package, ShoppingBag, Truck } from "lucide-react";
+import { ChevronUp, Package, ShoppingBag, Truck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
