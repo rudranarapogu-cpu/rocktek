@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { ORDER_STATUS_LABEL, TRIP_STATUS_LABEL, inr, type TripStatus } from "@/lib/logistics";
+import { StatusChip } from "@/components/status-chip";
 import { TripMap } from "@/components/trip-map";
 import { TripTimeline } from "@/components/trip-timeline";
 import { TripEventsLog } from "@/components/trip-events-log";
