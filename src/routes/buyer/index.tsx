@@ -187,10 +187,5 @@ function Detail({ label, value }: { label: string; value?: string }) {
 }
 
 export function StatusPill({ status }: { status: string }) {
-  const tone =
-    status === "delivered" ? "bg-accent/20 text-accent-foreground"
-    : status === "cancelled" ? "bg-destructive/15 text-destructive"
-    : status === "in_transit" || status === "dispatched" ? "bg-primary/15 text-primary"
-    : "bg-secondary text-secondary-foreground";
-  return <span className={`rounded-md px-2 py-1 text-xs font-semibold ${tone}`}>{ORDER_STATUS_LABEL[status] ?? status}</span>;
+  return <StatusChip status={status} label={ORDER_STATUS_LABEL[status] ?? status} />;
 }
