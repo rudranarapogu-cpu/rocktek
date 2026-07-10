@@ -102,13 +102,13 @@ function SellerOrders() {
 
 
                 {trip ? (
-                  <div className={`mt-3 inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-sm ${
-                    trip.acceptance === "pending" ? "bg-accent/10 text-accent" : "bg-primary/10 text-primary"
-                  }`}>
-                    <Truck className="h-4 w-4" />
-                    {trip.acceptance === "pending"
-                      ? "Awaiting driver acceptance"
-                      : `Driver accepted — trip status: ${trip.status}`}
+                  <div className="mt-3 inline-flex items-center gap-2">
+                    <Truck className="h-4 w-4 text-muted-foreground" />
+                    {trip.acceptance === "pending" ? (
+                      <StatusChip tone="warning" label="Awaiting driver acceptance" />
+                    ) : (
+                      <StatusChip status={trip.status} label={`Driver accepted — ${TRIP_STATUS_LABEL[trip.status as TripStatus] ?? trip.status}`} />
+                    )}
                   </div>
                 ) : o.buyer_has_vehicle ? (
                   <div className="mt-3 inline-flex items-center gap-2 rounded-md bg-secondary px-3 py-1.5 text-sm text-secondary-foreground">
