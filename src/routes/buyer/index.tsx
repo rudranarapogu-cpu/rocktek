@@ -63,8 +63,8 @@ function OrderCard({ order, onChange }: { order: any; onChange: () => void }) {
     <div className="overflow-hidden rounded-xl border border-border bg-card">
       {/* STATUS FIRST */}
       <div className="flex flex-wrap items-start justify-between gap-2 p-4">
-        <div>
-          <p className="font-display text-2xl leading-tight">{ORDER_STATUS_LABEL[order.status] ?? order.status}</p>
+        <div className="min-w-0">
+          <StatusChip status={order.status} label={ORDER_STATUS_LABEL[order.status] ?? order.status} />
           <p className="mt-0.5 text-xs text-muted-foreground">
             #{String(order.id).slice(0, 8).toUpperCase()} · {new Date(order.created_at).toLocaleDateString("en-IN")}
           </p>
