@@ -10,6 +10,7 @@ import { useGpsShare } from "@/hooks/use-gps-share";
 import { TripMap } from "@/components/trip-map";
 import { TripTimeline } from "@/components/trip-timeline";
 import { TRIP_STATUS_LABEL, nextTripStatus, type TripStatus } from "@/lib/logistics";
+import { StatusChip } from "@/components/status-chip";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/driver/active")({

@@ -1,3 +1,4 @@
+import { StatusChip } from "@/components/status-chip";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { CheckCircle2, MapPin, Clock, Package } from "lucide-react";
