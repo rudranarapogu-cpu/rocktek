@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
-import { ORDER_STATUS_LABEL, inr } from "@/lib/logistics";
+import { ORDER_STATUS_LABEL, TRIP_STATUS_LABEL, inr, type TripStatus } from "@/lib/logistics";
 import { StatusChip } from "@/components/status-chip";
 import { statusTone } from "@/lib/status";
 import { toast } from "sonner";
