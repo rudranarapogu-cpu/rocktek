@@ -8,6 +8,7 @@ import { TripTimeline } from "@/components/trip-timeline";
 import { TripEventsLog } from "@/components/trip-events-log";
 import { useTripLive } from "@/hooks/use-trip-live";
 import { TRIP_STATUS_LABEL, type TripStatus } from "@/lib/logistics";
+import { StatusChip } from "@/components/status-chip";
 
 export const Route = createFileRoute("/buyer/tracking")({
   component: BuyerTracking,
@@ -63,7 +64,7 @@ function TrackingCard({ trip }: { trip: any }) {
     <div className="rounded-xl border border-border bg-card p-5">
       <div className="flex items-center justify-between">
         <p className="font-display text-xl">{trip.title ?? "Shipment"}</p>
-        <span className="rounded-md bg-primary/15 px-2 py-1 text-xs font-semibold text-primary">{TRIP_STATUS_LABEL[status]}</span>
+        <StatusChip status={status} label={TRIP_STATUS_LABEL[status]} />
       </div>
       <div className="mt-4 grid gap-5 md:grid-cols-2">
         <TripMap lat={live?.current_lat} lng={live?.current_lng} updatedAt={live?.updated_at} />
