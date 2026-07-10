@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { TRIP_STATUS_LABEL, type TripStatus } from "@/lib/logistics";
+import { StatusChip } from "@/components/status-chip";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/driver/")({

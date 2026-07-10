@@ -110,7 +110,7 @@ function ActiveTripCard({ trip, userId, onChange }: { trip: any; userId: string;
           <p className="font-display text-xl">{trip.orders?.listings?.title ?? "Shipment"}</p>
           <p className="text-sm text-muted-foreground">{trip.orders?.buyer_name} · {trip.orders?.delivery_address}</p>
         </div>
-        <span className="rounded-md bg-primary/15 px-2 py-1 text-xs font-semibold text-primary">{TRIP_STATUS_LABEL[status]}</span>
+        <StatusChip status={status} label={TRIP_STATUS_LABEL[status]} />
       </div>
 
       <div className="mt-4 grid gap-5 md:grid-cols-2">
