@@ -60,9 +60,8 @@ function DeliveryHistory() {
                     <p className="font-display text-lg">{t.orders?.listings?.title ?? "Shipment"}</p>
                     <p className="text-sm text-muted-foreground">{t.orders?.buyer_name} · {t.orders?.delivery_address}</p>
                   </div>
-                  <span className="inline-flex items-center gap-1 rounded-md bg-accent/15 px-2 py-1 text-xs font-semibold text-primary">
-                    <CheckCircle2 className="h-3.5 w-3.5" /> Delivered
-                  </span>
+                  <StatusChip tone="success" label="Delivered" />
+
                 </div>
                 {t.delivered_at && (
                   <p className="mt-2 inline-flex items-center gap-1 text-xs text-muted-foreground">
