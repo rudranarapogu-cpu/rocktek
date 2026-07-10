@@ -1,3 +1,4 @@
+import { StatusChip } from "@/components/status-chip";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Truck } from "lucide-react";
@@ -45,7 +46,7 @@ function AdminDrivers() {
                   <p className="text-sm text-muted-foreground">{d.vehicle_type ?? "Truck"} · {d.vehicle_number} · {d.state ?? "—"}</p>
                   <p className="text-xs text-muted-foreground">License: {d.license_number} · {d.phone}</p>
                 </div>
-                <span className={`rounded-md px-2 py-1 text-xs font-semibold ${d.status === "approved" ? "bg-accent/20 text-accent-foreground" : d.status === "rejected" ? "bg-destructive/15 text-destructive" : "bg-secondary text-secondary-foreground"}`}>{d.status}</span>
+                <StatusChip status={d.status} tone={d.status === "approved" ? "success" : d.status === "rejected" ? "error" : "warning"} />
               </div>
               {d.status === "pending" && (
                 <div className="mt-3 flex gap-2">

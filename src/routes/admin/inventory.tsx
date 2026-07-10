@@ -1,3 +1,4 @@
+import { StatusChip } from "@/components/status-chip";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Boxes } from "lucide-react";
@@ -50,7 +51,7 @@ function AdminInventory() {
                   <p className="text-sm text-muted-foreground">{l.sellers?.company_name} · {l.categories?.name}</p>
                   <p className="text-xs text-muted-foreground">{inr(Number(l.price))}/{l.unit_type} · stock {l.stock_available} {l.unit_type}</p>
                 </div>
-                <span className={`rounded-md px-2 py-1 text-xs font-semibold ${l.status === "active" ? "bg-accent/20 text-accent-foreground" : l.status === "sold" ? "bg-primary/15 text-primary" : "bg-secondary text-secondary-foreground"}`}>{l.status}</span>
+                <StatusChip status={l.status} tone={l.status === "active" ? "success" : l.status === "sold" ? "info" : "neutral"} />
               </div>
               <div className="mt-3 flex gap-2">
                 {l.status !== "expired" ? (

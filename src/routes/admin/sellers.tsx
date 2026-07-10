@@ -1,3 +1,4 @@
+import { StatusChip } from "@/components/status-chip";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { Store } from "lucide-react";
@@ -45,7 +46,7 @@ function AdminSellers() {
                   <p className="text-sm text-muted-foreground">{s.owner_name} · {s.state} · {s.phone}</p>
                   <p className="text-xs text-muted-foreground">GST: {s.gst_number} — {s.gst_address}</p>
                 </div>
-                <span className={`rounded-md px-2 py-1 text-xs font-semibold ${s.status === "approved" ? "bg-accent/20 text-accent-foreground" : s.status === "rejected" ? "bg-destructive/15 text-destructive" : "bg-secondary text-secondary-foreground"}`}>{s.status}</span>
+                <StatusChip status={s.status} tone={s.status === "approved" ? "success" : s.status === "rejected" ? "error" : "warning"} />
               </div>
               {s.status === "pending" && (
                 <div className="mt-3 flex gap-2">
