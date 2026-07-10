@@ -7,6 +7,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { ORDER_STATUS_LABEL, inr } from "@/lib/logistics";
+import { StatusChip } from "@/components/status-chip";
+import { statusTone } from "@/lib/status";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/seller/orders")({
