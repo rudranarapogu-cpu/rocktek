@@ -6,7 +6,9 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
-import { ORDER_STATUS_LABEL, inr } from "@/lib/logistics";
+import { ORDER_STATUS_LABEL, TRIP_STATUS_LABEL, inr, type TripStatus } from "@/lib/logistics";
+import { StatusChip } from "@/components/status-chip";
+import { statusTone } from "@/lib/status";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/seller/orders")({
@@ -79,13 +81,14 @@ function SellerOrders() {
             return (
               <div key={o.id} className="overflow-hidden rounded-xl border border-border bg-card">
                 <div className="flex flex-wrap items-start justify-between gap-2 p-4">
-                  <div>
-                    <p className="font-display text-2xl leading-tight">{ORDER_STATUS_LABEL[o.status]}</p>
-                    <p className="mt-0.5 text-xs text-muted-foreground">#{String(o.id).slice(0, 8).toUpperCase()} · {new Date(o.created_at).toLocaleDateString("en-IN")}</p>
+                  <div className="min-w-0">
+                    <StatusChip status={o.status} label={ORDER_STATUS_LABEL[o.status]} tone={statusTone(o.status)} />
+                    <p className="mt-1.5 text-xs text-muted-foreground">#{String(o.id).slice(0, 8).toUpperCase()} · {new Date(o.created_at).toLocaleDateString("en-IN")}</p>
                   </div>
-                  <span className={`rounded-md px-2 py-1 text-xs font-semibold ${o.payment_status === "advance_paid" ? "bg-primary/15 text-primary" : "bg-secondary text-secondary-foreground"}`}>
-                    Advance {o.payment_status === "advance_paid" ? "Received" : "Pending"}
-                  </span>
+                  <StatusChip
+                    tone={o.payment_status === "advance_paid" ? "info" : "warning"}
+                    label={o.payment_status === "advance_paid" ? "Advance Received" : "Advance Pending"}
+                  />
                 </div>
 
                 <div className="flex flex-wrap items-center gap-x-6 gap-y-1 border-t border-border bg-muted/40 px-4 py-3 text-sm">
@@ -99,13 +102,13 @@ function SellerOrders() {
 
 
                 {trip ? (
-                  <div className={`mt-3 inline-flex items-center gap-2 rounded-md px-3 py-1.5 text-sm ${
-                    trip.acceptance === "pending" ? "bg-accent/10 text-accent" : "bg-primary/10 text-primary"
-                  }`}>
-                    <Truck className="h-4 w-4" />
-                    {trip.acceptance === "pending"
-                      ? "Awaiting driver acceptance"
-                      : `Driver accepted — trip status: ${trip.status}`}
+                  <div className="mt-3 inline-flex items-center gap-2">
+                    <Truck className="h-4 w-4 text-muted-foreground" />
+                    {trip.acceptance === "pending" ? (
+                      <StatusChip tone="warning" label="Awaiting driver acceptance" />
+                    ) : (
+                      <StatusChip status={trip.status} label={`Driver accepted — ${TRIP_STATUS_LABEL[trip.status as TripStatus] ?? trip.status}`} />
+                    )}
                   </div>
                 ) : o.buyer_has_vehicle ? (
                   <div className="mt-3 inline-flex items-center gap-2 rounded-md bg-secondary px-3 py-1.5 text-sm text-secondary-foreground">

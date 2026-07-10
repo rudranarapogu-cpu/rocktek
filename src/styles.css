@@ -5,8 +5,10 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * RockTek Services — Industrial Granite Marketplace
- * Palette: Crimson red + molten yellow on graphite black
+ * RockTek Services — Premium Industrial Granite Marketplace
+ * Design system per RockTek UI/UX spec:
+ *   Primary graphite #1F1F1F · Accent orange #F57C00 · BG #F8F9FA · Inter
+ *   Accent orange is reserved for buttons/CTAs/active-nav ONLY (never status chips)
  */
 
 @theme inline {
@@ -16,7 +18,7 @@
   --radius-xl: calc(var(--radius) + 4px);
   --radius-2xl: calc(var(--radius) + 8px);
 
-  --font-display: "Bebas Neue", "Impact", system-ui, sans-serif;
+  --font-display: "Inter", system-ui, sans-serif;
   --font-sans: "Inter", system-ui, sans-serif;
 
   --color-background: var(--background);
@@ -39,6 +41,23 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
   --color-ring-offset-background: var(--background);
+
+  /* Status palette (spec §2 + §15). Text/background pairs for chips. */
+  --color-status-neutral: var(--status-neutral);
+  --color-status-neutral-foreground: var(--status-neutral-foreground);
+  --color-status-warning: var(--status-warning);
+  --color-status-warning-foreground: var(--status-warning-foreground);
+  --color-status-info: var(--status-info);
+  --color-status-info-foreground: var(--status-info-foreground);
+  --color-status-progress: var(--status-progress);
+  --color-status-progress-foreground: var(--status-progress-foreground);
+  --color-status-transit: var(--status-transit);
+  --color-status-transit-foreground: var(--status-transit-foreground);
+  --color-status-success: var(--status-success);
+  --color-status-success-foreground: var(--status-success-foreground);
+  --color-status-error: var(--status-error);
+  --color-status-error-foreground: var(--status-error-foreground);
+
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -50,75 +69,93 @@
 }
 
 :root {
-  --radius: 0.5rem;
+  /* Spec §4 — cards 18px, buttons 14px, inputs 12px. Base radius = 0.75rem. */
+  --radius: 0.75rem;
 
-  /* Light surfaces — paper white with warm undertone */
-  --background: oklch(0.985 0.005 80);
-  --foreground: oklch(0.18 0.02 30);
+  /* Background #F8F9FA · surfaces white */
+  --background: oklch(0.985 0.001 250);
+  --foreground: oklch(0.21 0 0); /* graphite #1F1F1F */
 
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.18 0.02 30);
+  --card-foreground: oklch(0.21 0 0);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.18 0.02 30);
+  --popover-foreground: oklch(0.21 0 0);
 
-  /* Primary: Crimson red */
-  --primary: oklch(0.55 0.22 27);
+  /* Primary = Accent orange #F57C00 (drives CTA buttons + active nav) */
+  --primary: oklch(0.7 0.176 52);
   --primary-foreground: oklch(0.99 0 0);
 
-  /* Secondary: Graphite black */
-  --secondary: oklch(0.22 0.01 30);
-  --secondary-foreground: oklch(0.98 0.005 80);
+  /* Secondary = graphite surface for dark chrome (header, footer) */
+  --secondary: oklch(0.21 0 0);
+  --secondary-foreground: oklch(0.98 0 0);
 
-  /* Accent: Molten yellow */
-  --accent: oklch(0.83 0.17 85);
-  --accent-foreground: oklch(0.18 0.02 30);
+  /* Accent = subtle warm tint for hovers/menus */
+  --accent: oklch(0.96 0.02 60);
+  --accent-foreground: oklch(0.21 0 0);
 
-  --muted: oklch(0.95 0.008 60);
-  --muted-foreground: oklch(0.45 0.02 40);
+  --muted: oklch(0.965 0.002 250);
+  --muted-foreground: oklch(0.5 0.005 250);
 
   --destructive: oklch(0.55 0.22 27);
   --destructive-foreground: oklch(0.99 0 0);
 
-  --border: oklch(0.9 0.01 60);
-  --input: oklch(0.92 0.008 60);
-  --ring: oklch(0.55 0.22 27);
+  --border: oklch(0.92 0.003 250); /* #E5E5E5 */
+  --input: oklch(0.92 0.003 250);
+  --ring: oklch(0.7 0.176 52);
 
-  --sidebar: oklch(0.18 0.02 30);
-  --sidebar-foreground: oklch(0.95 0.005 80);
-  --sidebar-primary: oklch(0.83 0.17 85);
-  --sidebar-primary-foreground: oklch(0.18 0.02 30);
-  --sidebar-accent: oklch(0.25 0.015 30);
-  --sidebar-accent-foreground: oklch(0.95 0.005 80);
-  --sidebar-border: oklch(0.3 0.015 30);
-  --sidebar-ring: oklch(0.55 0.22 27);
+  /* Status tokens — soft tinted background + saturated foreground */
+  --status-neutral: oklch(0.95 0.003 250);
+  --status-neutral-foreground: oklch(0.5 0.005 250);      /* #757575 gray */
+  --status-warning: oklch(0.95 0.05 85);
+  --status-warning-foreground: oklch(0.6 0.14 75);        /* #F9A825 amber */
+  --status-info: oklch(0.95 0.03 255);
+  --status-info-foreground: oklch(0.52 0.16 258);         /* #1976D2 blue */
+  --status-progress: oklch(0.95 0.04 190);
+  --status-progress-foreground: oklch(0.48 0.09 190);     /* #00796B teal */
+  --status-transit: oklch(0.95 0.04 295);
+  --status-transit-foreground: oklch(0.47 0.18 295);      /* #5E35B1 indigo */
+  --status-success: oklch(0.95 0.05 150);
+  --status-success-foreground: oklch(0.52 0.13 152);      /* #2E7D32 green */
+  --status-error: oklch(0.95 0.04 27);
+  --status-error-foreground: oklch(0.55 0.22 27);         /* #D32F2F red */
+
+  --sidebar: oklch(1 0 0);
+  --sidebar-foreground: oklch(0.21 0 0);
+  --sidebar-primary: oklch(0.7 0.176 52);
+  --sidebar-primary-foreground: oklch(0.99 0 0);
+  --sidebar-accent: oklch(0.96 0.02 60);
+  --sidebar-accent-foreground: oklch(0.21 0 0);
+  --sidebar-border: oklch(0.92 0.003 250);
+  --sidebar-ring: oklch(0.7 0.176 52);
 
   /* Brand tokens */
-  --gradient-hero: linear-gradient(135deg, oklch(0.18 0.02 30) 0%, oklch(0.28 0.03 28) 60%, oklch(0.55 0.22 27) 100%);
-  --gradient-flame: linear-gradient(90deg, oklch(0.55 0.22 27), oklch(0.83 0.17 85));
-  --shadow-industrial: 0 12px 32px -16px oklch(0.18 0.02 30 / 0.45), 0 2px 4px -2px oklch(0.18 0.02 30 / 0.15);
-  --shadow-glow: 0 0 0 1px oklch(0.83 0.17 85 / 0.4), 0 8px 28px -8px oklch(0.55 0.22 27 / 0.45);
+  --gradient-hero: linear-gradient(135deg, oklch(0.21 0 0) 0%, oklch(0.3 0.01 40) 60%, oklch(0.7 0.176 52) 140%);
+  --gradient-flame: linear-gradient(90deg, oklch(0.7 0.176 52), oklch(0.8 0.13 70));
+  --shadow-industrial: 0 12px 32px -16px oklch(0.21 0 0 / 0.35), 0 2px 4px -2px oklch(0.21 0 0 / 0.12);
+  --shadow-card: 0 4px 12px oklch(0 0 0 / 0.05); /* spec §7 */
+  --shadow-glow: 0 0 0 1px oklch(0.7 0.176 52 / 0.35), 0 8px 28px -8px oklch(0.7 0.176 52 / 0.4);
 }
 
 .dark {
-  --background: oklch(0.14 0.015 30);
-  --foreground: oklch(0.96 0.005 80);
-  --card: oklch(0.2 0.018 30);
-  --card-foreground: oklch(0.96 0.005 80);
-  --popover: oklch(0.2 0.018 30);
-  --popover-foreground: oklch(0.96 0.005 80);
-  --primary: oklch(0.65 0.22 27);
-  --primary-foreground: oklch(0.14 0.015 30);
-  --secondary: oklch(0.25 0.015 30);
-  --secondary-foreground: oklch(0.96 0.005 80);
-  --accent: oklch(0.83 0.17 85);
-  --accent-foreground: oklch(0.14 0.015 30);
-  --muted: oklch(0.25 0.015 30);
-  --muted-foreground: oklch(0.7 0.015 60);
+  --background: oklch(0.17 0 0);
+  --foreground: oklch(0.96 0 0);
+  --card: oklch(0.22 0 0);
+  --card-foreground: oklch(0.96 0 0);
+  --popover: oklch(0.22 0 0);
+  --popover-foreground: oklch(0.96 0 0);
+  --primary: oklch(0.72 0.176 52);
+  --primary-foreground: oklch(0.15 0 0);
+  --secondary: oklch(0.27 0 0);
+  --secondary-foreground: oklch(0.96 0 0);
+  --accent: oklch(0.3 0.02 60);
+  --accent-foreground: oklch(0.96 0 0);
+  --muted: oklch(0.27 0 0);
+  --muted-foreground: oklch(0.72 0.005 250);
   --destructive: oklch(0.65 0.22 27);
   --destructive-foreground: oklch(0.99 0 0);
-  --border: oklch(1 0 0 / 8%);
-  --input: oklch(1 0 0 / 12%);
-  --ring: oklch(0.83 0.17 85);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 14%);
+  --ring: oklch(0.72 0.176 52);
 }
 
 @layer base {
@@ -135,7 +172,8 @@
 
   h1, h2, h3, .font-display {
     font-family: var(--font-display);
-    letter-spacing: 0.01em;
+    font-weight: 700;
+    letter-spacing: -0.01em;
   }
 }
 
@@ -149,6 +187,7 @@
     color: transparent;
   }
   .shadow-industrial { box-shadow: var(--shadow-industrial); }
+  .shadow-card { box-shadow: var(--shadow-card); }
   .shadow-glow { box-shadow: var(--shadow-glow); }
 
   /* Subtle granite noise overlay */

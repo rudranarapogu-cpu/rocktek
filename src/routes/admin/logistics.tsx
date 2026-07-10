@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { TripMap } from "@/components/trip-map";
 import { useTripLive } from "@/hooks/use-trip-live";
 import { TRIP_STATUS_LABEL, tripProgress, inr, type TripStatus } from "@/lib/logistics";
+import { StatusChip } from "@/components/status-chip";
 
 export const Route = createFileRoute("/admin/logistics")({
   component: AdminLogistics,
@@ -57,7 +58,7 @@ function AdminLogistics() {
               <tbody>
                 {trips.map((t) => (
                   <tr key={t.id} className="border-t border-border">
-                    <td className="px-3 py-2"><span className="rounded bg-primary/10 px-1.5 py-0.5 text-xs font-medium text-primary">{TRIP_STATUS_LABEL[t.status as TripStatus]}</span></td>
+                    <td className="px-3 py-2"><StatusChip status={t.status} label={TRIP_STATUS_LABEL[t.status as TripStatus]} /></td>
                     <td className="px-3 py-2">{t.orders?.listings?.title ?? "—"}</td>
                     <td className="px-3 py-2 text-muted-foreground">{t.sellers?.company_name ?? "—"}</td>
                     <td className="px-3 py-2 text-muted-foreground">{t.orders?.buyer_name ?? "—"}</td>
@@ -87,7 +88,7 @@ function MonitorCard({ trip }: { trip: any }) {
     <div className="rounded-xl border border-border bg-card p-4">
       <div className="flex items-center justify-between">
         <p className="font-display text-lg">{trip.orders?.listings?.title ?? "Shipment"}</p>
-        <span className="rounded-md bg-primary/15 px-2 py-1 text-xs font-semibold text-primary">{TRIP_STATUS_LABEL[status]}</span>
+        <StatusChip status={status} label={TRIP_STATUS_LABEL[status]} />
       </div>
       <p className="text-sm text-muted-foreground">{trip.sellers?.company_name} → {trip.orders?.buyer_name} · {trip.drivers?.full_name} ({trip.drivers?.vehicle_number})</p>
       <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-muted">

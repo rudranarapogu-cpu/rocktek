@@ -7,6 +7,7 @@ import { TripMap } from "@/components/trip-map";
 import { TripTimeline } from "@/components/trip-timeline";
 import { useTripLive } from "@/hooks/use-trip-live";
 import { TRIP_STATUS_LABEL, type TripStatus } from "@/lib/logistics";
+import { StatusChip } from "@/components/status-chip";
 
 export const Route = createFileRoute("/seller/dispatches")({
   component: SellerDispatches,
@@ -63,7 +64,7 @@ function DispatchCard({ trip }: { trip: any }) {
             {trip.drivers?.full_name} · {trip.drivers?.vehicle_number} → {trip.orders?.buyer_name}
           </p>
         </div>
-        <span className="rounded-md bg-primary/15 px-2 py-1 text-xs font-semibold text-primary">{TRIP_STATUS_LABEL[status]}</span>
+        <StatusChip status={status} label={TRIP_STATUS_LABEL[status]} />
       </div>
       <div className="mt-4 grid gap-5 md:grid-cols-2">
         <TripMap lat={live?.current_lat} lng={live?.current_lng} updatedAt={live?.updated_at} />

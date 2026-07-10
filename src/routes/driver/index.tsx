@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { TRIP_STATUS_LABEL, type TripStatus } from "@/lib/logistics";
+import { StatusChip } from "@/components/status-chip";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/driver/")({
@@ -90,11 +91,10 @@ function AssignedLoads() {
                   <p className="font-display text-xl leading-tight">
                     {pending ? "Awaiting your response" : rejected ? "Rejected" : TRIP_STATUS_LABEL[t.status as TripStatus]}
                   </p>
-                  <span className={`rounded-md px-2 py-1 text-xs font-semibold ${
-                    pending ? "bg-accent/15 text-accent" : rejected ? "bg-destructive/15 text-destructive" : "bg-primary/15 text-primary"
-                  }`}>
-                    {pending ? "Action needed" : rejected ? "Closed" : "Active"}
-                  </span>
+                  <StatusChip
+                    tone={pending ? "warning" : rejected ? "error" : "info"}
+                    label={pending ? "Action needed" : rejected ? "Closed" : "Active"}
+                  />
                 </div>
 
                 <div className="flex flex-wrap items-center gap-x-6 gap-y-1 border-t border-border bg-muted/40 px-4 py-3 text-sm">

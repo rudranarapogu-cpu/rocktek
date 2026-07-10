@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { ORDER_STATUS_LABEL, TRIP_STATUS_LABEL, inr, type TripStatus } from "@/lib/logistics";
+import { StatusChip } from "@/components/status-chip";
 import { TripMap } from "@/components/trip-map";
 import { TripTimeline } from "@/components/trip-timeline";
 import { TripEventsLog } from "@/components/trip-events-log";
@@ -63,8 +64,8 @@ function OrderCard({ order, onChange }: { order: any; onChange: () => void }) {
     <div className="overflow-hidden rounded-xl border border-border bg-card">
       {/* STATUS FIRST */}
       <div className="flex flex-wrap items-start justify-between gap-2 p-4">
-        <div>
-          <p className="font-display text-2xl leading-tight">{ORDER_STATUS_LABEL[order.status] ?? order.status}</p>
+        <div className="min-w-0">
+          <StatusChip status={order.status} label={ORDER_STATUS_LABEL[order.status] ?? order.status} />
           <p className="mt-0.5 text-xs text-muted-foreground">
             #{String(order.id).slice(0, 8).toUpperCase()} · {new Date(order.created_at).toLocaleDateString("en-IN")}
           </p>
@@ -161,9 +162,9 @@ function TrackingBlock({ trip }: { trip: any }) {
     <div className="rounded-lg border border-border bg-background p-4">
       <div className="flex items-center justify-between">
         <p className="inline-flex items-center gap-2 font-display text-lg"><Package className="h-4 w-4 text-primary" /> Live tracking</p>
-        <span className="rounded-md bg-primary/15 px-2 py-1 text-xs font-semibold text-primary">
-          {trip.acceptance === "pending" ? "Awaiting driver acceptance" : TRIP_STATUS_LABEL[status]}
-        </span>
+        {trip.acceptance === "pending"
+          ? <StatusChip tone="warning" label="Awaiting driver acceptance" />
+          : <StatusChip status={status} label={TRIP_STATUS_LABEL[status]} />}
       </div>
       <div className="mt-4 grid gap-5 md:grid-cols-2">
         <TripMap lat={live?.current_lat} lng={live?.current_lng} updatedAt={live?.updated_at} />
@@ -186,10 +187,5 @@ function Detail({ label, value }: { label: string; value?: string }) {
 }
 
 export function StatusPill({ status }: { status: string }) {
-  const tone =
-    status === "delivered" ? "bg-accent/20 text-accent-foreground"
-    : status === "cancelled" ? "bg-destructive/15 text-destructive"
-    : status === "in_transit" || status === "dispatched" ? "bg-primary/15 text-primary"
-    : "bg-secondary text-secondary-foreground";
-  return <span className={`rounded-md px-2 py-1 text-xs font-semibold ${tone}`}>{ORDER_STATUS_LABEL[status] ?? status}</span>;
+  return <StatusChip status={status} label={ORDER_STATUS_LABEL[status] ?? status} />;
 }
