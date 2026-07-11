@@ -70,7 +70,6 @@ function OrderCard({ order, onChange }: { order: any; onChange: () => void }) {
             #{String(order.id).slice(0, 8).toUpperCase()} · {new Date(order.created_at).toLocaleDateString("en-IN")}
           </p>
         </div>
-        <StatusPill status={order.status} />
       </div>
 
       {/* METADATA STRIP (read-only) */}
