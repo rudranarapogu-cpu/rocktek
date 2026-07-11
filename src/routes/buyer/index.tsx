@@ -70,7 +70,6 @@ function OrderCard({ order, onChange }: { order: any; onChange: () => void }) {
             #{String(order.id).slice(0, 8).toUpperCase()} · {new Date(order.created_at).toLocaleDateString("en-IN")}
           </p>
         </div>
-        <StatusPill status={order.status} />
       </div>
 
       {/* METADATA STRIP (read-only) */}
@@ -92,11 +91,8 @@ function OrderCard({ order, onChange }: { order: any; onChange: () => void }) {
         <Button size="sm" variant="outline" asChild><Link to="/contact">Contact Seller</Link></Button>
       </div>
 
-      <div className="px-4 pb-4">
-
-
       {open && (
-        <div className="mt-4 space-y-4 border-t border-border pt-4">
+        <div className="space-y-4 border-t border-border px-4 py-4">
           <div className="grid gap-1 text-sm sm:grid-cols-2">
             <Detail label="Delivery address" value={order.delivery_address} />
             <Detail label="Contact" value={[order.buyer_name, order.buyer_phone].filter(Boolean).join(" · ")} />
@@ -115,7 +111,6 @@ function OrderCard({ order, onChange }: { order: any; onChange: () => void }) {
           )}
         </div>
       )}
-      </div>
     </div>
   );
 }
