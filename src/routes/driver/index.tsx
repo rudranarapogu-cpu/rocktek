@@ -103,11 +103,9 @@ function AssignedLoads() {
                   <span className="text-muted-foreground">Drop: {t.orders?.delivery_address}</span>
                 </div>
 
-                <div className="px-4 py-3">
-
-
+                <div className="border-t border-border px-4 py-3">
                 {pending ? (
-                  <div className="mt-3 flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2">
                     <Button size="sm" className="bg-primary" disabled={busy === t.id} onClick={() => respond(t, true)}>
                       <Check className="mr-1 h-4 w-4" /> Accept
                     </Button>
@@ -116,9 +114,9 @@ function AssignedLoads() {
                     </Button>
                   </div>
                 ) : rejected ? (
-                  <p className="mt-3 text-sm text-muted-foreground">You rejected this trip. The seller can reassign it.</p>
+                  <p className="text-sm text-muted-foreground">You rejected this trip. The seller can reassign it.</p>
                 ) : (
-                  <Link to="/driver/active" className="mt-3 inline-block text-sm text-primary hover:underline">Manage trip →</Link>
+                  <Link to="/driver/active" className="inline-block text-sm text-primary hover:underline">Manage trip →</Link>
                 )}
                 </div>
               </div>
